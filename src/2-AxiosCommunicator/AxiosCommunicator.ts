@@ -23,7 +23,6 @@ export default class AxiosCommunicator implements AuthCommunicator
             })
             .catch((axiosError) =>
             {
-                if(axiosError.response.status==403) console.log(axiosError);
                 const apiResponse = this.makeApiResponse(axiosError.response)
                 this.communicatorDelegate.read(apiResponse);
             })
