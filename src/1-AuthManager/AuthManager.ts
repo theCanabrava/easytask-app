@@ -20,9 +20,25 @@ export default class AuthManager implements CommunicatorDelegate
 
     constructor(components: AuthManagerComponents)
     {
+        this.setCommunicator(components);
+        this.setDataSource(components);
+        this.setSubscribers(components);
+    }
+
+    private setCommunicator(components: AuthManagerComponents)
+    {
         this.communicator = components.communicator;
+        this.communicator.setDelegate(this);
+    }
+
+    private setDataSource(components: AuthManagerComponents)
+    {
         this.dataSource = components.dataSource;
         this.token = this.dataSource.getToken();
+    }
+
+    private setSubscribers(components: AuthManagerComponents)
+    {
         this.subscribers = [];
         for(let index in components.subscribers)
         {

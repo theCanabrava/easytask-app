@@ -21,7 +21,6 @@ describe('Authentication', function()
             subscribers: [subscriber]
         };
         manager = new AuthManager(components);
-        communicator.setDelegate(manager);
     });
 
     it('Sends registration request', async function () 

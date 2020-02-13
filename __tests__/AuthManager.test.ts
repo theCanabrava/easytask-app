@@ -5,6 +5,7 @@ import ApiRequest from '../src/0-ApiLibrary/types/ApiRequest';
 import AuthManager from '../src/1-AuthManager/AuthManager';
 import NewUserParameters from '../src/1-AuthManager/types/NewUserParameters';
 import LoginParameters from '../src/1-AuthManager/types/LoginParameters';
+import CommunicatorDelegate from '../src/1-AuthManager/interfaces/CommunicatorDelegate';
 
 class DummyDS implements AuthDataSource
 {
@@ -17,10 +18,16 @@ class DummyDS implements AuthDataSource
 class DummyComunicator implements AuthCommunicator
 {
     public latestRequest: ApiRequest;
+    private delegate: CommunicatorDelegate
 
     public send(request: ApiRequest)
     {
         this.latestRequest = request
+    }
+
+    public setDelegate(delegate: CommunicatorDelegate)
+    {
+        this.delegate = delegate
     }
 }
 
