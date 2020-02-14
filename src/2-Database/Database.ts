@@ -17,6 +17,12 @@ export default class Database implements UserStorage
     constructor()
     {
         this.database = SQLite.openDatabase(DBConstants.name);
+        this.userData = 
+        {
+            email: '',
+            uuid: '',
+            webtoken: '',
+        }
     }
 
     public async initDatabase()
