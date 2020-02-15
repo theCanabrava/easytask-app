@@ -49,6 +49,11 @@ describe('Authentication', function()
         await manager.refreshToken('teste@unitario.com');      
     })
 
+    it('Unsubscribes', function()
+    {
+        manager.unsubscribe(subscriber);
+    })
+
     let manager: AuthManager;
     const subscriber: AuthSubscriber =
     {

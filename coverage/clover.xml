@@ -1,6 +1,331 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1581264169304" clover="3.2.0">
-  <project timestamp="1581264169304" name="All files">
-    <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="0" coveredelements="0" complexity="0" loc="0" ncloc="0" packages="0" files="0" classes="0"/>
+<coverage generated="1581796893893" clover="3.2.0">
+  <project timestamp="1581796893893" name="All files">
+    <metrics statements="169" coveredstatements="112" conditionals="16" coveredconditionals="2" methods="75" coveredmethods="48" elements="260" coveredelements="162" complexity="0" loc="169" ncloc="169" packages="18" files="34" classes="34"/>
+    <package name="easy-task">
+      <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <file name="App.tsx" path="/home/cana/Documents/Programas/easy-task/App.tsx">
+        <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="easy-task.src.0-ApiLibrary">
+      <metrics statements="36" coveredstatements="36" conditionals="0" coveredconditionals="0" methods="18" coveredmethods="18"/>
+      <file name="ApiLibrary.ts" path="/home/cana/Documents/Programas/easy-task/src/0-ApiLibrary/ApiLibrary.ts">
+        <metrics statements="36" coveredstatements="36" conditionals="0" coveredconditionals="0" methods="18" coveredmethods="18"/>
+        <line num="11" count="13" type="stmt"/>
+        <line num="16" count="21" type="stmt"/>
+        <line num="21" count="10" type="stmt"/>
+        <line num="25" count="9" type="stmt"/>
+        <line num="34" count="4" type="stmt"/>
+        <line num="45" count="4" type="stmt"/>
+        <line num="51" count="5" type="stmt"/>
+        <line num="61" count="5" type="stmt"/>
+        <line num="67" count="4" type="stmt"/>
+        <line num="80" count="4" type="stmt"/>
+        <line num="84" count="9" type="stmt"/>
+        <line num="97" count="3" type="stmt"/>
+        <line num="113" count="3" type="stmt"/>
+        <line num="119" count="3" type="stmt"/>
+        <line num="135" count="3" type="stmt"/>
+        <line num="141" count="3" type="stmt"/>
+        <line num="157" count="3" type="stmt"/>
+        <line num="163" count="3" type="stmt"/>
+        <line num="177" count="3" type="stmt"/>
+        <line num="183" count="3" type="stmt"/>
+        <line num="197" count="3" type="stmt"/>
+        <line num="203" count="3" type="stmt"/>
+        <line num="213" count="3" type="stmt"/>
+        <line num="219" count="3" type="stmt"/>
+        <line num="229" count="3" type="stmt"/>
+        <line num="233" count="9" type="stmt"/>
+        <line num="244" count="2" type="stmt"/>
+        <line num="267" count="2" type="stmt"/>
+        <line num="273" count="2" type="stmt"/>
+        <line num="296" count="2" type="stmt"/>
+        <line num="302" count="2" type="stmt"/>
+        <line num="317" count="2" type="stmt"/>
+        <line num="323" count="2" type="stmt"/>
+        <line num="333" count="2" type="stmt"/>
+        <line num="339" count="2" type="stmt"/>
+        <line num="353" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="easy-task.src.0-ApiLibrary.constants">
+      <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="ApiConstants.ts" path="/home/cana/Documents/Programas/easy-task/src/0-ApiLibrary/constants/ApiConstants.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="4" count="9" type="stmt"/>
+        <line num="11" count="9" type="stmt"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="31" count="9" type="stmt"/>
+        <line num="38" count="9" type="stmt"/>
+      </file>
+    </package>
+    <package name="easy-task.src.0-ApiLibrary.interfaces">
+      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+      <file name="AuthLib.ts" path="/home/cana/Documents/Programas/easy-task/src/0-ApiLibrary/interfaces/AuthLib.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="9" count="10" type="stmt"/>
+      </file>
+      <file name="ProjectLib.ts" path="/home/cana/Documents/Programas/easy-task/src/0-ApiLibrary/interfaces/ProjectLib.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="9" count="14" type="stmt"/>
+      </file>
+      <file name="WorkTaskLib.ts" path="/home/cana/Documents/Programas/easy-task/src/0-ApiLibrary/interfaces/WorkTaskLib.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="9" count="5" type="stmt"/>
+      </file>
+    </package>
+    <package name="easy-task.src.0-ApiLibrary.types">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="ApiRequest.ts" path="/home/cana/Documents/Programas/easy-task/src/0-ApiLibrary/types/ApiRequest.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="ApiResponse.ts" path="/home/cana/Documents/Programas/easy-task/src/0-ApiLibrary/types/ApiResponse.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="AuthForm.ts" path="/home/cana/Documents/Programas/easy-task/src/0-ApiLibrary/types/AuthForm.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="ProjectForm.ts" path="/home/cana/Documents/Programas/easy-task/src/0-ApiLibrary/types/ProjectForm.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="WorkTaskForm.ts" path="/home/cana/Documents/Programas/easy-task/src/0-ApiLibrary/types/WorkTaskForm.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="easy-task.src.1-AuthManager">
+      <metrics statements="25" coveredstatements="25" conditionals="2" coveredconditionals="2" methods="11" coveredmethods="11"/>
+      <file name="AuthManager.ts" path="/home/cana/Documents/Programas/easy-task/src/1-AuthManager/AuthManager.ts">
+        <metrics statements="25" coveredstatements="25" conditionals="2" coveredconditionals="2" methods="11" coveredmethods="11"/>
+        <line num="23" count="3" type="stmt"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="25" count="3" type="stmt"/>
+        <line num="30" count="3" type="stmt"/>
+        <line num="31" count="3" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
+        <line num="37" count="3" type="stmt"/>
+        <line num="42" count="3" type="stmt"/>
+        <line num="43" count="3" type="stmt"/>
+        <line num="45" count="2" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="58" count="2" type="stmt"/>
+        <line num="64" count="3" type="stmt"/>
+        <line num="69" count="3" type="stmt"/>
+        <line num="70" count="3" type="stmt"/>
+        <line num="76" count="2" type="stmt"/>
+        <line num="85" count="2" type="stmt"/>
+        <line num="86" count="2" type="stmt"/>
+        <line num="91" count="2" type="stmt"/>
+        <line num="96" count="1" type="stmt"/>
+        <line num="101" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="103" count="2" type="stmt"/>
+        <line num="105" count="4" type="stmt"/>
+        <line num="107" count="4" type="stmt"/>
+      </file>
+    </package>
+    <package name="easy-task.src.1-AuthManager.interfaces">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="AuthCommunicator.ts" path="/home/cana/Documents/Programas/easy-task/src/1-AuthManager/interfaces/AuthCommunicator.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="AuthDataSource.ts" path="/home/cana/Documents/Programas/easy-task/src/1-AuthManager/interfaces/AuthDataSource.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="AuthSubscriber.ts" path="/home/cana/Documents/Programas/easy-task/src/1-AuthManager/interfaces/AuthSubscriber.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="CommunicatorDelegate.ts" path="/home/cana/Documents/Programas/easy-task/src/1-AuthManager/interfaces/CommunicatorDelegate.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="easy-task.src.1-AuthManager.types">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="AuthManagerComponents.ts" path="/home/cana/Documents/Programas/easy-task/src/1-AuthManager/types/AuthManagerComponents.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="LoginParameters.ts" path="/home/cana/Documents/Programas/easy-task/src/1-AuthManager/types/LoginParameters.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="NewUserParameters.ts" path="/home/cana/Documents/Programas/easy-task/src/1-AuthManager/types/NewUserParameters.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="easy-task.src.1-ProjectManager">
+      <metrics statements="37" coveredstatements="30" conditionals="2" coveredconditionals="0" methods="15" coveredmethods="11"/>
+      <file name="ProjectManager.ts" path="/home/cana/Documents/Programas/easy-task/src/1-ProjectManager/ProjectManager.ts">
+        <metrics statements="37" coveredstatements="30" conditionals="2" coveredconditionals="0" methods="15" coveredmethods="11"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+        <line num="84" count="1" type="stmt"/>
+        <line num="93" count="1" type="stmt"/>
+        <line num="94" count="1" type="stmt"/>
+        <line num="100" count="1" type="stmt"/>
+        <line num="109" count="1" type="stmt"/>
+        <line num="110" count="1" type="stmt"/>
+        <line num="116" count="1" type="stmt"/>
+        <line num="125" count="1" type="stmt"/>
+        <line num="126" count="1" type="stmt"/>
+        <line num="132" count="1" type="stmt"/>
+        <line num="141" count="1" type="stmt"/>
+        <line num="142" count="1" type="stmt"/>
+        <line num="148" count="1" type="stmt"/>
+        <line num="157" count="1" type="stmt"/>
+        <line num="158" count="1" type="stmt"/>
+        <line num="163" count="0" type="stmt"/>
+        <line num="168" count="0" type="stmt"/>
+        <line num="173" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="175" count="0" type="stmt"/>
+        <line num="177" count="0" type="stmt"/>
+        <line num="179" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="easy-task.src.1-ProjectManager.interfaces">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="CommunicatorDelagate.ts" path="/home/cana/Documents/Programas/easy-task/src/1-ProjectManager/interfaces/CommunicatorDelagate.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="ProjectCommunicator.ts" path="/home/cana/Documents/Programas/easy-task/src/1-ProjectManager/interfaces/ProjectCommunicator.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="ProjectDataSource.ts" path="/home/cana/Documents/Programas/easy-task/src/1-ProjectManager/interfaces/ProjectDataSource.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="ProjectSubscriber.ts" path="/home/cana/Documents/Programas/easy-task/src/1-ProjectManager/interfaces/ProjectSubscriber.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="easy-task.src.1-ProjectManager.types">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="ManageUserParameters.ts" path="/home/cana/Documents/Programas/easy-task/src/1-ProjectManager/types/ManageUserParameters.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="ProjectManagerComponents.ts" path="/home/cana/Documents/Programas/easy-task/src/1-ProjectManager/types/ProjectManagerComponents.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="ProjectParameters.ts" path="/home/cana/Documents/Programas/easy-task/src/1-ProjectManager/types/ProjectParameters.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="easy-task.src.2-AxiosCommunicator">
+      <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+      <file name="AxiosCommunicator.ts" path="/home/cana/Documents/Programas/easy-task/src/2-AxiosCommunicator/AxiosCommunicator.ts">
+        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+        <line num="13" count="3" type="stmt"/>
+        <line num="18" count="7" type="stmt"/>
+        <line num="21" count="5" type="stmt"/>
+        <line num="22" count="5" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="34" count="7" type="stmt"/>
+        <line num="39" count="7" type="stmt"/>
+      </file>
+    </package>
+    <package name="easy-task.src.2-Database">
+      <metrics statements="34" coveredstatements="1" conditionals="12" coveredconditionals="0" methods="16" coveredmethods="0"/>
+      <file name="Database.ts" path="/home/cana/Documents/Programas/easy-task/src/2-Database/Database.ts">
+        <metrics statements="34" coveredstatements="1" conditionals="12" coveredconditionals="0" methods="16" coveredmethods="0"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="94" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="95" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="96" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="111" count="0" type="stmt"/>
+        <line num="117" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="120" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="129" count="0" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="easy-task.src.2-Database.constants">
+      <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="DBConstants.ts" path="/home/cana/Documents/Programas/easy-task/src/2-Database/constants/DBConstants.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="easy-task.src.2-Database.interfaces">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="UserStorage.ts" path="/home/cana/Documents/Programas/easy-task/src/2-Database/interfaces/UserStorage.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="easy-task.src.2-Database.types">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="UserData.ts" path="/home/cana/Documents/Programas/easy-task/src/2-Database/types/UserData.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="easy-task.src.3-ToolsetFactory">
+      <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+      <file name="ToolsetFactory.ts" path="/home/cana/Documents/Programas/easy-task/src/3-ToolsetFactory/ToolsetFactory.ts">
+        <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="easy-task.src.3-ToolsetFactory.types">
+      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="AppToolset.ts" path="/home/cana/Documents/Programas/easy-task/src/3-ToolsetFactory/types/AppToolset.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
   </project>
 </coverage>
