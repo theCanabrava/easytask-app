@@ -18,6 +18,15 @@ export default class ApiConstants
         getUsersInProject: "Get-Users-In-Project"
     }
 
+    public static readonly workTask =
+    {
+        createWorkTask: "Create-WorkTask",
+        updateWorkTask: "Update-WorkTask",
+        addResoinsible: "Add-Responsible",
+        getWorkTasksOfProject: "GetWorkTasksOfProject",
+        deleteWorkTask: "Delete-WorkTask"
+    }
+
     public static readonly reqType =
     {
         get: 'get',
@@ -28,8 +37,23 @@ export default class ApiConstants
     public static readonly paths =
     {
         prefix: 'http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080',
+
         newUser: '/api/New-User',
         login: '/api/Login',
-        refreshToken: '/api/Refresh-Token'
+        refreshToken: '/api/Refresh-Token',
+
+        createProject: '/api/Project/Create-Project',
+        editProject: '/api/Project/Edit-Project',
+        deleteProject: '/api/Project/Delete-Project',
+        addUserToProject: '/api/Project/Add-User-To-Project',
+        removeUserFromProject: '/api/Project/Remove-User-From-Project',
+        getProjectsList:  '/api/Project/Get-Projects-List',
+        getUsersInProject: '/api/Project/Get-Users-In-Project',
+
+        createWorkTask: '/api/WorkTask/Create-WorkTask',
+        updateWorkTask: '/api/WorkTask/Update-WorkTask',
+        addResoinsible: '/api/WorkTask/Add-Responsible',
+        getWorkTasksOfProject: '/api/WorkTask/GetWorkTasksOfProject',
+        deleteWorkTask: '/api/WorkTask/Delete-WorkTask',
     }
 }

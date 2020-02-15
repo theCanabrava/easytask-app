@@ -1,6 +1,7 @@
 import AuthForm from "./types/AuthForm";
 import ApiRequest from "./types/ApiRequest";
 import ProjectForm from "./types/ProjectForm";
+import WorkTaskForm from "./types/WorkTaskForm";
 import ApiConstants from "./constants/ApiConstants";
 
 export default class ApiLibrary extends Object
@@ -13,6 +14,11 @@ export default class ApiLibrary extends Object
     public static projectRequest(form: ProjectForm): ApiRequest
     {
         return ApiLibrary.projectLibrary[form.id](form.parameters);
+    }
+
+    public static workTaskRequest(form: WorkTaskForm): ApiRequest
+    {
+        return ApiLibrary.workTaskLibrary[form.id](form.parameters);
     }
 
     private static authLibrary =
@@ -69,7 +75,6 @@ export default class ApiLibrary extends Object
             {
                 Authorization: `Bearer ${parameters.token}`
             }
-
         };
 
         return refreshTokenRequest;
@@ -88,9 +93,9 @@ export default class ApiLibrary extends Object
 
     private static createProject(parameters): ApiRequest
     {
-        const createProjectRequest =
+        const createProjectRequest: ApiRequest =
         {
-            url: ApiConstants.paths.prefix + '/api/Project/Create-Project',
+            url: ApiConstants.paths.prefix + ApiConstants.paths.createProject,
             reqType: ApiConstants.reqType.post,
             body:
             {
@@ -98,6 +103,10 @@ export default class ApiLibrary extends Object
                 managerId: parameters.managerId,
                 id: parameters.id,
                 description: parameters.description
+            },
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
             }
         }
 
@@ -106,9 +115,9 @@ export default class ApiLibrary extends Object
 
     private static editProject(parameters): ApiRequest
     {
-        const editProjectRequest =
+        const editProjectRequest: ApiRequest =
         {
-            url: ApiConstants.paths.prefix + '/api/Project/Edit-Project',
+            url: ApiConstants.paths.prefix + ApiConstants.paths.editProject,
             reqType: ApiConstants.reqType.post,
             body:
             {
@@ -116,6 +125,10 @@ export default class ApiLibrary extends Object
                 managerId: parameters.managerId,
                 id: parameters.id,
                 description: parameters.description
+            },
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
             }
         }
 
@@ -124,9 +137,9 @@ export default class ApiLibrary extends Object
 
     private static deleteProject(parameters): ApiRequest
     {
-        const deleteProjectRequest =
+        const deleteProjectRequest: ApiRequest =
         {
-            url: ApiConstants.paths.prefix + '/api/Project/Delete-Project',
+            url: ApiConstants.paths.prefix + ApiConstants.paths.deleteProject,
             reqType: ApiConstants.reqType.post,
             body:
             {
@@ -134,6 +147,10 @@ export default class ApiLibrary extends Object
                 managerId: parameters.managerId,
                 id: parameters.id,
                 description: parameters.description
+            },
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
             }
         }
 
@@ -142,14 +159,18 @@ export default class ApiLibrary extends Object
 
     private static addUserToProject(parameters): ApiRequest
     {
-        const addUserToProjectRequest =
+        const addUserToProjectRequest: ApiRequest =
         {
-            url: ApiConstants.paths.prefix + '/api/Project/Add-User-To-Project',
+            url: ApiConstants.paths.prefix + ApiConstants.paths.addUserToProject,
             reqType: ApiConstants.reqType.post,
             body:
             {
                 userId: parameters.userId,
                 projectId: parameters.projectId
+            },
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
             }
         }
 
@@ -158,14 +179,18 @@ export default class ApiLibrary extends Object
 
     private static removeUserFromProject(parameters): ApiRequest
     {
-        const removeUserFromProjectRequest =
+        const removeUserFromProjectRequest: ApiRequest =
         {
-            url: ApiConstants.paths.prefix + '/api/Project/Remove-User-From-Project',
+            url: ApiConstants.paths.prefix + ApiConstants.paths.removeUserFromProject,
             reqType: ApiConstants.reqType.post,
             body:
             {
                 userId: parameters.userId,
                 projectId: parameters.projectId
+            },
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
             }
         }
 
@@ -174,11 +199,15 @@ export default class ApiLibrary extends Object
 
     private static getProjectsList(parameters): ApiRequest
     {
-        const getProjectsListRequest =
+        const getProjectsListRequest: ApiRequest =
         {
-            url: ApiConstants.paths.prefix + `/api/Project/Get-Projects-List?UserId=${encodeURI(parameters.userId)}`,
+            url: ApiConstants.paths.prefix + ApiConstants.paths.getProjectsList + `?UserId=${encodeURI(parameters.userId)}`,
             reqType: ApiConstants.reqType.get,
-            body:{}
+            body:{},
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
+            }
         }
 
         return getProjectsListRequest;
@@ -186,13 +215,141 @@ export default class ApiLibrary extends Object
 
     private static getUsersInProject(parameters): ApiRequest
     {
-        const getUsersInProjectRequest =
+        const getUsersInProjectRequest: ApiRequest =
         {
-            url: ApiConstants.paths.prefix +  `/api/Project/Get-Projects-List?ProjectId=${encodeURI(parameters.projectId)}`,
+            url: ApiConstants.paths.prefix + ApiConstants.paths.getUsersInProject + `?ProjectId=${encodeURI(parameters.projectId)}`,
             reqType: ApiConstants.reqType.get,
-            body:{}
+            body:{},
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
+            }
         }
 
         return getUsersInProjectRequest;
+    }
+
+    private static workTaskLibrary =
+    {
+        [ApiConstants.workTask.createWorkTask]: ApiLibrary.createWorkTask,
+        [ApiConstants.workTask.updateWorkTask]: ApiLibrary.updateWorkTask,
+        [ApiConstants.workTask.addResoinsible]: ApiLibrary.addResponsible,
+        [ApiConstants.workTask.getWorkTasksOfProject]: ApiLibrary.getWorkTasksOfProject,
+        [ApiConstants.workTask.deleteWorkTask]: ApiLibrary.deleteWorkTask
+    }
+
+    private static createWorkTask(parameters): ApiRequest
+    {
+        const createWorkTaskRequest: ApiRequest =
+        {
+            url: ApiConstants.paths.prefix + ApiConstants.paths.createWorkTask,
+            reqType: ApiConstants.reqType.post,
+            body:
+            {
+                workTaskName: parameters.workTaskName,
+                projectId: parameters.projectId,
+                id: parameters.id,
+                description: parameters.description,
+                startDate: parameters.startDate,
+                expectedConclusionDate: parameters.expectedConclusionDate,
+                where: parameters.where,
+                why: parameters.why,
+                how: parameters.how,
+                howMuch: parameters.howMuch,
+                observation: parameters.observation
+            },
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
+            }
+        }
+
+        return createWorkTaskRequest;
+    }
+
+    private static updateWorkTask(parameters): ApiRequest
+    {
+        const updateWorkTaskRequest: ApiRequest =
+        {
+            url: ApiConstants.paths.prefix + ApiConstants.paths.updateWorkTask,
+            reqType: ApiConstants.reqType.post,
+            body:
+            {
+                workTaskName: parameters.workTaskName,
+                projectId: parameters.projectId,
+                id: parameters.id,
+                description: parameters.description,
+                startDate: parameters.startDate,
+                expectedConclusionDate: parameters.expectedConclusionDate,
+                where: parameters.where,
+                why: parameters.why,
+                how: parameters.how,
+                howMuch: parameters.howMuch,
+                observation: parameters.observation
+            },
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
+            }
+        }
+
+        return updateWorkTaskRequest;
+    }
+
+    private static addResponsible(parameters): ApiRequest
+    {
+        const addResponsibleRequest: ApiRequest =
+        {
+            url: ApiConstants.paths.prefix + ApiConstants.paths.addResoinsible,
+            reqType: ApiConstants.reqType.post,
+            body:
+            {
+                id: parameters.id,
+                projectId: parameters.projectId,
+                responsibleUserId: parameters.responsibleUserId,
+            },
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
+            }
+        }
+
+        return addResponsibleRequest;
+    }
+
+    private static getWorkTasksOfProject(parameters): ApiRequest
+    {
+        const getWorkTasksOfProjectRequest: ApiRequest =
+        {
+            url: ApiConstants.paths.prefix + ApiConstants.paths.getWorkTasksOfProject + `?projectId=${parameters.projectId}`,
+            reqType: ApiConstants.reqType.get,
+            body:{},
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
+            }
+        }
+
+        return getWorkTasksOfProjectRequest;
+    }
+
+    private static deleteWorkTask(parameters): ApiRequest
+    {
+        const deleteWorkTaskRequest: ApiRequest =
+        {
+            url: ApiConstants.paths.prefix + ApiConstants.paths.deleteWorkTask,
+            reqType: ApiConstants.reqType.delete,
+            body:
+            {
+                id: parameters.id,
+                projectId: parameters.projectId,
+            },
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
+            }
+        }
+
+        return deleteWorkTaskRequest;
     }
 }
