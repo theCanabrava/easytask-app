@@ -31,7 +31,7 @@ class DummyComunicator implements ProjectCommunicator
     }
 }
 
-describe('Projectentication Manager', function()
+describe('Project Manager', function()
 {
     describe('Requisitions', function()
     {
