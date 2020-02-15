@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import AuthForm from '../src/0-ApiLibrary/types/AuthForm';
 import ApiLibrary from '../src/0-ApiLibrary/ApiLibrary';
+import AuthForm from '../src/0-ApiLibrary/types/AuthForm';
 import ProjectForm from '../src/0-ApiLibrary/types/ProjectForm';
-
+import WorkTaskForm from '../src/0-ApiLibrary/types/WorkTaskForm';
 
 describe('API Library', function()
 {
@@ -275,7 +275,7 @@ describe('API Library', function()
             expect(req.body.projectId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
         });
 
-        const createWorkTaskForm: AuthForm =
+        const createWorkTaskForm: WorkTaskForm =
         {
             id: 'Create-WorkTask',
             parameters:
@@ -294,7 +294,7 @@ describe('API Library', function()
             }
         }
 
-        const updateWorkTaskForm: AuthForm =
+        const updateWorkTaskForm: WorkTaskForm =
         {
             id: 'Update-WorkTask',
             parameters:
@@ -313,7 +313,7 @@ describe('API Library', function()
             }
         }
 
-        const addResponsibleForm: AuthForm =
+        const addResponsibleForm: WorkTaskForm =
         {
             id: 'Add-Responsible',
             parameters:
@@ -324,7 +324,7 @@ describe('API Library', function()
             }
         }
 
-        const getWorkTasksOfProjectForm: AuthForm =
+        const getWorkTasksOfProjectForm: WorkTaskForm =
         {
             id: 'GetWorkTasksOfProject',
             parameters:
@@ -333,7 +333,7 @@ describe('API Library', function()
             }
         }
 
-        const deleteWorkTaskForm: AuthForm =
+        const deleteWorkTaskForm: WorkTaskForm =
         {
             id: 'Delete-WorkTask',
             parameters:
