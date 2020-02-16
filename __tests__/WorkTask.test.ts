@@ -9,15 +9,19 @@ import ApiResponse from '../src/0-ApiLibrary/types/ApiResponse';
 import ApiConstants from '../src/0-ApiLibrary/constants/ApiConstants';
 import AuthManagerComponents from '../src/1-AuthManager/types/AuthManagerComponents';
 import LoginParameters from '../src/1-AuthManager/types/LoginParameters';
-import EditProjectParameters from '../src/1-ProjectManager/types/EditProjectParameters';
-import ManageUserParameters from '../src/1-ProjectManager/types/ManageUserParameters';
 import CreateProjectParameters from '../src/1-ProjectManager/types/CreateProjectParameters';
 import DeleteProjectParameters from '../src/1-ProjectManager/types/DeleteProjectParameters';
+import WorkTaskManager from '../src/1-WorkTaskManager/WorkTaskManager';
+import UpdateWorkTaskParameters from '../src/1-WorkTaskManager/types/UpdateWorkTaskParameters';
+import CreateWorkTaskParameters from '../src/1-WorkTaskManager/types/CreateWorkTaskParameters';
+import AddResponsibleParameters from '../src/1-WorkTaskManager/types/AddResponsibleParameters';
+import DeleteTaskParameters from '../src/1-WorkTaskManager/types/DeleteTaskParameters';
 const jwt_decode = require('jwt-decode');
 
 describe('Project', function()
 {
     let projectId: string;
+    let workTaskId: string;
     class DataSource implements AuthDataSource
     {
         token = '';
@@ -49,11 +53,15 @@ describe('Project', function()
             {
                 dataSource.setToken(response.data.data);
             }
-            else
+            else if(response.path == ApiConstants.paths.createProject)
             {
-                if(response.path == ApiConstants.paths.createProject)
+                projectId = response.data.data.id;
+            }
+            else if(response.path != ApiConstants.paths.deleteProject)
+            {
+                if(response.path == ApiConstants.paths.createWorkTask)
                 {
-                    projectId = response.data.data.id;
+                    workTaskId = response.data.data.id
                 }
                 console.log(response);
                 expect(response.status).to.equal(200);
@@ -61,6 +69,8 @@ describe('Project', function()
         }
     };
     
+    let projectManager: ProjectManager
+
     beforeAll(async function()
     {
         let components: AuthManagerComponents =
@@ -76,25 +86,9 @@ describe('Project', function()
             password: 'Teste@123',
         }
         await authManager.login(user);
-    });
-
-    let projectManager: ProjectManager;
-
-    it('Instantiates project manager', function()
-    {
-        const components: AuthManagerComponents =
-        {
-            communicator: communicator,
-            dataSource: dataSource,
-            subscribers: [subscriber],
-        }
 
         projectManager = new ProjectManager(components);
         expect(projectManager).to.not.equal(undefined);
-    });
-
-    it('Creates projects', async function()
-    {
         const createParams: CreateProjectParameters =
         {
             projectName: 'Unit Test Project',
@@ -102,52 +96,86 @@ describe('Project', function()
             description: 'This is an unit test',
         }
         await projectManager.createProject(createParams);
+        await projectManager.addUserToProject({projectId: projectId, userEmail:'testeProjeto@unitario.com'});
     });
 
-    it('Edits projects', async function()
+    let workTaskManager: WorkTaskManager;
+
+    it('Instantiates worktask manager', function()
     {
-        const editParams: EditProjectParameters =
+        const components: AuthManagerComponents =
         {
-            projectName: 'Unit Test Project Edited',
-            managerId: dataSource.getUuid(),
-            id: projectId,
-            description: 'This is an unit test edited',
+            communicator: communicator,
+            dataSource: dataSource,
+            subscribers: [subscriber]
         };
-        console.log(editParams);
-        await projectManager.editProject(editParams);
+
+        workTaskManager = new WorkTaskManager(components);
+        expect(workTaskManager).to.not.equal(undefined);
     });
 
-    it('Adds users from project', async function()
+    it('Sends create work task request', async function()
     {
-        const addParams: ManageUserParameters =
+        const workTask: CreateWorkTaskParameters =
         {
+            workTaskName: "Unit test work task",
             projectId: projectId,
-            userEmail: 'testeProjeto@unitario.com',
+            description: "Unit Test description",
+            expectedConclusionDate: "2020-03-16T21:17:44.089Z",
+            where: "Where",
+            why: "Why",
+            how: "How",
+            howMuch: 0,
+            observation: "Obs:"
         }
-        await projectManager.addUserToProject(addParams);
+        await workTaskManager.createWorkTask(workTask);
     });
 
-    it('Removes users from project', async function()
+    it('Edits work tasks', async function()
     {
-        const removeParams: ManageUserParameters =
+        const updateWorkTask: UpdateWorkTaskParameters =
         {
+            workTaskName: "Unit test work task edited",
             projectId: projectId,
-            userEmail: 'testeProjeto@unitario.com',
+            id: workTaskId,
+            description: "Unit Test description edited",
+            expectedConclusionDate: "2020-04-16T21:17:44.089Z",
+            where: "Where edited",
+            why: "Why edited",
+            how: "How edited",
+            howMuch: 1,
+            observation: "Obs: This was edited"
         }
-        await projectManager.removeUserFromProject(removeParams);
+        await workTaskManager.updateWorkTask(updateWorkTask);
     });
 
-    it('Gets user project list', async function()
+    it('Adds responsible to work task', async function()
     {
-        await projectManager.getProjectsList(dataSource.getUuid());
+        const addResponsible: AddResponsibleParameters =
+        {
+            workTaskId: workTaskId,
+            projectId: projectId,
+            userEmail: 'testeProjeto@unitario.com'
+        }
+        await workTaskManager.addResponsibleToWorkTask(addResponsible);
     });
 
-    it('Gets projects users list', async function()
+    it('Gets work tasks of projects', async function()
     {
-        await projectManager.getUsersInProject(projectId);
-    });
+        await workTaskManager.getWorkTasksOfProject(projectId);
+    })
 
-    it('Deletes projects', async function()
+    it('Deletes work task', async function()
+    {
+        const deleteTask: DeleteTaskParameters =
+        {
+            id: workTaskId,
+            projectId: projectId
+        }
+        await workTaskManager.deleteWorkTask(deleteTask);
+    })
+
+    afterAll(async function()
     {
         const deleteParams: DeleteProjectParameters =
         {

@@ -1,10 +1,8 @@
-export default interface WorkTaskParameters
+export default interface CreateWorkTaskParameters
 {
     workTaskName: string;
     projectId: string;
-    id: string;
     description: string;
-    startDate: string;
     expectedConclusionDate: string;
     where: string;
     why: string;

@@ -4,12 +4,14 @@ import ProjectDataSource from "./interfaces/ProjectDataSource";
 import ProjectSubscriber from "./interfaces/ProjectSubscriber";
 import ProjectManagerComponents from "./types/ProjectManagerComponents";
 import ApiResponse from "../0-ApiLibrary/types/ApiResponse";
-import ProjectParameters from "./types/ProjectParameters";
+import EditProjectParameters from "./types/EditProjectParameters";
 import ManageUserParameters from "./types/ManageUserParameters";
 import ProjectForm from "../0-ApiLibrary/types/ProjectForm";
 import ApiConstants from "../0-ApiLibrary/constants/ApiConstants";
 import ProjectLib from "../0-ApiLibrary/interfaces/ProjectLib";
 import ApiRequest from "../0-ApiLibrary/types/ApiRequest";
+import CreateProjectParameters from "./types/CreateProjectParameters";
+import DeleteProjectParameters from "./types/DeleteProjectParameters";
 
 export default class ProjectManager implements CommunicatorDelegate
 {
@@ -46,7 +48,7 @@ export default class ProjectManager implements CommunicatorDelegate
         } 
     }
 
-    public async createProject(project: ProjectParameters)
+    public async createProject(project: CreateProjectParameters)
     {
         const createProjectForm: ProjectForm =
         {
@@ -62,7 +64,7 @@ export default class ProjectManager implements CommunicatorDelegate
         await this.communicator.send(request);
     }
 
-    public async editProject(project: ProjectParameters)
+    public async editProject(project: EditProjectParameters)
     {
         const editProjectForm: ProjectForm =
         {
@@ -78,7 +80,7 @@ export default class ProjectManager implements CommunicatorDelegate
         await this.communicator.send(request);
     }
 
-    public async deleteProject(project: ProjectParameters)
+    public async deleteProject(project: DeleteProjectParameters)
     {
         const deleteProjectForm: ProjectForm =
         {
@@ -137,7 +139,7 @@ export default class ProjectManager implements CommunicatorDelegate
                 token: this.token
             }
         }
-
+        console
         const request:ApiRequest = ProjectLib.projectRequest(getProjectsListForm);
         await this.communicator.send(request);
     }
@@ -170,10 +172,6 @@ export default class ProjectManager implements CommunicatorDelegate
 
     public read(response: ApiResponse)
     {
-        if(response.status == 200)
-        {
-            this.token = response.data.data;
-        }
         for(let i in this.subscribers)
         {
             this.subscribers[i].notify(response);

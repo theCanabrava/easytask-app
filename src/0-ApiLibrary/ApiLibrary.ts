@@ -101,7 +101,6 @@ export default class ApiLibrary extends Object
             {
                 projectName: parameters.projectName,
                 managerId: parameters.managerId,
-                id: parameters.id,
                 description: parameters.description
             },
             headers: 
@@ -143,10 +142,8 @@ export default class ApiLibrary extends Object
             reqType: ApiConstants.reqType.post,
             body:
             {
-                projectName: parameters.projectName,
                 managerId: parameters.managerId,
                 id: parameters.id,
-                description: parameters.description
             },
             headers: 
             {
@@ -165,8 +162,8 @@ export default class ApiLibrary extends Object
             reqType: ApiConstants.reqType.post,
             body:
             {
-                userId: parameters.userId,
-                projectId: parameters.projectId
+                projectId: parameters.projectId,
+                userEmail: parameters.userEmail
             },
             headers: 
             {
@@ -185,8 +182,8 @@ export default class ApiLibrary extends Object
             reqType: ApiConstants.reqType.post,
             body:
             {
-                userId: parameters.userId,
-                projectId: parameters.projectId
+                projectId: parameters.projectId,
+                userEmail: parameters.userEmail
             },
             headers: 
             {
@@ -248,9 +245,7 @@ export default class ApiLibrary extends Object
             {
                 workTaskName: parameters.workTaskName,
                 projectId: parameters.projectId,
-                id: parameters.id,
                 description: parameters.description,
-                startDate: parameters.startDate,
                 expectedConclusionDate: parameters.expectedConclusionDate,
                 where: parameters.where,
                 why: parameters.why,
@@ -279,7 +274,6 @@ export default class ApiLibrary extends Object
                 projectId: parameters.projectId,
                 id: parameters.id,
                 description: parameters.description,
-                startDate: parameters.startDate,
                 expectedConclusionDate: parameters.expectedConclusionDate,
                 where: parameters.where,
                 why: parameters.why,
@@ -304,9 +298,9 @@ export default class ApiLibrary extends Object
             reqType: ApiConstants.reqType.post,
             body:
             {
-                id: parameters.id,
+                workTaskId: parameters.workTaskId,
                 projectId: parameters.projectId,
-                responsibleUserId: parameters.responsibleUserId,
+                userEmail: parameters.userEmail,
             },
             headers: 
             {

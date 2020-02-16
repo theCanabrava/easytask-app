@@ -3,10 +3,11 @@ import WorkTaskDataSource from '../src/1-WorkTaskManager/interfaces/WorkTaskData
 import WorkTaskCommunicator from '../src/1-WorkTaskManager/interfaces/WorkTaskCommunicator';
 import ApiRequest from '../src/0-ApiLibrary/types/ApiRequest';
 import WorkTaskManager from '../src/1-WorkTaskManager/WorkTaskManager';
-import WorkTaskParameters from '../src/1-WorkTaskManager/types/WorkTaskParameters';
+import UpdateWorkTaskParameters from '../src/1-WorkTaskManager/types/UpdateWorkTaskParameters';
 import AddResponsibleParameters from '../src/1-WorkTaskManager/types/AddResponsibleParameters';
 import DeleteTaskParameters from '../src/1-WorkTaskManager/types/DeleteTaskParameters';
 import CommunicatorDelegate from '../src/1-WorkTaskManager/interfaces/CommunicatorDelagate';
+import CreateWorkTaskParameters from '../src/1-WorkTaskManager/types/CreateWorkTaskParameters';
 
 class DummyDS implements WorkTaskDataSource
 {
@@ -79,13 +80,11 @@ describe('WorkTask Manager', function()
             for(let i in addResponsible) expect(dummyComunicator.latestRequest.body[i]).to.equal(deleteWorkTask[i]);
         });
 
-        const createWorkTask: WorkTaskParameters =
+        const createWorkTask: CreateWorkTaskParameters =
         {
             workTaskName: "string",
             projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             description: "string",
-            startDate: "2020-02-15T20:20:18.314Z",
             expectedConclusionDate: "2020-02-15T20:20:18.314Z",
             where: "string",
             why: "string",
@@ -94,13 +93,12 @@ describe('WorkTask Manager', function()
             observation: "string"
         }
 
-        const updateWorkTask: WorkTaskParameters =
+        const updateWorkTask: UpdateWorkTaskParameters =
         {
             workTaskName: "string",
             projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             description: "string",
-            startDate: "2020-02-15T20:20:18.314Z",
             expectedConclusionDate: "2020-02-15T20:20:18.314Z",
             where: "string",
             why: "string",
@@ -111,9 +109,9 @@ describe('WorkTask Manager', function()
         
         const addResponsible: AddResponsibleParameters =
         {
-            id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            workTaskId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             projectId: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-            responsibleUserId: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
+            userEmail: 'testeProjeto@unitario.com',
         }
 
         const projectId = '3fa85f64-5717-4562-b3fc-2c963f66afa7';

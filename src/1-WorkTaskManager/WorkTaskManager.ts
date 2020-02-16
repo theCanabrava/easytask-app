@@ -8,11 +8,12 @@ import WorkTaskForm from "../0-ApiLibrary/types/ProjectForm";
 import ApiConstants from "../0-ApiLibrary/constants/ApiConstants";
 import WorkTaskLib from "../0-ApiLibrary/interfaces/WorkTaskLib";
 import ApiRequest from "../0-ApiLibrary/types/ApiRequest";
-import WorkTaskParameters from "./types/WorkTaskParameters";
+import UpdateWorkTaskParameters from "./types/UpdateWorkTaskParameters";
 import AddResponsibleParameters from "./types/AddResponsibleParameters";
 import DeleteTaskParameters from "./types/DeleteTaskParameters";
+import CreateWorkTaskParameters from "./types/CreateWorkTaskParameters";
 
-export default class ProjectManager implements CommunicatorDelegate
+export default class WorkTaskManager implements CommunicatorDelegate
 {
     private token: string;
     private communicator: WorkTaskCommunicator;
@@ -47,7 +48,7 @@ export default class ProjectManager implements CommunicatorDelegate
         } 
     }
 
-    public async createWorkTask(workTask: WorkTaskParameters)
+    public async createWorkTask(workTask: CreateWorkTaskParameters)
     {
         const createWorkTaskForm: WorkTaskForm =
         {
@@ -63,7 +64,7 @@ export default class ProjectManager implements CommunicatorDelegate
         await this.communicator.send(request);
     }
 
-    public async updateWorkTask(workTask: WorkTaskParameters)
+    public async updateWorkTask(workTask: UpdateWorkTaskParameters)
     {
         const updateWorkTaskForm: WorkTaskForm =
         {
@@ -139,10 +140,6 @@ export default class ProjectManager implements CommunicatorDelegate
 
     public read(response: ApiResponse)
     {
-        if(response.status == 200)
-        {
-            this.token = response.data.data;
-        }
         for(let i in this.subscribers)
         {
             this.subscribers[i].notify(response);

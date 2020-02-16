@@ -1,6 +1,6 @@
 export default interface AddResponsibleParameters
 {
-    id: string;
+    workTaskId: string;
     projectId: string;
-    responsibleUserId: string;
+    userEmail: string;
 }

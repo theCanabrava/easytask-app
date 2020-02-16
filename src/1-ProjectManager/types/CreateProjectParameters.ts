@@ -1,7 +1,6 @@
-export default interface ProjectParameters
+export default interface CreateProjectParameters
 {
     projectName: string,
     managerId: string,
-    id: string,
     description: string
 }

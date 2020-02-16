@@ -12,7 +12,6 @@ describe('Project methods', function()
         expect(req.reqType).to.equal('post');
         expect(req.body.projectName).to.equal('New Project');
         expect(req.body.managerId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
-        expect(req.body.id).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
         expect(req.body.description).to.equal('This is a new project');
     });
 
@@ -32,10 +31,8 @@ describe('Project methods', function()
         let req = ProjectLib.projectRequest(DeleteProjectForm);
         expect(req.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Project/Delete-Project');
         expect(req.reqType).to.equal('post');
-        expect(req.body.projectName).to.equal('New Project');
-        expect(req.body.managerId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
         expect(req.body.id).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
-        expect(req.body.description).to.equal('This is a new project');
+        expect(req.body.managerId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
     });
 
     it('knows add user to project', function()
@@ -43,7 +40,7 @@ describe('Project methods', function()
         let req = ProjectLib.projectRequest(AddUserToProjectForm);
         expect(req.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Project/Add-User-To-Project');
         expect(req.reqType).to.equal('post');
-        expect(req.body.userId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+        expect(req.body.userEmail).to.equal('testeProjeto@unitario.com');
         expect(req.body.projectId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
     });
 
@@ -52,7 +49,7 @@ describe('Project methods', function()
         let req = ProjectLib.projectRequest(RemoveUserFromProjectForm);
         expect(req.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Project/Remove-User-From-Project');
         expect(req.reqType).to.equal('post');
-        expect(req.body.userId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+        expect(req.body.userEmail).to.equal('testeProjeto@unitario.com');
         expect(req.body.projectId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
     });
 
@@ -112,8 +109,8 @@ describe('Project methods', function()
         id: 'Add-User-To-Project',
         parameters:
         {
-            userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            userEmail: "testeProjeto@unitario.com"
         }
     }
 
@@ -122,8 +119,8 @@ describe('Project methods', function()
         id: 'Remove-User-From-Project',
         parameters:
         {
-            userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+            projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            userEmail: "testeProjeto@unitario.com",
         }
     }
 

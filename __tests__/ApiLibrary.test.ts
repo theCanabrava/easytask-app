@@ -77,7 +77,6 @@ describe('API Library', function()
             expect(req.reqType).to.equal('post');
             expect(req.body.projectName).to.equal('New Project');
             expect(req.body.managerId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
-            expect(req.body.id).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
             expect(req.body.description).to.equal('This is a new project');
         });
 
@@ -97,10 +96,8 @@ describe('API Library', function()
             let req = ApiLibrary.projectRequest(DeleteProjectForm);
             expect(req.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Project/Delete-Project');
             expect(req.reqType).to.equal('post');
-            expect(req.body.projectName).to.equal('New Project');
-            expect(req.body.managerId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
             expect(req.body.id).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
-            expect(req.body.description).to.equal('This is a new project');
+            expect(req.body.managerId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
         });
 
         it('knows add user to project', function()
@@ -108,7 +105,7 @@ describe('API Library', function()
             let req = ApiLibrary.projectRequest(AddUserToProjectForm);
             expect(req.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Project/Add-User-To-Project');
             expect(req.reqType).to.equal('post');
-            expect(req.body.userId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+            expect(req.body.userEmail).to.equal('testeProjeto@unitario.com');
             expect(req.body.projectId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
         });
 
@@ -117,8 +114,8 @@ describe('API Library', function()
             let req = ApiLibrary.projectRequest(RemoveUserFromProjectForm);
             expect(req.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Project/Remove-User-From-Project');
             expect(req.reqType).to.equal('post');
-            expect(req.body.userId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
             expect(req.body.projectId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+            expect(req.body.userEmail).to.equal('testeProjeto@unitario.com');
         });
 
         it('knows get project list', function()
@@ -177,8 +174,8 @@ describe('API Library', function()
             id: 'Add-User-To-Project',
             parameters:
             {
-                userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                userEmail: "testeProjeto@unitario.com"
             }
         }
 
@@ -187,8 +184,8 @@ describe('API Library', function()
             id: 'Remove-User-From-Project',
             parameters:
             {
-                userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                userEmail: "testeProjeto@unitario.com"
             }
         }
 
@@ -220,9 +217,7 @@ describe('API Library', function()
             expect(req.reqType).to.equal('post');
             expect(req.body.workTaskName).to.equal('name');
             expect(req.body.projectId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
-            expect(req.body.id).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
             expect(req.body.description).to.equal('description');
-            expect(req.body.startDate).to.equal('2020-02-15T00:45:09.996Z');
             expect(req.body.expectedConclusionDate).to.equal('2020-02-15T00:45:10.006Z');
             expect(req.body.where).to.equal('where');
             expect(req.body.why).to.equal('why');
@@ -240,7 +235,6 @@ describe('API Library', function()
             expect(req.body.projectId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
             expect(req.body.id).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
             expect(req.body.description).to.equal('descriptionUpd');
-            expect(req.body.startDate).to.equal('2021-02-15T00:45:09.996Z');
             expect(req.body.expectedConclusionDate).to.equal('2021-02-15T00:45:10.006Z');
             expect(req.body.where).to.equal('whereUpd');
             expect(req.body.why).to.equal('whyUpd');
@@ -254,9 +248,9 @@ describe('API Library', function()
             let req = ApiLibrary.workTaskRequest(addResponsibleForm);
             expect(req.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/WorkTask/Add-Responsible');
             expect(req.reqType).to.equal('post');
-            expect(req.body.id).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+            expect(req.body.workTaskId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
             expect(req.body.projectId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
-            expect(req.body.responsibleUserId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+            expect(req.body.userEmail).to.equal('testeProjeto@unitario.com');
         });
 
         it('knows get worktask of project', function()
@@ -282,9 +276,7 @@ describe('API Library', function()
             {
                 workTaskName: "name",
                 projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                 description: "description",
-                startDate: "2020-02-15T00:45:09.996Z",
                 expectedConclusionDate: "2020-02-15T00:45:10.006Z",
                 where: "where",
                 why: "why",
@@ -303,7 +295,6 @@ describe('API Library', function()
                 projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                 id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                 description: "descriptionUpd",
-                startDate: "2021-02-15T00:45:09.996Z",
                 expectedConclusionDate: "2021-02-15T00:45:10.006Z",
                 where: "whereUpd",
                 why: "whyUpd",
@@ -318,9 +309,9 @@ describe('API Library', function()
             id: 'Add-Responsible',
             parameters:
             {
-                id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                workTaskId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
                 projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-                responsibleUserId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                userEmail: "testeProjeto@unitario.com"
             }
         }
 

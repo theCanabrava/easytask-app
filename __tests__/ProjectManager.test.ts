@@ -3,9 +3,11 @@ import ProjectDataSource from '../src/1-ProjectManager/interfaces/ProjectDataSou
 import ProjectCommunicator from '../src/1-ProjectManager/interfaces/ProjectCommunicator';
 import ApiRequest from '../src/0-ApiLibrary/types/ApiRequest';
 import ProjectManager from '../src/1-ProjectManager/ProjectManager';
-import ProjectParameters from '../src/1-ProjectManager/types/ProjectParameters';
+import EditProjectParameters from '../src/1-ProjectManager/types/EditProjectParameters';
+import DeleteProjectParameters from '../src/1-ProjectManager/types/DeleteProjectParameters';
 import ManageUserParameters from '../src/1-ProjectManager/types/ManageUserParameters';
 import CommunicatorDelegate from '../src/1-ProjectManager/interfaces/CommunicatorDelagate';
+import CreateProjectParameters from '../src/1-ProjectManager/types/CreateProjectParameters';
 
 class DummyDS implements ProjectDataSource
 {
@@ -46,7 +48,6 @@ describe('Project Manager', function()
             expect(dummyComunicator.latestRequest.reqType).to.equal('post');
             expect(dummyComunicator.latestRequest.body.projectName).to.equal('projectName');
             expect(dummyComunicator.latestRequest.body.managerId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
-            expect(dummyComunicator.latestRequest.body.id).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa7');
             expect(dummyComunicator.latestRequest.body.description).to.equal('projectDescription')
         });
 
@@ -66,10 +67,8 @@ describe('Project Manager', function()
             manager.deleteProject(deleteProject);
             expect(dummyComunicator.latestRequest.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Project/Delete-Project');
             expect(dummyComunicator.latestRequest.reqType).to.equal('post');
-            expect(dummyComunicator.latestRequest.body.projectName).to.equal('projectNameEdited');
             expect(dummyComunicator.latestRequest.body.managerId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
             expect(dummyComunicator.latestRequest.body.id).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa7');
-            expect(dummyComunicator.latestRequest.body.description).to.equal('projectDescriptionEdited');
         });
 
         it('Sends add user to project request', function()
@@ -77,7 +76,7 @@ describe('Project Manager', function()
             manager.addUserToProject(addUser);
             expect(dummyComunicator.latestRequest.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Project/Add-User-To-Project');
             expect(dummyComunicator.latestRequest.reqType).to.equal('post');
-            expect(dummyComunicator.latestRequest.body.userId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+            expect(dummyComunicator.latestRequest.body.userEmail).to.equal('testeProjeto@unitario.com');
             expect(dummyComunicator.latestRequest.body.projectId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa7');
         });
 
@@ -86,7 +85,7 @@ describe('Project Manager', function()
             manager.removeUserFromProject(removeUser);
             expect(dummyComunicator.latestRequest.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Project/Remove-User-From-Project');
             expect(dummyComunicator.latestRequest.reqType).to.equal('post');
-            expect(dummyComunicator.latestRequest.body.userId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+            expect(dummyComunicator.latestRequest.body.userEmail).to.equal('testeProjeto@unitario.com');
             expect(dummyComunicator.latestRequest.body.projectId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa7');
         });
 
@@ -104,15 +103,14 @@ describe('Project Manager', function()
             expect(dummyComunicator.latestRequest.reqType).to.equal('get');
         });
 
-        const createProject: ProjectParameters =
+        const createProject: CreateProjectParameters =
         {
             projectName: 'projectName',
             managerId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
             description: 'projectDescription'
         }
 
-        const editProject: ProjectParameters =
+        const editProject: EditProjectParameters =
         {
             projectName: 'projectNameEdited',
             managerId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -120,23 +118,21 @@ describe('Project Manager', function()
             description: 'projectDescriptionEdited'
         }
         
-        const deleteProject: ProjectParameters =
+        const deleteProject: DeleteProjectParameters =
         {
-            projectName: 'projectNameEdited',
-            managerId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
             id: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
-            description: 'projectDescriptionEdited'
+            managerId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         }
 
         const addUser: ManageUserParameters =
         {
-            userId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            userEmail: 'testeProjeto@unitario.com',
             projectId: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
         }
 
         const removeUser: ManageUserParameters =
         {
-            userId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            userEmail: 'testeProjeto@unitario.com',
             projectId: '3fa85f64-5717-4562-b3fc-2c963f66afa7',
         }
 
