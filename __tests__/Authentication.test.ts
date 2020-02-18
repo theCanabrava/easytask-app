@@ -59,19 +59,20 @@ describe('Authentication', function()
     {
         notify(response: ApiResponse)
         {
-            if(response.path==ApiConstants.paths.newUser)
+            console.log(response.path);
+            if(response.path.endsWith(ApiConstants.paths.newUser))
             {
                 expect(response.status).to.equal(400);
                 expect(response.data.success).to.equal(false);
                 expect(response.data.errors[0]).to.equal(`Login 'teste@unitario.com' já está sendo utilizado.`);
             }
-            else if(response.path==ApiConstants.paths.login)
+            else if(response.path.endsWith(ApiConstants.paths.login))
             {
                 expect(response.status).to.equal(200);
                 expect(response.data.success).to.equal(true);
                 expect(response.data.data).to.not.equal(undefined);
             }
-            else if(response.path==ApiConstants.paths.refreshToken)
+            else if(response.path.endsWith(ApiConstants.paths.refreshToken))
             {
                 expect(response.status).to.equal(403);
             }

@@ -45,13 +45,13 @@ describe('Project', function()
     {
         notify(response: ApiResponse)
         {
-            if(response.path===ApiConstants.paths.login)
+            if(response.path.endsWith(ApiConstants.paths.login))
             {
                 dataSource.setToken(response.data.data);
             }
             else
             {
-                if(response.path == ApiConstants.paths.createProject)
+                if(response.path.endsWith(ApiConstants.paths.createProject))
                 {
                     projectId = response.data.data.id;
                 }
@@ -113,7 +113,6 @@ describe('Project', function()
             id: projectId,
             description: 'This is an unit test edited',
         };
-        console.log(editParams);
         await projectManager.editProject(editParams);
     });
 

@@ -6,8 +6,6 @@ import DBConstants from "./constants/DBConstants";
 import { WebSQLDatabase } from "expo-sqlite";
 const jwt_decode = require('jwt-decode');
 
-let current: Database;
-
 export default class Database implements UserStorage
 {
     private database: WebSQLDatabase;
@@ -27,11 +25,10 @@ export default class Database implements UserStorage
 
     public async initDatabase()
     {
-        current = this;
         return new Promise((res, rej) =>
         {
-            current.resolve = res;
-            current.database.transaction(current.createUserTable);
+            this.resolve = res;
+            this.database.transaction(this.createUserTable.bind(this));
         });
     }
 
@@ -45,37 +42,36 @@ export default class Database implements UserStorage
             ${DBConstants.userFields.webtoken} ${DBConstants.userTypes.webtoken}
         );`;
 
-        tx.executeSql(statement, [], current.selectUser);
+        tx.executeSql(statement, [], this.selectUser.bind(this));
     }
 
     private selectUser(tx, res)
     {
         const statement = `SELECT * FROM ${DBConstants.tables.user}`;
-        tx.executeSql(statement, [], current.extractUser);
+        tx.executeSql(statement, [], this.extractUser.bind(this));
     }
 
     private extractUser(tx, res)
     {
-        if(res.rows.length==0) current.addUser(tx, res);
-        else current.saveUser(res);
+        if(res.rows.length==0) this.addUser(tx, res);
+        else this.saveUser(res);
     }
 
     private addUser(tx, res)
     {
         const statement = `INSERT INTO  ${DBConstants.tables.user} VALUES (0, "", "", "");`;
-        tx.executeSql(statement, [], current.selectUser);
+        tx.executeSql(statement, [], this.selectUser.bind(this));
     }
 
     private saveUser(res)
     {
-        current.userData = 
+        this.userData = 
         {
             email: res.rows.item(0).email,
             uuid: res.rows.item(0).uuid,
             webtoken: res.rows.item(0).webtoken,
         };
-        if(current.resolve !== undefined) current.resolve('Done!');
-        current = undefined;
+        if(this.resolve !== undefined) this.resolve('Done!');
     }
 
     public getUser(): UserData
@@ -114,13 +110,15 @@ export default class Database implements UserStorage
 
     public notify(response: ApiResponse)
     {
-        if(response.data.success === false) this.resetUser();
-        else 
-        {
-            const webtoken = response.data.data;
-            const uuid = jwt_decode(webtoken).sub;
-            this.softSave({uuid: uuid, webtoken: webtoken});
-        }
+        if(response.data.success === true) this.renewToken(response);
+        else this.resetUser();
+    }
+
+    private renewToken(response: ApiResponse)
+    {
+        const webtoken = response.data.data;
+        const uuid = jwt_decode(webtoken).sub;
+        this.softSave({uuid: uuid, webtoken: webtoken});
         this.commitToDatabase();
     }
 
@@ -132,6 +130,19 @@ export default class Database implements UserStorage
             uuid: '',
             webtoken: '',
         }
+        this.dropTables();
+    }
+
+    private dropTables()
+    {
+        this.database.transaction((tx) =>
+        {
+            const statement = `DROP TABLE ${DBConstants.tables.user}`
+            tx.executeSql(statement, [], (tx, res) =>
+            {
+                this.initDatabase();
+            });
+        });
     }
 
     public getToken(): string

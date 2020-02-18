@@ -33,7 +33,7 @@ export default class AxiosCommunicator implements AuthCommunicator
         const apiResponse: ApiResponse =
         {
             status: axiosResponse.status,
-            path: axiosResponse.request.path,
+            path: axiosResponse.config.url,
             data: axiosResponse.data
         }
         return apiResponse

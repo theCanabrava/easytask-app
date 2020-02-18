@@ -49,17 +49,17 @@ describe('Project', function()
     {
         notify(response: ApiResponse)
         {
-            if(response.path===ApiConstants.paths.login)
+            if(response.path.endsWith(ApiConstants.paths.login))
             {
                 dataSource.setToken(response.data.data);
             }
-            else if(response.path == ApiConstants.paths.createProject)
+            else if(response.path.endsWith(ApiConstants.paths.createProject))
             {
                 projectId = response.data.data.id;
             }
-            else if(response.path != ApiConstants.paths.deleteProject)
+            else if(!response.path.endsWith(ApiConstants.paths.deleteProject))
             {
-                if(response.path == ApiConstants.paths.createWorkTask)
+                if(response.path.endsWith(ApiConstants.paths.createWorkTask))
                 {
                     workTaskId = response.data.data.id
                 }
