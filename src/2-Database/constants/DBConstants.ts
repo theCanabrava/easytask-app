@@ -5,6 +5,7 @@ export default class DBConstants
     public static tables =
     {
         user: 'USER',
+        project: 'PROJECT'
     }
 
     public static userFields =
@@ -21,5 +22,27 @@ export default class DBConstants
         email: 'VARCHAR (255)',
         uuid: 'VARCHAR (255)',
         webtoken: 'VARCHAR (255)'
+    }
+
+    public static projectFields =
+    {
+        id: 'id',
+        projectName: 'projectName',
+        description: 'description',
+        startDate: 'startDate',
+        finishDate: 'finishDate',
+        managerId: 'managerId',
+        completed: 'completed',
+    }
+
+    public static projectTypes =
+    {
+        id: 'VARCHAR(36) PRIMARY KEY NOT NULL',
+        projectName: 'VARCHAR(255)',
+        description: 'TEXT',
+        startDate: 'VARCHAR(24)',
+        finishDate: 'VARCHAR(24)',
+        managerId: 'VARCHAR(36)',
+        completed: 'BOOL',
     }
 }

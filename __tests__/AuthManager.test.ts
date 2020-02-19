@@ -61,7 +61,7 @@ describe('Authentication Manager', function()
         it('Sends refresh token request', function()
         {
             manager.refreshToken(refresh);
-            expect(dummyComunicator.latestRequest.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Refresh-Token');
+            expect(dummyComunicator.latestRequest.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Refresh-Token?email=user@example.com');
             expect(dummyComunicator.latestRequest.reqType).to.equal('post');
             expect(dummyComunicator.latestRequest.body.email).to.equal('user@example.com');
         });

@@ -65,7 +65,7 @@ export default class ApiLibrary extends Object
     {
         const refreshTokenRequest: ApiRequest =
         {
-            url: ApiConstants.paths.prefix + ApiConstants.paths.refreshToken,
+            url: ApiConstants.paths.prefix + ApiConstants.paths.refreshToken + `?email=${encodeURI(parameters.email)}`,
             reqType: ApiConstants.reqType.post,
             body:
             {
@@ -206,7 +206,6 @@ export default class ApiLibrary extends Object
                 Authorization: `Bearer ${parameters.token}`
             }
         }
-
         return getProjectsListRequest;
     }
 

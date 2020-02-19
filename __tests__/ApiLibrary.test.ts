@@ -31,7 +31,7 @@ describe('API Library', function()
         it('knows refresh token', function()
         {
             let req = ApiLibrary.authRequest(RefreshTokenForm);
-            expect(req.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Refresh-Token');
+            expect(req.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/Refresh-Token?email=user@example.com');
             expect(req.reqType).to.equal('post');
             expect(req.body.email).to.equal('user@example.com');
         });

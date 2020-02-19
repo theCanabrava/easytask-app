@@ -15,7 +15,28 @@ export default class AxiosCommunicator implements AuthCommunicator
 
     public async send(request: ApiRequest)
     {
+        if(request.reqType === 'post') await this.sendPost(request);
+        else await this.sendGetOrDelete(request);
+    }
+
+    private async sendPost(request: ApiRequest)
+    {
         await axios[request.reqType](request.url, request.body, {headers: request.headers})
+            .then((axiosResponse) =>
+            {
+                const apiResponse = this.makeApiResponse(axiosResponse);
+                this.communicatorDelegate.read(apiResponse);
+            })
+            .catch((axiosError) =>
+            {
+                const apiResponse = this.makeApiResponse(axiosError.response)
+                this.communicatorDelegate.read(apiResponse);
+            })
+    }
+
+    private async sendGetOrDelete(request: ApiRequest)
+    {
+        await axios[request.reqType](request.url, {headers: request.headers})
             .then((axiosResponse) =>
             {
                 const apiResponse = this.makeApiResponse(axiosResponse);

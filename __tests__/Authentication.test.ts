@@ -59,7 +59,6 @@ describe('Authentication', function()
     {
         notify(response: ApiResponse)
         {
-            console.log(response.path);
             if(response.path.endsWith(ApiConstants.paths.newUser))
             {
                 expect(response.status).to.equal(400);
@@ -72,9 +71,11 @@ describe('Authentication', function()
                 expect(response.data.success).to.equal(true);
                 expect(response.data.data).to.not.equal(undefined);
             }
-            else if(response.path.endsWith(ApiConstants.paths.refreshToken))
+            else if(response.path.includes(ApiConstants.paths.refreshToken))
             {
-                expect(response.status).to.equal(403);
+                expect(response.status).to.equal(200);
+                expect(response.data.success).to.equal(true);
+                expect(response.data.data).to.not.equal(undefined);
             }
         }
     };

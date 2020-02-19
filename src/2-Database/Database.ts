@@ -4,12 +4,14 @@ import UserStorage from "./interfaces/UserStorage";
 import * as SQLite from 'expo-sqlite';
 import DBConstants from "./constants/DBConstants";
 import { WebSQLDatabase } from "expo-sqlite";
+import ProjectData from "./types/ProjectData";
 const jwt_decode = require('jwt-decode');
 
 export default class Database implements UserStorage
 {
     private database: WebSQLDatabase;
     private userData: UserData;
+    private projecsArray: ProjectData[];
     private resolve: (value?: unknown) => void
 
     constructor()
