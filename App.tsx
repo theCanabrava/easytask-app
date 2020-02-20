@@ -22,7 +22,8 @@ export default class App extends Component implements AuthSubscriber
 
   notify(response)
   {
-    console.log('done');
+
+    console.log(response);
   }
 
   render()
@@ -40,6 +41,16 @@ export default class App extends Component implements AuthSubscriber
             this.udb = toolset.userStorage
             this.manager = toolset.authManager;
             this.manager.subscribe(this);
+            this.udb.updateProject(
+              {
+                id: 'e2553a54-4b46-42ae-a0b6-e1f54cdcc9ad',
+                projectName: 'Project',
+                description: 'Sample',
+                startDate: 'Hoje',
+                managerId: 'e2553a54-4b46-42ae-a0b6-e1f54cdcc9ad',
+                completed: false
+              }
+            )
             console.log("Inited");
           }}
         />
@@ -64,6 +75,7 @@ export default class App extends Component implements AuthSubscriber
           onPress = {async () =>
           {
             console.log(this.udb.getUser());
+            console.log(this.udb.getProjects())
           }}
         />
       </View>

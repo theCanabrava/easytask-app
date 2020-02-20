@@ -23,6 +23,7 @@ export default class Database implements UserStorage
             uuid: '',
             webtoken: '',
         }
+        this.projecsArray = [];
     }
 
     public async initDatabase()
@@ -56,7 +57,11 @@ export default class Database implements UserStorage
     private extractUser(tx, res)
     {
         if(res.rows.length==0) this.addUser(tx, res);
-        else this.saveUser(res);
+        else 
+        {
+            this.saveUser(res);
+            this.createProjectsTable(tx, res);
+        }
     }
 
     private addUser(tx, res)
@@ -73,6 +78,46 @@ export default class Database implements UserStorage
             uuid: res.rows.item(0).uuid,
             webtoken: res.rows.item(0).webtoken,
         };
+    }
+
+    private createProjectsTable(tx, res)
+    {
+        const statement = `CREATE TABLE IF NOT EXISTS ${DBConstants.tables.project}
+        (
+            ${DBConstants.projectFields.id} ${DBConstants.projectTypes.id},
+            ${DBConstants.projectFields.projectName} ${DBConstants.projectTypes.projectName},
+            ${DBConstants.projectFields.description} ${DBConstants.projectTypes.description},
+            ${DBConstants.projectFields.startDate} ${DBConstants.projectTypes.startDate},
+            ${DBConstants.projectFields.finishDate} ${DBConstants.projectTypes.finishDate},
+            ${DBConstants.projectFields.managerId} ${DBConstants.projectTypes.managerId},
+            ${DBConstants.projectFields.completed} ${DBConstants.projectTypes.completed}
+        );`;
+
+        tx.executeSql(statement, [], this.selectProjects.bind(this), (err) => console.log(err));
+    }
+
+    private selectProjects(tx, res)
+    {
+        const statement = `SELECT * FROM ${DBConstants.tables.project}`;
+        tx.executeSql(statement, [], this.extractProjects.bind(this));
+    }
+
+    private extractProjects(tx, res)
+    {
+        for(let i=0; i<res.rows.length; i++)
+        {
+            const project: ProjectData =
+            {
+                id: res.rows.item(i).id,
+                projectName: res.rows.item(i).projectName,
+                description: res.rows.item(i).description,
+                startDate: res.rows.item(i).startDate,
+                finishDate: res.rows.item(i).finishDate,
+                managerId: res.rows.item(i).managerId,
+                completed: res.rows.item(i).completed,
+            }
+            this.projecsArray.push(project);
+        }
         if(this.resolve !== undefined) this.resolve('Done!');
     }
 
@@ -84,7 +129,7 @@ export default class Database implements UserStorage
     public updateUser(user: UserData)
     {
         this.softSave(user);
-        this.commitToDatabase();
+        this.commitUser();
     }
 
     private softSave(user: UserData)
@@ -94,7 +139,7 @@ export default class Database implements UserStorage
         if(user.webtoken) this.userData.webtoken = user.webtoken
     }
 
-    private commitToDatabase()
+    private commitUser()
     {
         this.database.transaction((tx) =>
         {
@@ -104,9 +149,80 @@ export default class Database implements UserStorage
             ${DBConstants.userFields.uuid} = '${this.userData.uuid}',
             ${DBConstants.userFields.webtoken} = '${this.userData.webtoken}'
             WHERE
-            ${DBConstants.userFields.id} = 0
-            `
+            ${DBConstants.userFields.id} = 0`
             tx.executeSql(statement, []);
+        })
+    }
+
+    public getProjects(): ProjectData[]
+    {
+        return this.projecsArray;
+    }
+
+    public updateProject(project: ProjectData)
+    {
+        const index = this.projectIndex(project);
+        if(index !== -1) this.appendProject(project, index)
+        else this.addProject(project);
+    }
+
+    private projectIndex(project: ProjectData): number
+    {
+        return this.projecsArray.findIndex(proj => proj.id === project.id)
+    }
+
+    private appendProject(project: ProjectData, index: number)
+    {
+        if(project.projectName) this.projecsArray[index].projectName = project.projectName;
+        if(project.description) this.projecsArray[index].description = project.description;
+        if(project.startDate) this.projecsArray[index].startDate = project.startDate;
+        if(project.finishDate) this.projecsArray[index].finishDate = project.finishDate;
+        if(project.managerId) this.projecsArray[index].managerId = project.managerId;
+        if(typeof project.completed !== 'undefined') this.projecsArray[index].completed = project.completed;
+        this.setProject(this.projecsArray[index]);
+    }
+
+    private setProject(project: ProjectData)
+    {
+        this.database.transaction((tx) =>
+        {
+            const statement = `UPDATE ${DBConstants.tables.project}
+            SET 
+                ${DBConstants.projectFields.projectName} = '${project.projectName}',
+                ${DBConstants.projectFields.description} = '${project.description}',
+                ${DBConstants.projectFields.startDate} = '${project.startDate}',
+                ${DBConstants.projectFields.finishDate} = ${project.finishDate ? `'${project.finishDate}'` : `NULL`},
+                ${DBConstants.projectFields.managerId} = '${project.managerId}',
+                ${DBConstants.projectFields.completed} = ${project.completed ? 1: 0}
+            WHERE
+                ${DBConstants.projectFields.id} = '${project.id}'`
+
+            tx.executeSql(statement, [], undefined, (err) => console.log(err));
+        })
+    }
+
+    private addProject(project: ProjectData)
+    {
+        this.projecsArray.push(project);
+        this.insertProject(project)
+    }
+
+    private insertProject(project: ProjectData)
+    {
+        this.database.transaction((tx) =>
+        {
+            const statement = `INSERT INTO ${DBConstants.tables.project} VALUES 
+            (
+                '${project.id}',
+                '${project.projectName}',
+                '${project.description}',
+                '${project.startDate}',
+                ${project.finishDate ? `'${project.finishDate}'` : `NULL`},
+                '${project.managerId}',
+                ${project.completed ? 1: 0}
+            )`
+
+            tx.executeSql(statement, [], undefined, (err) => console.log(err));
         })
     }
 
@@ -121,7 +237,7 @@ export default class Database implements UserStorage
         const webtoken = response.data.data;
         const uuid = jwt_decode(webtoken).sub;
         this.softSave({uuid: uuid, webtoken: webtoken});
-        this.commitToDatabase();
+        this.commitUser();
     }
 
     private resetUser()
@@ -131,7 +247,8 @@ export default class Database implements UserStorage
             email: '',
             uuid: '',
             webtoken: '',
-        }
+        };
+        this.projecsArray = [];
         this.dropTables();
     }
 
@@ -139,10 +256,14 @@ export default class Database implements UserStorage
     {
         this.database.transaction((tx) =>
         {
-            const statement = `DROP TABLE ${DBConstants.tables.user}`
+            const statement = `DROP TABLE IF EXISTS ${DBConstants.tables.user}`;
             tx.executeSql(statement, [], (tx, res) =>
             {
-                this.initDatabase();
+                const statement = `DROP TABLE IF EXISTS ${DBConstants.tables.project}`;
+                tx.executeSql(statement, [], (tx, res) =>
+                {
+                    this.initDatabase();
+                })
             });
         });
     }
