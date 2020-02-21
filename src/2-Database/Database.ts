@@ -5,13 +5,14 @@ import * as SQLite from 'expo-sqlite';
 import DBConstants from "./constants/DBConstants";
 import { WebSQLDatabase } from "expo-sqlite";
 import ProjectData from "./types/ProjectData";
+import ProjectStorage from "./interfaces/ProjectStorage";
 const jwt_decode = require('jwt-decode');
 
-export default class Database implements UserStorage
+export default class Database implements UserStorage, ProjectStorage
 {
     private database: WebSQLDatabase;
     private userData: UserData;
-    private projecsArray: ProjectData[];
+    private projectsArray: ProjectData[];
     private resolve: (value?: unknown) => void
 
     constructor()
@@ -23,7 +24,7 @@ export default class Database implements UserStorage
             uuid: '',
             webtoken: '',
         }
-        this.projecsArray = [];
+        this.projectsArray = [];
     }
 
     public async initDatabase()
@@ -116,7 +117,7 @@ export default class Database implements UserStorage
                 managerId: res.rows.item(i).managerId,
                 completed: res.rows.item(i).completed,
             }
-            this.projecsArray.push(project);
+            this.projectsArray.push(project);
         }
         if(this.resolve !== undefined) this.resolve('Done!');
     }
@@ -156,30 +157,30 @@ export default class Database implements UserStorage
 
     public getProjects(): ProjectData[]
     {
-        return this.projecsArray;
+        return this.projectsArray;
     }
 
     public updateProject(project: ProjectData)
     {
         const index = this.projectIndex(project);
-        if(index !== -1) this.appendProject(project, index)
-        else this.addProject(project);
+        if(index !== -1) this.rewriteProject(project, index)
+        else this.writeProject(project);
     }
 
     private projectIndex(project: ProjectData): number
     {
-        return this.projecsArray.findIndex(proj => proj.id === project.id)
+        return this.projectsArray.findIndex(proj => proj.id === project.id)
     }
 
-    private appendProject(project: ProjectData, index: number)
+    private rewriteProject(project: ProjectData, index: number)
     {
-        if(project.projectName) this.projecsArray[index].projectName = project.projectName;
-        if(project.description) this.projecsArray[index].description = project.description;
-        if(project.startDate) this.projecsArray[index].startDate = project.startDate;
-        if(project.finishDate) this.projecsArray[index].finishDate = project.finishDate;
-        if(project.managerId) this.projecsArray[index].managerId = project.managerId;
-        if(typeof project.completed !== 'undefined') this.projecsArray[index].completed = project.completed;
-        this.setProject(this.projecsArray[index]);
+        if(project.projectName) this.projectsArray[index].projectName = project.projectName;
+        if(project.description) this.projectsArray[index].description = project.description;
+        if(project.startDate) this.projectsArray[index].startDate = project.startDate;
+        if(project.finishDate) this.projectsArray[index].finishDate = project.finishDate;
+        if(project.managerId) this.projectsArray[index].managerId = project.managerId;
+        if(typeof project.completed !== 'undefined') this.projectsArray[index].completed = project.completed;
+        this.setProject(this.projectsArray[index]);
     }
 
     private setProject(project: ProjectData)
@@ -197,13 +198,13 @@ export default class Database implements UserStorage
             WHERE
                 ${DBConstants.projectFields.id} = '${project.id}'`
 
-            tx.executeSql(statement, [], undefined, (err) => console.log(err));
+            tx.executeSql(statement, []);
         })
     }
 
-    private addProject(project: ProjectData)
+    private writeProject(project: ProjectData)
     {
-        this.projecsArray.push(project);
+        this.projectsArray.push(project);
         this.insertProject(project)
     }
 
@@ -222,8 +223,53 @@ export default class Database implements UserStorage
                 ${project.completed ? 1: 0}
             )`
 
-            tx.executeSql(statement, [], undefined, (err) => console.log(err));
+            tx.executeSql(statement, []);
         })
+    }
+
+    private reloadProjects(projects: ProjectData[])
+    {
+        this.projectsArray = projects;
+        this.database.transaction((tx) =>
+        {
+            const statement = `DELETE FROM ${DBConstants.tables.project}`;
+            tx.executeSql(statement, [], this.loadProjects.bind(this));
+        })
+    }
+
+    private loadProjects(tx, res)
+    {
+        let statement =  `INSERT INTO ${DBConstants.tables.project} VALUES `;
+        for(let i in this.projectsArray)
+        {
+            const project = this.projectsArray[i];
+            statement += `(
+                '${project.id}',
+                '${project.projectName}',
+                '${project.description}',
+                '${project.startDate}',
+                ${project.finishDate ? `'${project.finishDate}'` : `NULL`},
+                '${project.managerId}',
+                ${project.completed ? 1: 0}
+            )`
+            if(Number(i)+1 != this.projectsArray.length) statement += ', '
+        }
+        tx.executeSql(statement, []);
+    }
+
+    public deleteProject(projectId: string)
+    {
+        let projectIndex = this.projectIndex({id: projectId})
+        if(projectIndex !== -1)
+        {
+            this.projectsArray.splice(projectIndex, 1);
+            this.database.transaction((tx) =>
+            {
+                const statement = `DELETE FROM ${DBConstants.tables.project}
+                    WHERE ID = ${projectId}`;
+                tx.executeSql(statement, []);
+            });
+        }
     }
 
     public notify(response: ApiResponse)
@@ -248,7 +294,7 @@ export default class Database implements UserStorage
             uuid: '',
             webtoken: '',
         };
-        this.projecsArray = [];
+        this.projectsArray = [];
         this.dropTables();
     }
 
