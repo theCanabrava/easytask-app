@@ -5,7 +5,8 @@ export default class DBConstants
     public static tables =
     {
         user: 'USER',
-        project: 'PROJECT'
+        project: 'PROJECT',
+        workTask: 'WORKTASK'
     }
 
     public static userFields =
@@ -44,5 +45,39 @@ export default class DBConstants
         finishDate: 'VARCHAR(24)',
         managerId: 'VARCHAR(36)',
         completed: 'BOOL',
+    }
+
+    public static workTaskFields =
+    {
+        id: 'id',
+        workTaskName: 'workTaskName',
+        description: 'description',
+        projectId: 'projectId',
+        responsibleUserId: 'responsibleUserId',
+        startDate: 'startDate',
+        expectedConclusionDate: 'expectedConclusionDate',
+        finishDate: 'finishDate',
+        where: 'where',
+        why: 'why',
+        how: 'how',
+        howMuch: 'howMuch',
+        observation: 'observation'
+    }
+
+    public static workTaskTypes =
+    {
+        id: 'VARCHAR(36) PRIMARY KEY NOT NULL',
+        workTaskName: 'VARCHAR(255)',
+        description: 'TEXT',
+        projectId: 'VARCHAR(36)',
+        responsibleUserId: 'VARCHAR(36)',
+        startDate: 'VARCHAR(24)',
+        expectedConclusionDate: 'VARCHAR(24)',
+        finishDate: 'VARCHAR(24)',
+        where: 'TEXT',
+        why: 'TEXT',
+        how: 'TEXT',
+        howMuch: 'INT',
+        observation: 'TEXT'
     }
 }

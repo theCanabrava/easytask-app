@@ -50,6 +50,7 @@ export default class WorkTaskManager implements CommunicatorDelegate
 
     public async createWorkTask(workTask: CreateWorkTaskParameters)
     {
+        this.updateToken();
         const createWorkTaskForm: WorkTaskForm =
         {
             id: ApiConstants.workTask.createWorkTask,
@@ -66,6 +67,7 @@ export default class WorkTaskManager implements CommunicatorDelegate
 
     public async updateWorkTask(workTask: UpdateWorkTaskParameters)
     {
+        this.updateToken();
         const updateWorkTaskForm: WorkTaskForm =
         {
             id: ApiConstants.workTask.updateWorkTask,
@@ -82,9 +84,10 @@ export default class WorkTaskManager implements CommunicatorDelegate
 
     public async addResponsibleToWorkTask(addResponsible: AddResponsibleParameters)
     {
+        this.updateToken();
         const addResponsibleForm: WorkTaskForm =
         {
-            id: ApiConstants.workTask.addResoinsible,
+            id: ApiConstants.workTask.addResponsible,
             parameters:
             {
                 ...addResponsible,
@@ -98,6 +101,7 @@ export default class WorkTaskManager implements CommunicatorDelegate
 
     public async getWorkTasksOfProject(projectId: string)
     {
+        this.updateToken();
         const getWorkTaskForm: WorkTaskForm =
         {
             id: ApiConstants.workTask.getWorkTasksOfProject,
@@ -114,6 +118,7 @@ export default class WorkTaskManager implements CommunicatorDelegate
 
     public async deleteWorkTask(deleteTask: DeleteTaskParameters)
     {
+        this.updateToken();
         const deleteWorkTaskForm: WorkTaskForm =
         {
             id: ApiConstants.workTask.deleteWorkTask,
@@ -126,6 +131,14 @@ export default class WorkTaskManager implements CommunicatorDelegate
 
         const request: ApiRequest = WorkTaskLib.workTaskRequest(deleteWorkTaskForm);
         await this.communicator.send(request);
+    }
+
+    private updateToken()
+    {
+        if(this.token !== this.dataSource.getToken())
+        {
+            this.token = this.dataSource.getToken();
+        }
     }
 
     public subscribe(subscriber: WorkTaskSubscriber)

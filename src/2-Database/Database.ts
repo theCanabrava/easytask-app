@@ -7,13 +7,16 @@ import { WebSQLDatabase } from "expo-sqlite";
 import ProjectData from "./types/ProjectData";
 import ProjectStorage from "./interfaces/ProjectStorage";
 import ApiConstants from "../0-ApiLibrary/constants/ApiConstants";
+import WorkTaskData from "./types/WorkTaskData";
+import WorkTaskStorage from "./interfaces/WorkTaskStorage";
 const jwt_decode = require('jwt-decode');
 
-export default class Database implements UserStorage, ProjectStorage
+export default class Database implements UserStorage, ProjectStorage, WorkTaskStorage
 {
     private database: WebSQLDatabase;
     private userData: UserData;
     private projectsArray: ProjectData[];
+    private workTasksArray: WorkTaskData[];
     private resolve: (value?: unknown) => void
 
     constructor()
@@ -26,6 +29,7 @@ export default class Database implements UserStorage, ProjectStorage
             webtoken: '',
         }
         this.projectsArray = [];
+        this.workTasksArray = [];
     }
 
     public async initDatabase()
@@ -119,6 +123,59 @@ export default class Database implements UserStorage, ProjectStorage
                 completed: res.rows.item(i).completed,
             }
             this.projectsArray.push(project);
+        }
+        this.createWorkTaskTable(tx, res);
+    }
+
+    private createWorkTaskTable(tx, res)
+    {
+        const statement = `CREATE TABLE IF NOT EXISTS ${DBConstants.tables.workTask}
+        (
+            ${DBConstants.workTaskFields.id} ${DBConstants.workTaskTypes.id},
+            ${DBConstants.workTaskFields.workTaskName} ${DBConstants.workTaskTypes.workTaskName},
+            ${DBConstants.workTaskFields.description} ${DBConstants.workTaskTypes.description},
+            ${DBConstants.workTaskFields.projectId} ${DBConstants.workTaskTypes.projectId},
+            ${DBConstants.workTaskFields.responsibleUserId} ${DBConstants.workTaskTypes.responsibleUserId},
+            ${DBConstants.workTaskFields.startDate} ${DBConstants.workTaskTypes.startDate},
+            ${DBConstants.workTaskFields.expectedConclusionDate} ${DBConstants.workTaskTypes.expectedConclusionDate},
+            ${DBConstants.workTaskFields.finishDate} ${DBConstants.workTaskTypes.finishDate},
+            '${DBConstants.workTaskFields.where}' ${DBConstants.workTaskTypes.where},
+            ${DBConstants.workTaskFields.why} ${DBConstants.workTaskTypes.why},
+            ${DBConstants.workTaskFields.how} ${DBConstants.workTaskTypes.how},
+            ${DBConstants.workTaskFields.howMuch} ${DBConstants.workTaskTypes.howMuch},
+            ${DBConstants.workTaskFields.observation} ${DBConstants.workTaskTypes.observation}
+        );`;
+
+        tx.executeSql(statement, [], this.selectWorkTasks.bind(this));
+    }
+
+    private selectWorkTasks(tx, res)
+    {
+        const statement = `SELECT * FROM ${DBConstants.tables.workTask}`;
+        tx.executeSql(statement, [], this.extractWorkTasks.bind(this));
+    }
+
+    private extractWorkTasks(tx, res)
+    {
+        for(let i=0; i<res.rows.length; i++)
+        {
+            const workTask: WorkTaskData =
+            {
+                id: res.rows.item(i).id,
+                workTaskName: res.rows.item(i).workTaskName,
+                description: res.rows.item(i).description,
+                projectId: res.rows.item(i).projectId,
+                responsibleUserId: res.rows.item(i).responsibleUserId,
+                startDate: res.rows.item(i).startDate,
+                expectedConclusionDate: res.rows.item(i).expectedConclusionDate,
+                finishDate: res.rows.item(i).finishDate,
+                where: res.rows.item(i).where,
+                why: res.rows.item(i).why,
+                how: res.rows.item(i).how,
+                howMuch: res.rows.item(i).howMuch,
+                observation: res.rows.item(i).observation,
+            }
+            this.workTasksArray.push(workTask);
         }
         if(this.resolve !== undefined) this.resolve('Done!');
     }
@@ -256,6 +313,117 @@ export default class Database implements UserStorage, ProjectStorage
 
 
 
+    public getWorkTasks(): WorkTaskData[]
+    {
+        return this.workTasksArray;
+    }
+
+
+
+    public updateWorkTask(workTask: WorkTaskData)
+    {
+        const index = this.workTaskIndex(workTask);
+        if(index !== -1) this.rewriteWorkTask(workTask, index)
+        else this.writeWorkTask(workTask);
+    }
+
+    private workTaskIndex(workTask: WorkTaskData): number
+    {
+        return this.workTasksArray.findIndex(work => work.id === workTask.id)
+    }
+
+    private rewriteWorkTask(workTask: WorkTaskData, index: number)
+    {
+        if(workTask.workTaskName) this.workTasksArray[index].workTaskName = workTask.workTaskName;
+        if(workTask.description) this.workTasksArray[index].description = workTask.description;
+        if(workTask.projectId) this.workTasksArray[index].projectId = workTask.projectId;
+        if(workTask.responsibleUserId) this.workTasksArray[index].responsibleUserId = workTask.responsibleUserId;
+        if(workTask.startDate) this.workTasksArray[index].startDate = workTask.startDate;
+        if(workTask.expectedConclusionDate) this.workTasksArray[index].expectedConclusionDate = workTask.expectedConclusionDate;
+        if(workTask.finishDate) this.workTasksArray[index].finishDate = workTask.finishDate;
+        if(workTask.where) this.workTasksArray[index].where = workTask.where;
+        if(workTask.why) this.workTasksArray[index].why = workTask.why;
+        if(workTask.how) this.workTasksArray[index].how = workTask.how;
+        if(workTask.howMuch) this.workTasksArray[index].howMuch = workTask.howMuch;
+        if(workTask.observation) this.workTasksArray[index].observation = workTask.observation;
+        this.setWorkTask(this.workTasksArray[index]);
+    }
+
+    private setWorkTask(workTask: WorkTaskData)
+    {
+        this.database.transaction((tx) =>
+        {
+            const statement = `UPDATE ${DBConstants.tables.workTask}
+            SET 
+                ${DBConstants.workTaskFields.workTaskName} = '${workTask.workTaskName}',
+                ${DBConstants.workTaskFields.description} = '${workTask.description}',
+                ${DBConstants.workTaskFields.projectId} = '${workTask.projectId}',
+                ${DBConstants.workTaskFields.responsibleUserId} = '${workTask.responsibleUserId}',
+                ${DBConstants.workTaskFields.startDate} = ${workTask.startDate ? `'${workTask.startDate}'` : `NULL`},
+                ${DBConstants.workTaskFields.expectedConclusionDate} = ${workTask.expectedConclusionDate ? `'${workTask.expectedConclusionDate}'` : `NULL`},
+                ${DBConstants.workTaskFields.finishDate} = ${workTask.finishDate ? `'${workTask.finishDate}'` : `NULL`},
+                '${DBConstants.workTaskFields.where}' = '${workTask.where}',
+                ${DBConstants.workTaskFields.why} = '${workTask.why}',
+                ${DBConstants.workTaskFields.how} = '${workTask.how}',
+                ${DBConstants.workTaskFields.howMuch} = ${workTask.howMuch},
+                ${DBConstants.workTaskFields.observation} = '${workTask.observation}'
+            WHERE
+                ${DBConstants.workTaskFields.id} = '${workTask.id}'`
+
+            tx.executeSql(statement, []);
+        })
+    }
+
+    private writeWorkTask(workTask: WorkTaskData)
+    {
+        this.workTasksArray.push(workTask);
+        this.insertWorkTask(workTask)
+    }
+
+    private insertWorkTask(workTask: WorkTaskData)
+    {
+        this.database.transaction((tx) =>
+        {
+            const statement = `INSERT INTO ${DBConstants.tables.workTask} VALUES 
+            (
+                '${workTask.id}',
+                '${workTask.workTaskName}',
+                '${workTask.description}',
+                '${workTask.projectId}',
+                '${workTask.responsibleUserId}',
+                ${workTask.startDate ? `'${workTask.startDate}'` : `NULL`},
+                ${workTask.expectedConclusionDate ? `'${workTask.expectedConclusionDate}'` : `NULL`},
+                ${workTask.finishDate ? `'${workTask.finishDate}'` : `NULL`},
+                '${workTask.where}',
+                '${workTask.why}',
+                '${workTask.how}',
+                ${workTask.howMuch},
+                '${workTask.observation}'
+            )`
+
+            tx.executeSql(statement, []);
+        })
+    }
+
+
+
+    public deleteWorkTask(workTaskId: string)
+    {
+        let workTaskIndex = this.workTaskIndex({id: workTaskId})
+        if(workTaskIndex !== -1)
+        {
+            this.workTasksArray.splice(workTaskIndex, 1);
+            this.database.transaction((tx) =>
+            {
+                const statement = `DELETE FROM ${DBConstants.tables.workTask}
+                    WHERE ${DBConstants.workTaskFields.id} = '${workTaskId}'`;
+                tx.executeSql(statement, []);
+            });
+        }
+    }
+
+
+
     public notify(response: ApiResponse)
     {
         if(this.isAuthResponse(response)) this.processAuth(response);
@@ -300,6 +468,7 @@ export default class Database implements UserStorage, ProjectStorage
             webtoken: '',
         };
         this.projectsArray = [];
+        this.workTasksArray = [];
         this.dropTables();
     }
 
@@ -313,7 +482,11 @@ export default class Database implements UserStorage, ProjectStorage
                 const statement = `DROP TABLE IF EXISTS ${DBConstants.tables.project}`;
                 tx.executeSql(statement, [], (tx, res) =>
                 {
-                    this.initDatabase();
+                    const statement = `DROP TABLE IF EXISTS ${DBConstants.tables.workTask}`;
+                    tx.executeSql(statement, [], (tx, res) =>
+                    {
+                        this.initDatabase();
+                    })
                 })
             });
         });
@@ -379,6 +552,53 @@ export default class Database implements UserStorage, ProjectStorage
         }
         tx.executeSql(statement, []);
     }
+
+
+    private reloadWorkTasks(workTasks: WorkTaskData[])
+    {
+        const projectId = workTasks[0].projectId;
+        if(projectId)
+        {
+            this.workTasksArray = this.workTasksArray.filter(work => work.projectId !== projectId);
+            for(const i in workTasks) this.workTasksArray.push(workTasks[i]);
+
+            this.database.transaction((tx) =>
+            {
+                const statement = `DELETE FROM ${DBConstants.tables.project}
+                    WHERE ${DBConstants.workTaskFields.projectId} = '${projectId}'`;
+                tx.executeSql(statement, [], this.loadWorkTasks.bind(this, projectId));
+            })
+        }
+    }
+
+    private loadWorkTasks(projectId: string, tx, res)
+    {
+        const updatedWorkTasks = this.workTasksArray.filter(work => work.projectId === projectId);
+        let statement =  `INSERT INTO ${DBConstants.tables.workTask} VALUES `;
+        for(let i in updatedWorkTasks)
+        {
+            const workTask = updatedWorkTasks[i];
+            statement += `(
+                '${workTask.id}',
+                '${workTask.workTaskName}',
+                '${workTask.description}',
+                '${workTask.projectId}',
+                '${workTask.responsibleUserId}',
+                ${workTask.startDate ? `'${workTask.startDate}'` : `NULL`},
+                ${workTask.expectedConclusionDate ? `'${workTask.expectedConclusionDate}'` : `NULL`},
+                ${workTask.finishDate ? `'${workTask.finishDate}'` : `NULL`},
+                '${workTask.where}',
+                '${workTask.why}',
+                '${workTask.how}',
+                ${workTask.howMuch},
+                '${workTask.observation}'
+            )`
+            if(Number(i)+1 != updatedWorkTasks.length) statement += ', '
+        }
+        tx.executeSql(statement, []);
+    }
+
+
 
     public getToken(): string
     {

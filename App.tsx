@@ -11,13 +11,19 @@ import UserStorage from './src/2-Database/interfaces/UserStorage';
 import ProjectData from './src/2-Database/types/ProjectData';
 import ProjectManager from './src/1-ProjectManager/ProjectManager';
 import ProjectStorage from './src/2-Database/interfaces/ProjectStorage';
+import UserData from './src/2-Database/types/UserData';
+import WorkTaskManager from './src/1-WorkTaskManager/WorkTaskManager';
+import WorkTaskStorage from './src/2-Database/interfaces/WorkTaskStorage';
+import WorkTaskData from './src/2-Database/types/WorkTaskData';
 
 export default class App extends Component implements AuthSubscriber
 {
   private manager: AuthManager;
   private pManager: ProjectManager;
+  private wtManager: WorkTaskManager;
   private udb: UserStorage;
   private pdb: ProjectStorage;
+  private wtDb: WorkTaskStorage;
 
   constructor(props)
   {
@@ -26,8 +32,7 @@ export default class App extends Component implements AuthSubscriber
 
   notify(response)
   {
-
-    //console.log(response);
+    console.log(response);
   }
 
   render()
@@ -44,10 +49,13 @@ export default class App extends Component implements AuthSubscriber
             const toolset = await ToolsetFactory.makeToolset();
             this.udb = toolset.userStorage
             this.pdb = toolset.projectStorage;
+            this.wtDb = toolset.workTaskStorage;
             this.manager = toolset.authManager;
             this.pManager = toolset.projectManager;
+            this.wtManager = toolset.workTaskManager;
             this.manager.subscribe(this);
             this.pManager.subscribe(this);
+            this.wtManager.subscribe(this);
             console.log('inited');
           }}
         />
@@ -55,16 +63,26 @@ export default class App extends Component implements AuthSubscriber
           title ={"Login"}
           onPress = {async () =>
           {
+            const user: UserData = this.udb.getUser();
+            //await this.manager.refreshToken(user.email);
             //this.udb.updateUser({email: 'teste@unitario.com'})
             //await this.manager.login({email: 'teste@unitario.com', password: 'Teste@123'})
             const project: ProjectData = this.pdb.getProjects()[0];
-            
-            await this.pManager.deleteProject(
-              {
-                id: project.id,
-                managerId: project.managerId
-              }
-            );
+            const newWorkTask: WorkTaskData =
+            {
+              id: '33783c48-db05-49a0-0435-08d7ac086fcc',
+              workTaskName: 'This is a test work task edited',
+              description: 'For the pupose of testing edited',
+              projectId: user.uuid,
+              responsibleUserId: user.uuid,
+              startDate: new Date().toISOString(),
+              where: 'guogo',
+              why: 'ihoi',
+              how: 'pjp',
+              howMuch: 70,
+              observation: 'inoi',
+            }
+            this.wtDb.deleteWorkTask(newWorkTask.id);
           }}
         />
          <Button
@@ -81,6 +99,7 @@ export default class App extends Component implements AuthSubscriber
           {
             console.log(this.udb.getUser());
             console.log(this.pdb.getProjects());
+            console.log(this.wtDb.getWorkTasks());
           }}
         />
       </View>

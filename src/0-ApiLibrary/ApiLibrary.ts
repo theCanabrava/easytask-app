@@ -229,7 +229,7 @@ export default class ApiLibrary extends Object
     {
         [ApiConstants.workTask.createWorkTask]: ApiLibrary.createWorkTask,
         [ApiConstants.workTask.updateWorkTask]: ApiLibrary.updateWorkTask,
-        [ApiConstants.workTask.addResoinsible]: ApiLibrary.addResponsible,
+        [ApiConstants.workTask.addResponsible]: ApiLibrary.addResponsible,
         [ApiConstants.workTask.getWorkTasksOfProject]: ApiLibrary.getWorkTasksOfProject,
         [ApiConstants.workTask.deleteWorkTask]: ApiLibrary.deleteWorkTask
     }
@@ -293,7 +293,7 @@ export default class ApiLibrary extends Object
     {
         const addResponsibleRequest: ApiRequest =
         {
-            url: ApiConstants.paths.prefix + ApiConstants.paths.addResoinsible,
+            url: ApiConstants.paths.prefix + ApiConstants.paths.addResponsible,
             reqType: ApiConstants.reqType.post,
             body:
             {
