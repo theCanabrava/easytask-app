@@ -63,7 +63,6 @@ describe('Project', function()
                 {
                     workTaskId = response.data.data.id
                 }
-                console.log(response);
                 expect(response.status).to.equal(200);
             }
         }

@@ -55,7 +55,6 @@ describe('Project', function()
                 {
                     projectId = response.data.data.id;
                 }
-                console.log(response.data.data);
                 expect(response.status).to.equal(200);
             }
         }

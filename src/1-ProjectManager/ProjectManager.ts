@@ -50,6 +50,7 @@ export default class ProjectManager implements CommunicatorDelegate
 
     public async createProject(project: CreateProjectParameters)
     {
+        this.updateToken();
         const createProjectForm: ProjectForm =
         {
             id: ApiConstants.project.createProject,
@@ -66,6 +67,7 @@ export default class ProjectManager implements CommunicatorDelegate
 
     public async editProject(project: EditProjectParameters)
     {
+        this.updateToken();
         const editProjectForm: ProjectForm =
         {
             id: ApiConstants.project.editProject,
@@ -82,6 +84,7 @@ export default class ProjectManager implements CommunicatorDelegate
 
     public async deleteProject(project: DeleteProjectParameters)
     {
+        this.updateToken();
         const deleteProjectForm: ProjectForm =
         {
             id: ApiConstants.project.deleteProject,
@@ -98,6 +101,7 @@ export default class ProjectManager implements CommunicatorDelegate
 
     public async addUserToProject(addUser: ManageUserParameters)
     {
+        this.updateToken();
         const addUserToProjectForm: ProjectForm =
         {
             id: ApiConstants.project.addUserToProject,
@@ -114,6 +118,7 @@ export default class ProjectManager implements CommunicatorDelegate
 
     public async removeUserFromProject(removeUser: ManageUserParameters)
     {
+        this.updateToken();
         const removeUserInProjectForm: ProjectForm =
         {
             id: ApiConstants.project.removeUserFromProject,
@@ -130,6 +135,7 @@ export default class ProjectManager implements CommunicatorDelegate
 
     public async getProjectsList(userId: string)
     {
+        this.updateToken();
         const getProjectsListForm: ProjectForm =
         {
             id: ApiConstants.project.getProjectsList,
@@ -146,6 +152,7 @@ export default class ProjectManager implements CommunicatorDelegate
 
     public async getUsersInProject(projectId: string)
     {
+        this.updateToken();
         const getUsersInProjectFrom: ProjectForm =
         {
             id: ApiConstants.project.getUsersInProject,
@@ -158,6 +165,14 @@ export default class ProjectManager implements CommunicatorDelegate
 
         const request:ApiRequest = ProjectLib.projectRequest(getUsersInProjectFrom);
         await this.communicator.send(request);
+    }
+
+    private updateToken()
+    {
+        if(this.token !== this.dataSource.getToken())
+        {
+            this.token = this.dataSource.getToken();
+        }
     }
 
     public subscribe(subscriber: ProjectSubscriber)

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, version} from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import AuthDataSource from './src/1-AuthManager/interfaces/AuthDataSource';
 import AxiosCommunicator from './src/2-AxiosCommunicator/AxiosCommunicator';
@@ -9,22 +9,25 @@ import Database from './src/2-Database/Database';
 import ToolsetFactory from './src/3-ToolsetFactory/ToolsetFactory';
 import UserStorage from './src/2-Database/interfaces/UserStorage';
 import ProjectData from './src/2-Database/types/ProjectData';
+import ProjectManager from './src/1-ProjectManager/ProjectManager';
+import ProjectStorage from './src/2-Database/interfaces/ProjectStorage';
 
 export default class App extends Component implements AuthSubscriber
 {
   private manager: AuthManager;
+  private pManager: ProjectManager;
   private udb: UserStorage;
+  private pdb: ProjectStorage;
 
   constructor(props)
   {
     super(props);
-    //this.udb = new Database();
   }
 
   notify(response)
   {
 
-    console.log(response);
+    //console.log(response);
   }
 
   render()
@@ -40,17 +43,28 @@ export default class App extends Component implements AuthSubscriber
           {
             const toolset = await ToolsetFactory.makeToolset();
             this.udb = toolset.userStorage
+            this.pdb = toolset.projectStorage;
             this.manager = toolset.authManager;
+            this.pManager = toolset.projectManager;
             this.manager.subscribe(this);
-            console.log("Inited");
+            this.pManager.subscribe(this);
+            console.log('inited');
           }}
         />
         <Button
           title ={"Login"}
           onPress = {async () =>
           {
-            this.udb.updateUser({email: 'teste@unitario.com'})
-            await this.manager.login({email: 'teste@unitario.com', password: 'Teste@123'})
+            //this.udb.updateUser({email: 'teste@unitario.com'})
+            //await this.manager.login({email: 'teste@unitario.com', password: 'Teste@123'})
+            const project: ProjectData = this.pdb.getProjects()[0];
+            
+            await this.pManager.deleteProject(
+              {
+                id: project.id,
+                managerId: project.managerId
+              }
+            );
           }}
         />
          <Button
@@ -66,6 +80,7 @@ export default class App extends Component implements AuthSubscriber
           onPress = {async () =>
           {
             console.log(this.udb.getUser());
+            console.log(this.pdb.getProjects());
           }}
         />
       </View>

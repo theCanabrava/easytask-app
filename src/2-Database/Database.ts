@@ -6,6 +6,7 @@ import DBConstants from "./constants/DBConstants";
 import { WebSQLDatabase } from "expo-sqlite";
 import ProjectData from "./types/ProjectData";
 import ProjectStorage from "./interfaces/ProjectStorage";
+import ApiConstants from "../0-ApiLibrary/constants/ApiConstants";
 const jwt_decode = require('jwt-decode');
 
 export default class Database implements UserStorage, ProjectStorage
@@ -94,7 +95,7 @@ export default class Database implements UserStorage, ProjectStorage
             ${DBConstants.projectFields.completed} ${DBConstants.projectTypes.completed}
         );`;
 
-        tx.executeSql(statement, [], this.selectProjects.bind(this), (err) => console.log(err));
+        tx.executeSql(statement, [], this.selectProjects.bind(this));
     }
 
     private selectProjects(tx, res)
@@ -122,10 +123,14 @@ export default class Database implements UserStorage, ProjectStorage
         if(this.resolve !== undefined) this.resolve('Done!');
     }
 
+
+
     public getUser(): UserData
     {
         return this.userData;
     }
+
+
 
     public updateUser(user: UserData)
     {
@@ -155,10 +160,15 @@ export default class Database implements UserStorage, ProjectStorage
         })
     }
 
+
+
     public getProjects(): ProjectData[]
     {
         return this.projectsArray;
     }
+
+
+
 
     public updateProject(project: ProjectData)
     {
@@ -227,6 +237,119 @@ export default class Database implements UserStorage, ProjectStorage
         })
     }
 
+
+
+    public deleteProject(projectId: string)
+    {
+        let projectIndex = this.projectIndex({id: projectId})
+        if(projectIndex !== -1)
+        {
+            this.projectsArray.splice(projectIndex, 1);
+            this.database.transaction((tx) =>
+            {
+                const statement = `DELETE FROM ${DBConstants.tables.project}
+                    WHERE ${DBConstants.projectFields.id} = '${projectId}'`;
+                tx.executeSql(statement, []);
+            });
+        }
+    }
+
+
+
+    public notify(response: ApiResponse)
+    {
+        if(this.isAuthResponse(response)) this.processAuth(response);
+        else if(this.isValidUpdateProject(response)) this.updateProject(response.data.data);
+        else if(this.isValidDeleteProject(response)) this.deleteProject(response.data.data.id);
+        else if(this.isValidGetProjects(response)) 
+        {
+            this.reloadProjects(response.data.data);
+        }
+    }
+
+
+
+    private isAuthResponse(response: ApiResponse): boolean
+    {
+        if(response.path.endsWith(ApiConstants.paths.newUser)) return true;
+        else if(response.path.endsWith(ApiConstants.paths.login)) return true;
+        else if(response.path.endsWith(ApiConstants.paths.refreshToken)) return true;
+        return false;
+    }
+
+    private processAuth(response: ApiResponse)
+    {
+        if(response.data.success === true) this.renewToken(response);
+        else this.reset();
+    }
+
+    private renewToken(response: ApiResponse)
+    {
+        const webtoken = response.data.data;
+        const uuid = jwt_decode(webtoken).sub;
+        this.softSave({uuid: uuid, webtoken: webtoken});
+        this.commitUser();
+    }
+
+    private reset()
+    {
+        this.userData =
+        {
+            email: '',
+            uuid: '',
+            webtoken: '',
+        };
+        this.projectsArray = [];
+        this.dropTables();
+    }
+
+    private dropTables()
+    {
+        this.database.transaction((tx) =>
+        {
+            const statement = `DROP TABLE IF EXISTS ${DBConstants.tables.user}`;
+            tx.executeSql(statement, [], (tx, res) =>
+            {
+                const statement = `DROP TABLE IF EXISTS ${DBConstants.tables.project}`;
+                tx.executeSql(statement, [], (tx, res) =>
+                {
+                    this.initDatabase();
+                })
+            });
+        });
+    }
+
+    private isValidUpdateProject(response: ApiResponse): boolean
+    {
+        if(response.data.success)
+        {
+            if(response.path.endsWith(ApiConstants.paths.createProject)) return true;
+            else if(response.path.endsWith(ApiConstants.paths.editProject)) return true;
+        }
+
+        return false;
+    }
+
+    private isValidDeleteProject(response: ApiResponse): boolean
+    {
+        if(response.data.success)
+        {
+            if(response.path.endsWith(ApiConstants.paths.deleteProject)) return true;
+        }
+        return false;
+    }
+
+    private isValidGetProjects(response: ApiResponse): boolean
+    {
+        if(response.data.success)
+        {
+            if(response.path.includes(ApiConstants.paths.getProjectsList)) return true;
+        }
+        return false;
+    }
+
+    
+
     private reloadProjects(projects: ProjectData[])
     {
         this.projectsArray = projects;
@@ -255,63 +378,6 @@ export default class Database implements UserStorage, ProjectStorage
             if(Number(i)+1 != this.projectsArray.length) statement += ', '
         }
         tx.executeSql(statement, []);
-    }
-
-    public deleteProject(projectId: string)
-    {
-        let projectIndex = this.projectIndex({id: projectId})
-        if(projectIndex !== -1)
-        {
-            this.projectsArray.splice(projectIndex, 1);
-            this.database.transaction((tx) =>
-            {
-                const statement = `DELETE FROM ${DBConstants.tables.project}
-                    WHERE ID = ${projectId}`;
-                tx.executeSql(statement, []);
-            });
-        }
-    }
-
-    public notify(response: ApiResponse)
-    {
-        if(response.data.success === true) this.renewToken(response);
-        else this.resetUser();
-    }
-
-    private renewToken(response: ApiResponse)
-    {
-        const webtoken = response.data.data;
-        const uuid = jwt_decode(webtoken).sub;
-        this.softSave({uuid: uuid, webtoken: webtoken});
-        this.commitUser();
-    }
-
-    private resetUser()
-    {
-        this.userData =
-        {
-            email: '',
-            uuid: '',
-            webtoken: '',
-        };
-        this.projectsArray = [];
-        this.dropTables();
-    }
-
-    private dropTables()
-    {
-        this.database.transaction((tx) =>
-        {
-            const statement = `DROP TABLE IF EXISTS ${DBConstants.tables.user}`;
-            tx.executeSql(statement, [], (tx, res) =>
-            {
-                const statement = `DROP TABLE IF EXISTS ${DBConstants.tables.project}`;
-                tx.executeSql(statement, [], (tx, res) =>
-                {
-                    this.initDatabase();
-                })
-            });
-        });
     }
 
     public getToken(): string
