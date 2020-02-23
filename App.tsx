@@ -15,6 +15,8 @@ import UserData from './src/2-Database/types/UserData';
 import WorkTaskManager from './src/1-WorkTaskManager/WorkTaskManager';
 import WorkTaskStorage from './src/2-Database/interfaces/WorkTaskStorage';
 import WorkTaskData from './src/2-Database/types/WorkTaskData';
+import CreateWorkTaskParameters from './src/1-WorkTaskManager/types/CreateWorkTaskParameters';
+import UpdateWorkTaskParameters from './src/1-WorkTaskManager/types/UpdateWorkTaskParameters';
 
 export default class App extends Component implements AuthSubscriber
 {
@@ -67,22 +69,15 @@ export default class App extends Component implements AuthSubscriber
             //await this.manager.refreshToken(user.email);
             //this.udb.updateUser({email: 'teste@unitario.com'})
             //await this.manager.login({email: 'teste@unitario.com', password: 'Teste@123'})
-            const project: ProjectData = this.pdb.getProjects()[0];
-            const newWorkTask: WorkTaskData =
-            {
-              id: '33783c48-db05-49a0-0435-08d7ac086fcc',
-              workTaskName: 'This is a test work task edited',
-              description: 'For the pupose of testing edited',
-              projectId: user.uuid,
-              responsibleUserId: user.uuid,
-              startDate: new Date().toISOString(),
-              where: 'guogo',
-              why: 'ihoi',
-              how: 'pjp',
-              howMuch: 70,
-              observation: 'inoi',
-            }
-            this.wtDb.deleteWorkTask(newWorkTask.id);
+            //await this.pManager.getProjectsList(user.uuid);
+            //const project: ProjectData = this.pdb.getProjects()[0];
+            const workTaks = this.wtDb.getWorkTasks()[0];
+            await this.wtManager.deleteWorkTask(
+              {
+                id: workTaks.id,
+                projectId: workTaks.projectId
+              }
+            );
           }}
         />
          <Button
@@ -97,8 +92,6 @@ export default class App extends Component implements AuthSubscriber
           title ={"CheckUser"}
           onPress = {async () =>
           {
-            console.log(this.udb.getUser());
-            console.log(this.pdb.getProjects());
             console.log(this.wtDb.getWorkTasks());
           }}
         />

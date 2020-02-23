@@ -369,8 +369,8 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
                 ${DBConstants.workTaskFields.observation} = '${workTask.observation}'
             WHERE
                 ${DBConstants.workTaskFields.id} = '${workTask.id}'`
-
-            tx.executeSql(statement, []);
+            console.log(statement);
+            tx.executeSql(statement, [], undefined, (tx, err) => console.log(err));
         })
     }
 
@@ -400,8 +400,8 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
                 ${workTask.howMuch},
                 '${workTask.observation}'
             )`
-
-            tx.executeSql(statement, []);
+            console.log(statement);
+            tx.executeSql(statement, [], undefined, (tx, err) => console.log(err));
         })
     }
 
@@ -429,10 +429,20 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
         if(this.isAuthResponse(response)) this.processAuth(response);
         else if(this.isValidUpdateProject(response)) this.updateProject(response.data.data);
         else if(this.isValidDeleteProject(response)) this.deleteProject(response.data.data.id);
-        else if(this.isValidGetProjects(response)) 
+        else if(this.isValidGetProjects(response)) this.reloadProjects(response.data.data);
+        else if(this.isValidUpdateWorkTask(response)) this.updateWorkTask(response.data.data);
+        else if(this.isValidAddResponsible(response))
         {
-            this.reloadProjects(response.data.data);
+            const workTask: WorkTaskData =
+            {
+                id: response.data.data.workTaskId,
+                projectId: response.data.data.projectId,
+                responsibleUserId: response.data.data.userEmail
+            }
+            this.updateWorkTask(workTask);
         }
+        else if(this.isValidGetWorkTasks(response)) this.reloadWorkTasks(response.data.data);
+        else if(this.isValidDeleteWorkTask(response)) this.deleteWorkTask(response.data.data.id);
     }
 
 
@@ -553,6 +563,47 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
         tx.executeSql(statement, []);
     }
 
+    private isValidUpdateWorkTask(response: ApiResponse): boolean
+    {
+        if(response.data.success)
+        {
+            if(response.path.endsWith(ApiConstants.paths.createWorkTask)) return true;
+            else if(response.path.endsWith(ApiConstants.paths.updateWorkTask)) return true;
+        }
+
+        return false;
+    }
+
+    private isValidAddResponsible(response: ApiResponse): boolean
+    {
+        if(response.data.success)
+        {
+            if(response.path.endsWith(ApiConstants.paths.addResponsible)) return true;
+        }
+
+        return false;
+    }
+
+    private isValidGetWorkTasks(response: ApiResponse): boolean
+    {
+        if(response.data.success)
+        {
+            if(response.path.includes(ApiConstants.paths.getWorkTasksOfProject)) return true;
+        }
+
+        return false;
+    }
+
+    private isValidDeleteWorkTask(response: ApiResponse): boolean
+    {
+        if(response.data.success)
+        {
+            if(response.path.includes(ApiConstants.paths.deleteWorkTask)) return true;
+        }
+
+        return false;
+    }
+
 
     private reloadWorkTasks(workTasks: WorkTaskData[])
     {
@@ -591,7 +642,7 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
                 '${workTask.why}',
                 '${workTask.how}',
                 ${workTask.howMuch},
-                '${workTask.observation}'
+                '${mysql_real_escape_string(workTask.observation)}'
             )`
             if(Number(i)+1 != updatedWorkTasks.length) statement += ', '
         }
@@ -604,4 +655,31 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
     {
         return this.userData.webtoken;
     }
+}
+
+function mysql_real_escape_string (str) {
+    return str.replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, function (char) {
+        switch (char) {
+            case "\0":
+                return "\\0";
+            case "\x08":
+                return "\\b";
+            case "\x09":
+                return "\\t";
+            case "\x1a":
+                return "\\z";
+            case "\n":
+                return "\\n";
+            case "\r":
+                return "\\r";
+            case "\"":
+            case "'":
+            case "\\":
+            case "%":
+                return "\\"+char; // prepends a backslash to backslash, percent,
+                                  // and double/single quotes
+            default:
+                return char;
+        }
+    });
 }
