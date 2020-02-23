@@ -369,8 +369,8 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
                 ${DBConstants.workTaskFields.observation} = '${workTask.observation}'
             WHERE
                 ${DBConstants.workTaskFields.id} = '${workTask.id}'`
-            console.log(statement);
-            tx.executeSql(statement, [], undefined, (tx, err) => console.log(err));
+
+            tx.executeSql(statement, []);
         })
     }
 
@@ -400,8 +400,8 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
                 ${workTask.howMuch},
                 '${workTask.observation}'
             )`
-            console.log(statement);
-            tx.executeSql(statement, [], undefined, (tx, err) => console.log(err));
+
+            tx.executeSql(statement, []);
         })
     }
 
@@ -642,7 +642,7 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
                 '${workTask.why}',
                 '${workTask.how}',
                 ${workTask.howMuch},
-                '${mysql_real_escape_string(workTask.observation)}'
+                '${sqlSafe(workTask.observation)}'
             )`
             if(Number(i)+1 != updatedWorkTasks.length) statement += ', '
         }
@@ -657,7 +657,8 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
     }
 }
 
-function mysql_real_escape_string (str) {
+function sqlSafe(str) 
+{
     return str.replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, function (char) {
         switch (char) {
             case "\0":
