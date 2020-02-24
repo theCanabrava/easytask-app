@@ -20,6 +20,7 @@ export function setToolset(toolset: AppToolset)
         type: SET_TOOLSET,
         toolset: toolset
     };
+    
     return action;
 }
 

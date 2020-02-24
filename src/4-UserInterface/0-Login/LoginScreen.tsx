@@ -1,13 +1,21 @@
 import React, {Component, ReactNode} from 'react';
 import {KeyboardAvoidingView, TextInput} from 'react-native';
+import {connect} from 'react-redux';
 import styles from '../Constants/styles';
 import DefaultButton from '../Reusables/DefaultButton';
 import texts from '../Constants/texts';
+import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
+import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
+import LoginParameters from '../../1-AuthManager/types/LoginParameters';
+import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
+import { Dispatch } from 'redux';
 
-export default class LoginScreen extends Component
+class LoginScreen extends Component
 {
     props;
-    state
+    state;
+    toolset: AppToolset;
+    dispatch: Dispatch
 
     constructor(props)
     {
@@ -44,7 +52,7 @@ export default class LoginScreen extends Component
                 />
                 <DefaultButton
                     title={texts.LOGIN_LBL}
-                    onPress={() => this.props.navigation.navigate('ProjectList')}
+                    onPress={this.login.bind(this)}
                 />
                 <DefaultButton
                     title={texts.SIGNUP_LBL}
@@ -54,4 +62,56 @@ export default class LoginScreen extends Component
         )
         return loginScreen
     }
+
+    componentDidMount()
+    {
+        console.log("Component mounted");
+        this.toolset = this.props.toolset;
+        this.toolset.authManager.subscribe(this);
+        this.dispatch = this.props.dispatch;
+    }
+
+    notify(response: ApiResponse)
+    {
+        if(response.status === 200)
+        {
+            this.toolset.userStorage.updateUser({email: this.state.email});
+            this.props.navigation.navigate('ProjectList');
+            this.dispatch(toolsetActions.updateUser(
+                {
+                    email: this.state.email,
+                    uuid: this.toolset.userStorage.getUser().uuid,
+                    webtoken: this.toolset.userStorage.getUser().webtoken
+                }
+            ));
+        }
+    }
+
+    async login()
+    {
+        const email:string = this.state.email;
+        const password: string = this.state.password;
+        if(email.length !== 0 && password.length !== 0)
+        {
+            const loginParameters: LoginParameters =
+            {
+                email: email,
+                password: password
+            }
+            await this.toolset.authManager.login(loginParameters);
+        }
+    }
 }
+
+function mapState(state) 
+{
+    const props =
+    {
+        toolset: state.toolset.toolset,
+        user: state.toolset.user
+    }
+    console.log("Props loaded");
+    return props;
+}
+
+export default connect(mapState, null)(LoginScreen);

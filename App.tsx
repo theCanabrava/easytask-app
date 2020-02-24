@@ -45,6 +45,7 @@ export default class App extends Component
   async loadApp()
   {
     this.toolset = await ToolsetFactory.makeToolset();
+    store.dispatch(toolsetActions.setToolset(this.toolset));
   }
 
   render()
@@ -77,8 +78,8 @@ export default class App extends Component
   
   async loaded()
   {
+    console.log("SETTING LOADING TO FALSE");
     this.setState({isLoading: false});
-    store.dispatch(toolsetActions.setToolset(this.toolset));
     /*const workTask: WorkTaskData =
     {
       id: 'NUUL ID',

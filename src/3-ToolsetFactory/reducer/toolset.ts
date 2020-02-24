@@ -60,6 +60,7 @@ function setToolset(state, action)
     const user = toolset.userStorage.getUser();
     const projects = toolset.projectStorage.getProjects();
     const workTasks = toolset.workTaskStorage.getWorkTasks();
+    console.log("TOOLSET SET");
     return {...state, toolset: toolset, user: user, projects: projects, workTasks: workTasks };
 }
 
