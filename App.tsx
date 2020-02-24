@@ -1,102 +1,102 @@
-import React, {Component, version} from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import AuthDataSource from './src/1-AuthManager/interfaces/AuthDataSource';
-import AxiosCommunicator from './src/2-AxiosCommunicator/AxiosCommunicator';
-import AuthSubscriber from './src/1-AuthManager/interfaces/AuthSubscriber';
-import AuthManagerComponents from './src/1-AuthManager/types/AuthManagerComponents';
-import AuthManager from './src/1-AuthManager/AuthManager';
-import Database from './src/2-Database/Database';
+import React, {Component} from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { AppLoading } from 'expo';
+import { combineReducers, createStore } from 'redux';
+import { Provider } from 'react-redux';
+import toolsetReducer from './src/3-ToolsetFactory/reducer/toolset';
 import ToolsetFactory from './src/3-ToolsetFactory/ToolsetFactory';
-import UserStorage from './src/2-Database/interfaces/UserStorage';
+import AppToolset from './src/3-ToolsetFactory/types/AppToolset';
+import * as toolsetActions from './src/3-ToolsetFactory/actions/toolset';
 import ProjectData from './src/2-Database/types/ProjectData';
-import ProjectManager from './src/1-ProjectManager/ProjectManager';
-import ProjectStorage from './src/2-Database/interfaces/ProjectStorage';
-import UserData from './src/2-Database/types/UserData';
-import WorkTaskManager from './src/1-WorkTaskManager/WorkTaskManager';
-import WorkTaskStorage from './src/2-Database/interfaces/WorkTaskStorage';
 import WorkTaskData from './src/2-Database/types/WorkTaskData';
-import CreateWorkTaskParameters from './src/1-WorkTaskManager/types/CreateWorkTaskParameters';
-import UpdateWorkTaskParameters from './src/1-WorkTaskManager/types/UpdateWorkTaskParameters';
 
-export default class App extends Component implements AuthSubscriber
+const rootReducer = combineReducers(
+  {
+    toolset: toolsetReducer
+  }
+);
+
+const store = createStore(rootReducer);
+
+
+
+export default class App extends Component
 {
-  private manager: AuthManager;
-  private pManager: ProjectManager;
-  private wtManager: WorkTaskManager;
-  private udb: UserStorage;
-  private pdb: ProjectStorage;
-  private wtDb: WorkTaskStorage;
+  private toolset: AppToolset;
+  state
 
   constructor(props)
   {
     super(props);
+    this.state = {isLoading: true};
+    this.loadApp = this.loadApp.bind(this);
+    this.loaded = this.loaded.bind(this);
   }
 
-  notify(response)
+  async loadApp()
   {
-    console.log(response);
+    this.toolset = await ToolsetFactory.makeToolset();
   }
 
   render()
   {
+    const isLoading = this.state.isLoading;
+    let app
+    if(isLoading)
+    {
+      app = (
+        <Provider store={store}>
+          <AppLoading
+            startAsync={this.loadApp}
+            onFinish={this.loaded}/>
+        </Provider>
+      )
+    }
+    else
+    {
+      app = (
+        <Provider store={store}>
+          <View style={styles.container}>
+            <Text>Open up App.tsx to start working on your app!</Text>
+          </View>
+        </Provider>
+      );
+    }
 
-
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.tsx to start working on your app!</Text>
-        <Button
-          title ={"Init"}
-          onPress = {async () =>
-          {
-            const toolset = await ToolsetFactory.makeToolset();
-            this.udb = toolset.userStorage
-            this.pdb = toolset.projectStorage;
-            this.wtDb = toolset.workTaskStorage;
-            this.manager = toolset.authManager;
-            this.pManager = toolset.projectManager;
-            this.wtManager = toolset.workTaskManager;
-            this.manager.subscribe(this);
-            this.pManager.subscribe(this);
-            this.wtManager.subscribe(this);
-            console.log('inited');
-          }}
-        />
-        <Button
-          title ={"Login"}
-          onPress = {async () =>
-          {
-            const user: UserData = this.udb.getUser();
-            //await this.manager.refreshToken(user.email);
-            //this.udb.updateUser({email: 'teste@unitario.com'})
-            //await this.manager.login({email: 'teste@unitario.com', password: 'Teste@123'})
-            //await this.pManager.getProjectsList(user.uuid);
-            //const project: ProjectData = this.pdb.getProjects()[0];
-            const workTaks = this.wtDb.getWorkTasks()[0];
-            await this.wtManager.deleteWorkTask(
-              {
-                id: workTaks.id,
-                projectId: workTaks.projectId
-              }
-            );
-          }}
-        />
-         <Button
-          title ={"False login"}
-          onPress = {async () =>
-          {
-            this.udb.updateUser({email: 'teste@unitario.com'})
-            await this.manager.login({email: 'teste@unitario.com', password: 'Teste@12'})
-          }}
-        />
-        <Button
-          title ={"CheckUser"}
-          onPress = {async () =>
-          {
-            console.log(this.wtDb.getWorkTasks());
-          }}
-        />
-      </View>
-    );
+    return app;
+  }
+  
+  async loaded()
+  {
+    this.setState({isLoading: false});
+    store.dispatch(toolsetActions.setToolset(this.toolset));
+    const workTask: WorkTaskData =
+    {
+      id: 'NUUL ID',
+      workTaskName: 'This is a check',
+      projectId: 'NUUL ID',
+      description: 'To see if redux can store a project',
+    }
+    store.dispatch(toolsetActions.updateWorkTask(workTask));
+    const workTask2: WorkTaskData =
+    {
+      id: 'NUUL ID2',
+      projectId: 'Sup, bro',
+      responsibleUserId: 'NUUL ID',
+      description: 'Actualy, a work task',
+      startDate: new Date().toISOString(),
+      finishDate: new Date().toISOString(),
+      expectedConclusionDate: new Date().toISOString(),
+      howMuch: 4,
+      observation: 'Today'
+    }
+    store.dispatch(toolsetActions.updateWorkTask(workTask2));
+    const workTasks: WorkTaskData[] = [];
+    for(let i=0; i<10; i++) workTasks.push({id: `Project ${i}`, projectId: `NUUL ID`})
+    store.dispatch(toolsetActions.reloadWorkTasks(workTasks));
+    console.log(store.getState().toolset.workTasks);
+    store.dispatch(toolsetActions.removeWorkTask('Project 5'));
+    console.log(store.getState().toolset.workTasks);
   }
 }
 
