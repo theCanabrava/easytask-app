@@ -9,6 +9,15 @@ import AppToolset from './src/3-ToolsetFactory/types/AppToolset';
 import * as toolsetActions from './src/3-ToolsetFactory/actions/toolset';
 import ProjectData from './src/2-Database/types/ProjectData';
 import WorkTaskData from './src/2-Database/types/WorkTaskData';
+import RegisterScreen from './src/4-UserInterface/0-Register/RegisterScreen';
+import LoginScreen from './src/4-UserInterface/0-Login/LoginScreen';
+import ProjectListScreen from './src/4-UserInterface/1-ProjectList/ProjectListScreen';
+import ManageMembersScreen from './src/4-UserInterface/2-ManageMembers/ManageMembersScreen';
+import ManageProjectScreen from './src/4-UserInterface/2-ManageProject/ManageProjectScreen';
+import WorkTaskListScreen from './src/4-UserInterface/2-WorkTaskList/WorkTaskList';
+import ManageWorkTaskScreen from './src/4-UserInterface/3-ManageWorkTask/ManageWorkTaskScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import AppNavigation from './src/5-Navigation/AppNavigation';
 
 const rootReducer = combineReducers(
   {
@@ -56,9 +65,9 @@ export default class App extends Component
     {
       app = (
         <Provider store={store}>
-          <View style={styles.container}>
-            <Text>Open up App.tsx to start working on your app!</Text>
-          </View>
+          <NavigationContainer>
+              <AppNavigation/>
+          </NavigationContainer>
         </Provider>
       );
     }
@@ -70,7 +79,7 @@ export default class App extends Component
   {
     this.setState({isLoading: false});
     store.dispatch(toolsetActions.setToolset(this.toolset));
-    const workTask: WorkTaskData =
+    /*const workTask: WorkTaskData =
     {
       id: 'NUUL ID',
       workTaskName: 'This is a check',
@@ -96,7 +105,7 @@ export default class App extends Component
     store.dispatch(toolsetActions.reloadWorkTasks(workTasks));
     console.log(store.getState().toolset.workTasks);
     store.dispatch(toolsetActions.removeWorkTask('Project 5'));
-    console.log(store.getState().toolset.workTasks);
+    console.log(store.getState().toolset.workTasks);*/
   }
 }
 
