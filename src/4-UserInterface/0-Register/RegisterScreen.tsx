@@ -80,8 +80,6 @@ class RegisterScreen extends Component implements AuthSubscriber
     {
         if(response.status === 200)
         {
-            this.toolset.userStorage.updateUser({email: this.state.email});
-            this.props.navigation.navigate('ProjectList');
             this.dispatch(toolsetActions.updateUser(
                 {
                     email: this.state.email,
@@ -89,6 +87,8 @@ class RegisterScreen extends Component implements AuthSubscriber
                     webtoken: this.toolset.userStorage.getUser().webtoken
                 }
             ));
+            this.toolset.userStorage.updateUser({email: this.state.email});
+            this.props.navigation.navigate('ProjectList');
         }
     }
 

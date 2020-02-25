@@ -1,58 +1,22 @@
 import React, {Component, ReactNode} from 'react';
-import {View, Text, FlatList} from 'react-native';
-import styles from '../Constants/styles';
+import { Dispatch } from 'redux';
+import { FlatList } from 'react-native';
+import {connect} from 'react-redux';
 import ProjectData from '../../2-Database/types/ProjectData';
+import ProjectSubscriber from '../../1-ProjectManager/interfaces/ProjectSubscriber';
 import DefaultButton from '../Reusables/DefaultButton';
 import texts from '../Constants/texts';
 import ProjectCell from './components/ProjectCell';
+import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
+import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
+import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
+import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
 
-const dummyData: ProjectData[] =
-[
-    {
-        id: '1',
-        projectName: 'Project 1',
-        description: 'Description 1',
-        startDate: new Date().toISOString(),
-        finishDate: new Date().toISOString(),
-        managerId: 'MEEEE',
-        completed: false
-    },
-    {
-        id: '2',
-        projectName: 'Project 2',
-        description: 'Description 2',
-        startDate: new Date().toISOString(),
-        finishDate: new Date().toISOString(),
-        managerId: 'MEEEE',
-        completed: false
-    },
-    {
-        id: '3',
-        projectName: 'Project 3',
-        description: 'Description 3',
-        startDate: new Date().toISOString(),
-        finishDate: new Date().toISOString(),
-        managerId: 'MEEEE',
-        completed: false
-    }, 
-    {
-        id: '4',
-        projectName: 'Project 4',
-        description: 'Description 4',
-        startDate: new Date().toISOString(),
-        finishDate: new Date().toISOString(),
-        managerId: 'MEEEE',
-        completed: false
-    },
-    {
-        id: 'ADD'
-    }  
-]
-
-export default class ProjectListScreen extends Component
+class ProjectListScreen extends Component implements ProjectSubscriber
 {
     props;
-    state;
+    toolset: AppToolset;
+    dispatch: Dispatch;
 
     constructor(props)
     {
@@ -64,7 +28,7 @@ export default class ProjectListScreen extends Component
         const projectListScreen: ReactNode =
         (
             <FlatList
-                data = {dummyData}
+                data = {this.props.projects}
                 renderItem = {this.renderItem.bind(this)}
             />
         )
@@ -98,4 +62,44 @@ export default class ProjectListScreen extends Component
             return projectCell;
         }
     }
+
+    componentDidMount()
+    {
+        this.toolset = this.props.toolset;
+        this.dispatch = this.props.dispatch;
+        this.toolset.projectManager.subscribe(this);
+        this.toolset.projectManager.getProjectsList(this.props.user.uuid);
+    }
+
+    notify(response: ApiResponse)
+    {
+        console.log(response);
+        if(response.path.includes(ApiConstants.paths.getProjectsList))
+        {
+            if(response.status === 200)
+            {
+                const projects = response.data.data;
+                this.dispatch(toolsetActions.reloadProjects(projects));
+            }
+        }
+    }
+
+    componentWillUnmount()
+    {
+        this.toolset.projectManager.unsubscribe(this);
+    }
 }
+
+function mapState(state) 
+{
+    const props =
+    {
+        toolset: state.toolset.toolset,
+        user: state.toolset.user,
+        projects: state.toolset.projects
+    }
+    console.log("Projects lists props loaded");
+    return props;
+}
+
+export default connect(mapState, null)(ProjectListScreen);

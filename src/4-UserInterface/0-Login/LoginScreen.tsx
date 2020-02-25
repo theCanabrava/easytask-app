@@ -76,8 +76,6 @@ class LoginScreen extends Component
     {
         if(response.status === 200 && response.path.includes(ApiConstants.paths.login))
         {
-            this.toolset.userStorage.updateUser({email: this.state.email});
-            this.props.navigation.navigate('ProjectList');
             this.dispatch(toolsetActions.updateUser(
                 {
                     email: this.state.email,
@@ -85,6 +83,8 @@ class LoginScreen extends Component
                     webtoken: this.toolset.userStorage.getUser().webtoken
                 }
             ));
+            this.toolset.userStorage.updateUser({email: this.state.email});
+            this.props.navigation.navigate('ProjectList');
         }
     }
 
