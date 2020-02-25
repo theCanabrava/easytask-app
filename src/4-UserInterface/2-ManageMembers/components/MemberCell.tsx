@@ -22,7 +22,7 @@ export default class MemberCell extends Component
                 <DefaultButton
                     style={styles.shortButton}
                     title={texts.REMOVE_LBL}
-                    onPress={this.props.onPressRemove}
+                    onPress={this.props.onPressRemove.bind(this, email)}
                 />
             </View>
         );

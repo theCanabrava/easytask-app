@@ -2,14 +2,17 @@ import React, {Component, ReactNode} from 'react';
 import { Dispatch } from 'redux';
 import { FlatList } from 'react-native';
 import {connect} from 'react-redux';
-import ProjectSubscriber from '../../1-ProjectManager/interfaces/ProjectSubscriber';
+
 import DefaultButton from '../Reusables/DefaultButton';
-import texts from '../Constants/texts';
 import ProjectCell from './components/ProjectCell';
-import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
-import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
+
+import texts from '../Constants/texts';
+
 import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
 import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
+import ProjectSubscriber from '../../1-ProjectManager/interfaces/ProjectSubscriber';
+import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
+import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
 
 class ProjectListScreen extends Component implements ProjectSubscriber
 {
@@ -62,7 +65,7 @@ class ProjectListScreen extends Component implements ProjectSubscriber
                 <ProjectCell
                     projectData = {itemData.item}
                     onPressWorkTasks = {() => this.props.navigation.navigate('WorkTaskList')}
-                    onPressManageMembers = {() => {this.props.navigation.navigate('ManageMembers')}}
+                    onPressManageMembers = {() => {this.props.navigation.navigate('ManageMembers', {projectId: itemData.item.id})}}
                     onPressManageProject = {() => this.props.navigation.navigate('ManageProject', {projectId: itemData.item.id})}
                 />
             )
@@ -76,7 +79,7 @@ class ProjectListScreen extends Component implements ProjectSubscriber
         this.dispatch = this.props.dispatch;
         this.toolset.projectManager.subscribe(this);
         this.toolset.projectManager.getProjectsList(this.props.user.uuid);
-        this.props.navigation.addListener('focus', p => this.forceUpdate());
+        this.props.navigation.addListener('focus', () => this.forceUpdate());
     }
 
     notify(response: ApiResponse)
