@@ -5,6 +5,8 @@ export default
     PASSWORD_LBL: 'Senha',
     LOGIN_LBL: 'Entrar',
     SIGNUP_LBL: 'Registrar',
+    FAIL: 'Falha',
+    LOGIN_MSG: 'Conta ou senha erradas',
     
     //Register
     CONFIRM_PASSWORD_LBL: 'Confirmar Senha',

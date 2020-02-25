@@ -1,15 +1,18 @@
-import React, {Component, ReactNode} from 'react';
-import {KeyboardAvoidingView, TextInput} from 'react-native';
-import {connect} from 'react-redux';
-import styles from '../Constants/styles';
+import React, { Component, ReactNode } from 'react';
+import { Dispatch } from 'redux';
+
+import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { connect } from 'react-redux';
 import DefaultButton from '../Reusables/DefaultButton';
+
+import styles from '../Constants/styles';
 import texts from '../Constants/texts';
-import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
+
+import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
 import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
+import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
 import LoginParameters from '../../1-AuthManager/types/LoginParameters';
 import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
-import { Dispatch } from 'redux';
-import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
 
 class LoginScreen extends Component
 {
@@ -25,6 +28,8 @@ class LoginScreen extends Component
         {
             email: '',
             password: '',
+            isLoading: false
+
         }
     }
 
@@ -32,6 +37,22 @@ class LoginScreen extends Component
     {
         const email = this.state.email;
         const password = this.state.password;
+        const isLoading = this.state.isLoading
+
+        let commandPannel = 
+        (
+            <>
+            <DefaultButton
+            title={texts.LOGIN_LBL}
+            onPress={this.login.bind(this)}
+            />
+            <DefaultButton
+                title={texts.SIGNUP_LBL}
+                onPress={() => this.props.navigation.navigate('Register')}
+            />
+            </>
+        )
+        if (isLoading) commandPannel = <ActivityIndicator/>
 
         const loginScreen: ReactNode =
         (
@@ -51,14 +72,7 @@ class LoginScreen extends Component
                     onChangeText={(password) => this.setState({password})}
                     placeholder={texts.PASSWORD_LBL}
                 />
-                <DefaultButton
-                    title={texts.LOGIN_LBL}
-                    onPress={this.login.bind(this)}
-                />
-                <DefaultButton
-                    title={texts.SIGNUP_LBL}
-                    onPress={() => this.props.navigation.navigate('Register')}
-                />
+                {commandPannel}
             </KeyboardAvoidingView>
         )
         return loginScreen
@@ -66,30 +80,14 @@ class LoginScreen extends Component
 
     componentDidMount()
     {
-        console.log("Login component mounted");
         this.toolset = this.props.toolset;
         this.toolset.authManager.subscribe(this);
         this.dispatch = this.props.dispatch;
     }
 
-    notify(response: ApiResponse)
-    {
-        if(response.status === 200 && response.path.includes(ApiConstants.paths.login))
-        {
-            this.dispatch(toolsetActions.updateUser(
-                {
-                    email: this.state.email,
-                    uuid: this.toolset.userStorage.getUser().uuid,
-                    webtoken: this.toolset.userStorage.getUser().webtoken
-                }
-            ));
-            this.toolset.userStorage.updateUser({email: this.state.email});
-            this.props.navigation.navigate('ProjectList');
-        }
-    }
-
     async login()
     {
+        this.setState({isLoading: true});
         const email:string = this.state.email;
         const password: string = this.state.password;
         if(email.length !== 0 && password.length !== 0)
@@ -103,10 +101,37 @@ class LoginScreen extends Component
         }
     }
 
+    notify(response: ApiResponse)
+    {
+        if(response.path.includes(ApiConstants.paths.login))
+        {
+            this.setState({isLoading: false});
+            if(response.status === 200) this.handleSuccess(response);
+            else this.handleFaillure();
+        }
+    }
+
+    handleSuccess(response: ApiResponse)
+    {
+        this.dispatch(toolsetActions.updateUser(
+            {
+                email: this.state.email,
+                uuid: this.toolset.userStorage.getUser().uuid,
+                webtoken: this.toolset.userStorage.getUser().webtoken
+            }
+        ));
+        this.toolset.userStorage.updateUser({email: this.state.email});
+        this.props.navigation.navigate('ProjectList');
+    }
+
+    handleFaillure()
+    {
+        Alert.alert(texts.FAIL, texts.LOGIN_MSG);
+    }
+
     componentWillUnmount()
     {
         this.toolset.authManager.unsubscribe(this);
-        console.log("Login component unmounted");
     }
 }
 
@@ -117,7 +142,6 @@ function mapState(state)
         toolset: state.toolset.toolset,
         user: state.toolset.user
     }
-    console.log("Login props loaded");
     return props;
 }
 
