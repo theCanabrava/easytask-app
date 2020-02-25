@@ -2,7 +2,6 @@ import React, {Component, ReactNode} from 'react';
 import { Dispatch } from 'redux';
 import { FlatList } from 'react-native';
 import {connect} from 'react-redux';
-import ProjectData from '../../2-Database/types/ProjectData';
 import ProjectSubscriber from '../../1-ProjectManager/interfaces/ProjectSubscriber';
 import DefaultButton from '../Reusables/DefaultButton';
 import texts from '../Constants/texts';
@@ -25,10 +24,18 @@ class ProjectListScreen extends Component implements ProjectSubscriber
     
     render(): ReactNode
     {
+        console.log("Rendering projects");
+        const projectList = 
+        [
+            ...this.props.projects,
+            {
+                id: 'ADD'
+            }
+        ]
         const projectListScreen: ReactNode =
         (
             <FlatList
-                data = {this.props.projects}
+                data = {projectList}
                 renderItem = {this.renderItem.bind(this)}
             />
         )
@@ -43,7 +50,7 @@ class ProjectListScreen extends Component implements ProjectSubscriber
             (
                 <DefaultButton
                     title = {texts.ADD_PROJECT_LBL}
-                    onPress = {() => this.props.navigation.navigate('ManageProject')}
+                    onPress = {() => this.props.navigation.navigate('ManageProject', {projectId: itemData.item.id})}
                 />
             )
             return addCell
@@ -56,7 +63,7 @@ class ProjectListScreen extends Component implements ProjectSubscriber
                     projectData = {itemData.item}
                     onPressWorkTasks = {() => this.props.navigation.navigate('WorkTaskList')}
                     onPressManageMembers = {() => {this.props.navigation.navigate('ManageMembers')}}
-                    onPressManageProject = {() => this.props.navigation.navigate('ManageProject')}
+                    onPressManageProject = {() => this.props.navigation.navigate('ManageProject', {projectId: itemData.item.id})}
                 />
             )
             return projectCell;
@@ -69,11 +76,11 @@ class ProjectListScreen extends Component implements ProjectSubscriber
         this.dispatch = this.props.dispatch;
         this.toolset.projectManager.subscribe(this);
         this.toolset.projectManager.getProjectsList(this.props.user.uuid);
+        this.props.navigation.addListener('focus', p => this.forceUpdate());
     }
 
     notify(response: ApiResponse)
     {
-        console.log(response);
         if(response.path.includes(ApiConstants.paths.getProjectsList))
         {
             if(response.status === 200)

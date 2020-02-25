@@ -10,7 +10,7 @@ export default
     CONFIRM_PASSWORD_LBL: 'Confirmar Senha',
 
     //Project List
-    ADD_PROJECT_LBL: 'Novo Projecto',
+    ADD_PROJECT_LBL: 'Novo Projeto',
     NAME_LBL: "Nome",
     DESCRIPTION_LBL: "Descrição",
     START_DATE_LBL: "Inicio",
@@ -30,6 +30,7 @@ export default
     PROJECT_NAME_LBL: "Nome do Projecto",
     CREATE_LBL: "Criar",
     CONFIRM_EDIT_LBL: "Confirmar edição",
+    DELETE_LBL: "Deletar",
 
     //Work Task List
     RESPONSIBLE_LBL: "Responsável",
