@@ -9,6 +9,7 @@ import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
 import LoginParameters from '../../1-AuthManager/types/LoginParameters';
 import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
 import { Dispatch } from 'redux';
+import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
 
 class LoginScreen extends Component
 {
@@ -65,7 +66,7 @@ class LoginScreen extends Component
 
     componentDidMount()
     {
-        console.log("Component mounted");
+        console.log("Login component mounted");
         this.toolset = this.props.toolset;
         this.toolset.authManager.subscribe(this);
         this.dispatch = this.props.dispatch;
@@ -73,7 +74,7 @@ class LoginScreen extends Component
 
     notify(response: ApiResponse)
     {
-        if(response.status === 200)
+        if(response.status === 200 && response.path.includes(ApiConstants.paths.login))
         {
             this.toolset.userStorage.updateUser({email: this.state.email});
             this.props.navigation.navigate('ProjectList');
@@ -101,6 +102,12 @@ class LoginScreen extends Component
             await this.toolset.authManager.login(loginParameters);
         }
     }
+
+    componentWillUnmount()
+    {
+        this.toolset.authManager.unsubscribe(this);
+        console.log("Login component unmounted");
+    }
 }
 
 function mapState(state) 
@@ -110,7 +117,7 @@ function mapState(state)
         toolset: state.toolset.toolset,
         user: state.toolset.user
     }
-    console.log("Props loaded");
+    console.log("Login props loaded");
     return props;
 }
 

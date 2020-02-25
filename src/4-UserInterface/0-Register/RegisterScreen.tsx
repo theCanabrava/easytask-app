@@ -1,13 +1,22 @@
 import React, {Component, ReactNode} from 'react';
 import {KeyboardAvoidingView, TextInput} from 'react-native';
+import {connect} from 'react-redux';
 import DefaultButton from '../Reusables/DefaultButton';
 import styles from '../Constants/styles';
 import texts from '../Constants/texts';
+import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
+import { Dispatch } from 'redux';
+import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
+import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
+import AuthSubscriber from '../../1-AuthManager/interfaces/AuthSubscriber';
+import NewUserParameters from '../../1-AuthManager/types/NewUserParameters';
 
-export default class RegisterScreen extends Component
+class RegisterScreen extends Component implements AuthSubscriber
 {
     props;
-    state
+    state;
+    toolset: AppToolset;
+    dispatch: Dispatch;
 
     constructor(props)
     {
@@ -52,10 +61,70 @@ export default class RegisterScreen extends Component
                 />
                 <DefaultButton
                     title={texts.SIGNUP_LBL}
-                    onPress={() => this.props.navigation.navigate('ProjectList')}
+                    onPress={this.signUp.bind(this)}
                 />
             </KeyboardAvoidingView>
         )
         return registerScreen
     }
+
+    componentDidMount()
+    {
+        this.toolset = this.props.toolset;
+        this.dispatch = this.props.dispatch;
+        this.toolset.authManager.subscribe(this);
+        console.log("Register mounted");
+    }
+
+    notify(response: ApiResponse)
+    {
+        if(response.status === 200)
+        {
+            this.toolset.userStorage.updateUser({email: this.state.email});
+            this.props.navigation.navigate('ProjectList');
+            this.dispatch(toolsetActions.updateUser(
+                {
+                    email: this.state.email,
+                    uuid: this.toolset.userStorage.getUser().uuid,
+                    webtoken: this.toolset.userStorage.getUser().webtoken
+                }
+            ));
+        }
+    }
+
+    async signUp()
+    {
+        const email:string = this.state.email;
+        const password: string = this.state.password;
+        const confirmPassword: string = this.state.confirmPassword;
+        if(email.length !== 0 && password.length !== 0)
+        {
+            const newUserParameters: NewUserParameters =
+            {
+                email: email,
+                password: password,
+                confirmPassword: confirmPassword
+            }
+            await this.toolset.authManager.newUser(newUserParameters);
+        }
+    }
+
+    componentWillUnmount()
+    {
+        this.toolset.authManager.unsubscribe(this);
+        console.log("Register unmounted");
+    }
 }
+
+function mapState(state) 
+{
+    const props =
+    {
+        toolset: state.toolset.toolset,
+        user: state.toolset.user
+    }
+    console.log("Register props loaded");
+    return props;
+}
+
+export default connect(mapState)(RegisterScreen);
