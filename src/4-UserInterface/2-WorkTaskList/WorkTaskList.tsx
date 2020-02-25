@@ -45,13 +45,16 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
 
     renderItem(itemData): ReactNode
     {
-        if(itemData.item.id === "ADD")
+        const workTaskId = itemData.item.id;
+        const projectId = this.props.route.params.projectId;
+
+        if(workTaskId === "ADD")
         {
             const addCell =
             (
                 <DefaultButton
                     title = {texts.ADD_WORK_TASK}
-                    onPress = {() => this.props.navigation.navigate('ManageWorkTask')}
+                    onPress = {() => this.props.navigation.navigate('ManageWorkTask', {workTaskId, projectId})}
                 />
             )
             return addCell
@@ -62,7 +65,7 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
             (
                 <WorkTaskCell
                     workTaskData = {itemData.item}
-                    onPressEdit = {() => this.props.navigation.navigate('ManageWorkTask')}
+                    onPressEdit = {() => this.props.navigation.navigate('ManageWorkTask', {workTaskId, projectId})}
                 />
             )
             return projectCell;
