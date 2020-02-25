@@ -51,12 +51,25 @@ export default class AxiosCommunicator implements AuthCommunicator
 
     private makeApiResponse(axiosResponse): ApiResponse
     {
-        const apiResponse: ApiResponse =
+        if(axiosResponse)
         {
-            status: axiosResponse.status,
-            path: axiosResponse.config.url,
-            data: axiosResponse.data
+            const apiResponse: ApiResponse =
+            {
+                status: axiosResponse.status,
+                path: axiosResponse.config.url,
+                data: axiosResponse.data
+            }
+            return apiResponse
         }
-        return apiResponse
+        else
+        {
+            const apiResponse: ApiResponse =
+            {
+                status: 401,
+                path: '',
+                data: {data: []}
+            }
+            return apiResponse;
+        }
     }
 }
