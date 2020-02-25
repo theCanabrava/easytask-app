@@ -65,12 +65,17 @@ class LoginScreen extends Component
                     value={email}
                     onChangeText={(email) => this.setState({email})}
                     placeholder={texts.EMAIL_LBL}
+                    keyboardType='email-address'
+                    autoCapitalize='none'
                 />
                 <TextInput
                     style={styles.input}
                     value={password}
                     onChangeText={(password) => this.setState({password})}
                     placeholder={texts.PASSWORD_LBL}
+                    keyboardType='default'
+                    autoCapitalize='none'
+                    secureTextEntry
                 />
                 {commandPannel}
             </KeyboardAvoidingView>
@@ -121,7 +126,6 @@ class LoginScreen extends Component
             }
         ));
         this.toolset.userStorage.updateUser({email: this.state.email});
-        this.props.navigation.navigate('ProjectList');
     }
 
     handleFaillure()

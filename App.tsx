@@ -7,15 +7,6 @@ import toolsetReducer from './src/3-ToolsetFactory/reducer/toolset';
 import ToolsetFactory from './src/3-ToolsetFactory/ToolsetFactory';
 import AppToolset from './src/3-ToolsetFactory/types/AppToolset';
 import * as toolsetActions from './src/3-ToolsetFactory/actions/toolset';
-import ProjectData from './src/2-Database/types/ProjectData';
-import WorkTaskData from './src/2-Database/types/WorkTaskData';
-import RegisterScreen from './src/4-UserInterface/0-Register/RegisterScreen';
-import LoginScreen from './src/4-UserInterface/0-Login/LoginScreen';
-import ProjectListScreen from './src/4-UserInterface/1-ProjectList/ProjectListScreen';
-import ManageMembersScreen from './src/4-UserInterface/2-ManageMembers/ManageMembersScreen';
-import ManageProjectScreen from './src/4-UserInterface/2-ManageProject/ManageProjectScreen';
-import WorkTaskListScreen from './src/4-UserInterface/2-WorkTaskList/WorkTaskList';
-import ManageWorkTaskScreen from './src/4-UserInterface/3-ManageWorkTask/ManageWorkTaskScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigation from './src/5-Navigation/AppNavigation';
 
@@ -45,6 +36,7 @@ export default class App extends Component
   async loadApp()
   {
     this.toolset = await ToolsetFactory.makeToolset();
+    await this.toolset.authManager.refreshToken(this.toolset.userStorage.getUser().email);
     store.dispatch(toolsetActions.setToolset(this.toolset));
   }
 

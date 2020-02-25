@@ -1,4 +1,5 @@
 import React, { Component, ReactNode } from 'react';
+import { connect } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import RegisterScreen from '../4-UserInterface/0-Register/RegisterScreen';
 import LoginScreen from '../4-UserInterface/0-Login/LoginScreen';
@@ -10,21 +11,13 @@ import ManageWorkTaskScreen from '../4-UserInterface/3-ManageWorkTask/ManageWork
 
 const Stack = createStackNavigator();
 
-export default class AppNavigation extends Component
+class AppNavigation extends Component
 {
     render()
     {
         let appNavigation: ReactNode =
         (
             <Stack.Navigator>
-                <Stack.Screen
-                    name="Login"
-                    component={LoginScreen}    
-                />
-                <Stack.Screen
-                    name="Register"
-                    component={RegisterScreen}
-                />
                 <Stack.Screen
                     name="ProjectList"
                     component={ProjectListScreen}    
@@ -51,3 +44,48 @@ export default class AppNavigation extends Component
         return appNavigation
     }
 }
+
+class LoginNavigation extends Component
+{
+    render()
+    {
+        const loginNavigator =
+        (
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="Login"
+                    component={LoginScreen}    
+                />
+                <Stack.Screen
+                    name="Register"
+                    component={RegisterScreen}
+                />
+            </Stack.Navigator>
+        )
+
+        return loginNavigator
+    }
+}
+
+class MainNavigator extends Component
+{
+    props;
+
+    render()
+    {
+        const loggedIn = this.props.user.uuid !== '';
+        if(loggedIn) return (<AppNavigation/>)
+        else return (<LoginNavigation/>)
+    }
+}
+
+function mapState(state) 
+{
+    const props =
+    {
+        user: state.toolset.user
+    }
+    return props;
+}
+
+export default connect(mapState, undefined)(MainNavigator);
