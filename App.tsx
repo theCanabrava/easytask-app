@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { AppLoading } from 'expo';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';

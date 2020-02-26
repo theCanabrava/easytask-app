@@ -51,7 +51,14 @@ class LoginNavigation extends Component
     {
         const loginNavigator =
         (
-            <Stack.Navigator>
+            <Stack.Navigator
+                screenOptions = 
+                {
+                    {
+                        headerShown: false
+                    }
+                }
+            >
                 <Stack.Screen
                     name="Login"
                     component={LoginScreen}    

@@ -10,6 +10,7 @@ export default
     
     //Register
     CONFIRM_PASSWORD_LBL: 'Confirmar Senha',
+    SIGNUP_MSG: 'Falha no registro',
 
     //Project List
     ADD_PROJECT_LBL: 'Novo Projeto',

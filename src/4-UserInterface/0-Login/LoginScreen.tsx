@@ -52,7 +52,7 @@ class LoginScreen extends Component
             />
             </>
         )
-        if (isLoading) commandPannel = <ActivityIndicator/>
+        if (isLoading) commandPannel = <ActivityIndicator style={{marginVertical:10}}/>
 
         const loginScreen: ReactNode =
         (
@@ -110,7 +110,6 @@ class LoginScreen extends Component
     {
         if(response.path.includes(ApiConstants.paths.login))
         {
-            this.setState({isLoading: false});
             if(response.status === 200) this.handleSuccess(response);
             else this.handleFaillure();
         }
@@ -130,6 +129,7 @@ class LoginScreen extends Component
 
     handleFaillure()
     {
+        this.setState({isLoading: false});
         Alert.alert(texts.FAIL, texts.LOGIN_MSG);
     }
 
