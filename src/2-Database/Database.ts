@@ -208,12 +208,13 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
         {
             const statement = `UPDATE ${DBConstants.tables.user} 
             SET
-            ${DBConstants.userFields.email} = '${this.userData.email}',
-            ${DBConstants.userFields.uuid} = '${this.userData.uuid}',
-            ${DBConstants.userFields.webtoken} = '${this.userData.webtoken}'
+            ${DBConstants.userFields.email} = '?',
+            ${DBConstants.userFields.uuid} = '?',
+            ${DBConstants.userFields.webtoken} = '?'
             WHERE
-            ${DBConstants.userFields.id} = 0`
-            tx.executeSql(statement, []);
+            ${DBConstants.userFields.id} = 0`;
+            const args = [this.userData.email, this.userData.uuid, this.userData.webtoken];
+            tx.executeSql(statement, args);
         })
     }
 
@@ -256,16 +257,27 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
         {
             const statement = `UPDATE ${DBConstants.tables.project}
             SET 
-                ${DBConstants.projectFields.projectName} = '${project.projectName}',
-                ${DBConstants.projectFields.description} = '${project.description}',
-                ${DBConstants.projectFields.startDate} = '${project.startDate}',
-                ${DBConstants.projectFields.finishDate} = ${project.finishDate ? `'${project.finishDate}'` : `NULL`},
-                ${DBConstants.projectFields.managerId} = '${project.managerId}',
-                ${DBConstants.projectFields.completed} = ${project.completed ? 1: 0}
+                ${DBConstants.projectFields.projectName} = '?',
+                ${DBConstants.projectFields.description} = '?',
+                ${DBConstants.projectFields.startDate} = '?',
+                ${DBConstants.projectFields.finishDate} = ?,
+                ${DBConstants.projectFields.managerId} = '?',
+                ${DBConstants.projectFields.completed} = ?
             WHERE
-                ${DBConstants.projectFields.id} = '${project.id}'`
+                ${DBConstants.projectFields.id} = '?'`
 
-            tx.executeSql(statement, []);
+            const args =
+            [
+                project.projectName,
+                project.description,
+                project.startDate,
+                (project.finishDate ? `${project.finishDate}` : `NULL`),
+                project.managerId,
+                (project.completed ? 1:0),
+                project.id
+            ];
+
+            tx.executeSql(statement, args);
         })
     }
 
@@ -281,16 +293,27 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
         {
             const statement = `INSERT INTO ${DBConstants.tables.project} VALUES 
             (
-                '${project.id}',
-                '${project.projectName}',
-                '${project.description}',
-                '${project.startDate}',
-                ${project.finishDate ? `'${project.finishDate}'` : `NULL`},
-                '${project.managerId}',
-                ${project.completed ? 1: 0}
-            )`
+                '?',
+                '?',
+                '?',
+                '?',
+                ?,
+                '?',
+                ?
+            )`;
 
-            tx.executeSql(statement, []);
+            const args =
+            [
+                project.id,
+                project.projectName,
+                project.description,
+                project.startDate,
+                (project.finishDate ? `'${project.finishDate}'` : `NULL`),
+                project.managerId,
+                (project.completed ? 1:0),
+            ];
+
+            tx.executeSql(statement, args);
         })
     }
 
@@ -305,8 +328,9 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
             this.database.transaction((tx) =>
             {
                 const statement = `DELETE FROM ${DBConstants.tables.project}
-                    WHERE ${DBConstants.projectFields.id} = '${projectId}'`;
-                tx.executeSql(statement, []);
+                    WHERE ${DBConstants.projectFields.id} = '?'`;
+                const args = [projectId];
+                tx.executeSql(statement, args);
             });
         }
     }
@@ -355,22 +379,39 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
         {
             const statement = `UPDATE ${DBConstants.tables.workTask}
             SET 
-                ${DBConstants.workTaskFields.workTaskName} = '${workTask.workTaskName}',
-                ${DBConstants.workTaskFields.description} = '${workTask.description}',
-                ${DBConstants.workTaskFields.projectId} = '${workTask.projectId}',
-                ${DBConstants.workTaskFields.responsibleUserId} = '${workTask.responsibleUserId}',
-                ${DBConstants.workTaskFields.startDate} = ${workTask.startDate ? `'${workTask.startDate}'` : `NULL`},
-                ${DBConstants.workTaskFields.expectedConclusionDate} = ${workTask.expectedConclusionDate ? `'${workTask.expectedConclusionDate}'` : `NULL`},
-                ${DBConstants.workTaskFields.finishDate} = ${workTask.finishDate ? `'${workTask.finishDate}'` : `NULL`},
-                '${DBConstants.workTaskFields.where}' = '${workTask.where}',
-                ${DBConstants.workTaskFields.why} = '${workTask.why}',
-                ${DBConstants.workTaskFields.how} = '${workTask.how}',
-                ${DBConstants.workTaskFields.howMuch} = ${workTask.howMuch},
-                ${DBConstants.workTaskFields.observation} = '${workTask.observation}'
+                ${DBConstants.workTaskFields.workTaskName} = '?',
+                ${DBConstants.workTaskFields.description} = '?',
+                ${DBConstants.workTaskFields.projectId} = '?',
+                ${DBConstants.workTaskFields.responsibleUserId} = '?',
+                ${DBConstants.workTaskFields.startDate} = ?,
+                ${DBConstants.workTaskFields.expectedConclusionDate} = ?,
+                ${DBConstants.workTaskFields.finishDate} = ?,
+                '${DBConstants.workTaskFields.where}' = '?',
+                ${DBConstants.workTaskFields.why} = '?',
+                ${DBConstants.workTaskFields.how} = '?',
+                ${DBConstants.workTaskFields.howMuch} = ?,
+                ${DBConstants.workTaskFields.observation} = '?'
             WHERE
-                ${DBConstants.workTaskFields.id} = '${workTask.id}'`
+                ${DBConstants.workTaskFields.id} = '?'`
 
-            tx.executeSql(statement, []);
+            const args =
+            [
+                workTask.workTaskName,
+                workTask.description,
+                workTask.projectId,
+                workTask.responsibleUserId,
+                (workTask.startDate ? `${workTask.startDate}` : `NULL`),
+                (workTask.expectedConclusionDate ? `${workTask.expectedConclusionDate}` : `NULL`),
+                (workTask.finishDate ? `${workTask.finishDate}` : `NULL`),
+                workTask.where,
+                workTask.why,
+                workTask.how,
+                workTask.howMuch,
+                workTask.observation,
+                workTask.id
+            ];
+
+            tx.executeSql(statement, args);
         })
     }
 
@@ -386,22 +427,39 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
         {
             const statement = `INSERT INTO ${DBConstants.tables.workTask} VALUES 
             (
-                '${workTask.id}',
-                '${workTask.workTaskName}',
-                '${workTask.description}',
-                '${workTask.projectId}',
-                '${workTask.responsibleUserId}',
-                ${workTask.startDate ? `'${workTask.startDate}'` : `NULL`},
-                ${workTask.expectedConclusionDate ? `'${workTask.expectedConclusionDate}'` : `NULL`},
-                ${workTask.finishDate ? `'${workTask.finishDate}'` : `NULL`},
-                '${workTask.where}',
-                '${workTask.why}',
-                '${workTask.how}',
-                ${workTask.howMuch},
-                '${workTask.observation}'
-            )`
+                '?',
+                '?',
+                '?',
+                '?',
+                '?',
+                ?,
+                ?,
+                ?,
+                '?',
+                '?',
+                '?',
+                ?,
+                '?'
+            )`;
+            
+            const args =
+            [
+                workTask.id,
+                workTask.workTaskName,
+                workTask.description,
+                workTask.projectId,
+                workTask.responsibleUserId,
+                (workTask.startDate ? `${workTask.startDate}` : `NULL`),
+                (workTask.expectedConclusionDate ? `${workTask.expectedConclusionDate}` : `NULL`),
+                (workTask.finishDate ? `${workTask.finishDate}` : `NULL`),
+                workTask.where,
+                workTask.why,
+                workTask.how,
+                workTask.howMuch,
+                workTask.observation
+            ];
 
-            tx.executeSql(statement, []);
+            tx.executeSql(statement, args);
         })
     }
 
@@ -416,8 +474,9 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
             this.database.transaction((tx) =>
             {
                 const statement = `DELETE FROM ${DBConstants.tables.workTask}
-                    WHERE ${DBConstants.workTaskFields.id} = '${workTaskId}'`;
-                tx.executeSql(statement, []);
+                    WHERE ${DBConstants.workTaskFields.id} = '?'`;
+                const args = [workTaskId];
+                tx.executeSql(statement, args);
             });
         }
     }

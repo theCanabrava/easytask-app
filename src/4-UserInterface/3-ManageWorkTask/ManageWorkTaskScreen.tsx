@@ -51,7 +51,6 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
 
         const workTaskId = this.props.route.params.workTaskId;
         const title = workTaskId === 'ADD' ? texts.CREATE_LBL : texts.CONFIRM_EDIT_LBL;
-        console.log(workTaskId);
 
         const manageWorkTaskScreen: ReactNode =
         (
@@ -149,11 +148,13 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
 
     submit()
     {
+        console.log('Submiting');
         const projectId = this.props.route.params.projectId;
         const workTaskId = this.props.route.params.workTaskId;
         const workTaskName = this.state.workTaskName;
         const description = this.state.description;
-        const expectedConclusionDate = this.state.expectedConclusionDate;
+        //const expectedConclusionDate = this.state.expectedConclusionDate;
+        const expectedConclusionDate = new Date().toISOString();
         const where = this.state.where;
         const why = this.state.why;
         const how = this.state.how;
@@ -208,6 +209,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
 
     notify(response: ApiResponse)
     {
+        console.log(response);
         if(response.path.includes(ApiConstants.paths.createWorkTask) 
             || response.path.includes(ApiConstants.paths.updateWorkTask))
         {
