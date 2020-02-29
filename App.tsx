@@ -36,8 +36,8 @@ export default class App extends Component
   async loadApp()
   {
     this.toolset = await ToolsetFactory.makeToolset();
-    //await this.toolset.authManager.refreshToken(this.toolset.userStorage.getUser().email);
-    await this.toolset.authManager.login({email: '', password: ''});
+    await this.toolset.authManager.refreshToken(this.toolset.userStorage.getUser().email);
+    //await this.toolset.authManager.login({email: '', password: ''});
     store.dispatch(toolsetActions.setToolset(this.toolset));
   }
 

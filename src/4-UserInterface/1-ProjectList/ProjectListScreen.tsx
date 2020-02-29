@@ -1,24 +1,34 @@
 import React, {Component, ReactNode} from 'react';
+import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { FlatList } from 'react-native';
-import {connect} from 'react-redux';
+import { FlatList, TouchableOpacity } from 'react-native';
+import { StackNavigationOptions } from '@react-navigation/stack';
+import { Icon } from 'react-native-elements';
 
 import DefaultButton from '../Reusables/DefaultButton';
 import ProjectCell from './components/ProjectCell';
 
 import texts from '../Constants/texts';
+import icons from '../Constants/icons';
 
 import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
 import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
 import ProjectSubscriber from '../../1-ProjectManager/interfaces/ProjectSubscriber';
 import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
 import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
+import cellIds from '../Constants/cellIds';
 
 class ProjectListScreen extends Component implements ProjectSubscriber
 {
     props;
+    unsubscribeFocus;
     toolset: AppToolset;
     dispatch: Dispatch;
+    navOptions: StackNavigationOptions =
+    {
+        headerRight: this.renderHeaderRight.bind(this),
+        headerRightContainerStyle:{paddingRight: 20}
+    };
 
     constructor(props)
     {
@@ -27,12 +37,11 @@ class ProjectListScreen extends Component implements ProjectSubscriber
     
     render(): ReactNode
     {
-        console.log("Rendering projects");
         const projectList = 
         [
             ...this.props.projects,
             {
-                id: 'ADD'
+                id: cellIds.ADD
             }
         ]
         const projectListScreen: ReactNode =
@@ -47,7 +56,7 @@ class ProjectListScreen extends Component implements ProjectSubscriber
 
     renderItem(itemData): ReactNode
     {
-        if(itemData.item.id === "ADD")
+        if(itemData.item.id === cellIds.ADD)
         {
             const addCell =
             (
@@ -79,7 +88,31 @@ class ProjectListScreen extends Component implements ProjectSubscriber
         this.dispatch = this.props.dispatch;
         this.toolset.projectManager.subscribe(this);
         this.toolset.projectManager.getProjectsList(this.props.user.uuid);
-        this.props.navigation.addListener('focus', () => this.forceUpdate());
+        this.unsubscribeFocus = this.props.navigation.addListener('focus', () => this.forceUpdate());
+        this.props.navigation.setOptions(this.navOptions);
+    }
+
+    renderHeaderRight()
+    {
+        const header =
+        (
+            <TouchableOpacity
+                onPress={this.logout.bind(this)}
+            >
+                <Icon
+                    name={icons.ICON_LOGOUT}
+                    type={icons.ICON_TYPE}
+                />
+            </TouchableOpacity>
+        )
+        return header;
+    }
+
+    async logout()
+    {
+        await this.toolset.authManager.login({email:'', password: ''});
+        this.dispatch(toolsetActions.removeUser());
+        this.dispatch(toolsetActions.reloadProjects([]));
     }
 
     notify(response: ApiResponse)
@@ -97,6 +130,7 @@ class ProjectListScreen extends Component implements ProjectSubscriber
     componentWillUnmount()
     {
         this.toolset.projectManager.unsubscribe(this);
+        if(this.unsubscribeFocus) this.unsubscribeFocus();
     }
 }
 
@@ -108,7 +142,6 @@ function mapState(state)
         user: state.toolset.user,
         projects: state.toolset.projects
     }
-    console.log("Projects lists props loaded");
     return props;
 }
 

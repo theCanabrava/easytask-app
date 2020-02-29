@@ -72,7 +72,13 @@ function updateUser(state, action)
 
 function removeUser(state, action)
 {
-    return {...state, user: undefined};
+    const user: UserData =
+    {
+        email: '',
+        uuid: '',
+        webtoken: ''
+    }
+    return {...state, user: user};
 }
 
 function updateProject(state, action)

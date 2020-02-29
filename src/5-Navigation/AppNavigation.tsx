@@ -61,7 +61,7 @@ class LoginNavigation extends Component
             >
                 <Stack.Screen
                     name="Login"
-                    component={LoginScreen}    
+                    component={LoginScreen}
                 />
                 <Stack.Screen
                     name="Register"
