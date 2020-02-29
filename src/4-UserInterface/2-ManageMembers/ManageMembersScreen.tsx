@@ -1,16 +1,16 @@
 import React, {Component, ReactNode} from 'react';
-import { Dispatch } from 'redux';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+
 import AddMemberForm from './components/AddMemberFrom';
 import MemberCell from './components/MemberCell';
+
+import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
 import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
+import ManageUserParameters from '../../1-ProjectManager/types/ManageUserParameters';
 import ProjectSubscriber from '../../1-ProjectManager/interfaces/ProjectSubscriber';
 import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
-import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
-import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
-import ManageUserParameters from '../../1-ProjectManager/types/ManageUserParameters';
-import { useRoute } from '@react-navigation/native';
 
 class ManageMembersScreen extends Component implements ProjectSubscriber
 {
@@ -100,30 +100,45 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
     {
         if(response.path.includes(ApiConstants.paths.getUsersInProject) && response.status===200)
         {
-            const users = [];
-            for(const i in response.data.data)
-            {
-                users.push({id: response.data.data[i].email});
-            }
-            users.push({id: 'ADD'});
-            this.setState({users});
+            this.getUsers(response);
         }
         else if(response.path.includes(ApiConstants.paths.addUserToProject) && response.status===200)
         {
-            const users = this.state.users;
-            users.pop();
-            users.push({id: response.data.data.userEmail});
-            users.push({id: 'ADD'});
-            this.setState({users});
+            this.addUser(response);
         }
         else if(response.path.includes(ApiConstants.paths.removeUserFromProject) && response.status===200)
         {
-            const email = response.data.data.userEmail;
-            const users = this.state.users;
-            const index = users.findIndex(user => user.id === email)
-            users.splice(index, 1);
-            this.setState({users});
+            this.removeUser(response);
         }
+    }
+
+    getUsers(response: ApiResponse)
+    {
+        const users = [];
+        for(const i in response.data.data)
+        {
+            users.push({id: response.data.data[i].email});
+        }
+        users.push({id: 'ADD'});
+        this.setState({users});
+    }
+
+    addUser(response: ApiResponse)
+    {
+        const users = this.state.users;
+        users.pop();
+        users.push({id: response.data.data.userEmail});
+        users.push({id: 'ADD'});
+        this.setState({users});
+    }
+
+    removeUser(response: ApiResponse)
+    {
+        const email = response.data.data.userEmail;
+        const users = this.state.users;
+        const index = users.findIndex(user => user.id === email)
+        users.splice(index, 1);
+        this.setState({users});
     }
 
     componentWillUnmount()
