@@ -1,10 +1,13 @@
-import React, {Component, ReactNode} from 'react';
-import {KeyboardAvoidingView, TextInput} from 'react-native';
+import React, { Component, ReactNode } from 'react';
+import { KeyboardAvoidingView, TextInput, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import styles from '../Constants/styles';
+
 import DefaultButton from '../Reusables/DefaultButton';
+
+import styles from '../Constants/styles';
 import texts from '../Constants/texts';
+
 import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
 import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
 import ProjectSubscriber from '../../1-ProjectManager/interfaces/ProjectSubscriber';
@@ -28,7 +31,8 @@ class ManageProjectScreen extends Component implements ProjectSubscriber
         this.state =
         {
             projectName: '',
-            description: ''
+            description: '',
+            loading: false
         }
     }
 
@@ -36,8 +40,21 @@ class ManageProjectScreen extends Component implements ProjectSubscriber
     {
         const projectName = this.state.projectName;
         const description = this.state.description;
+        const loading = this.state.loading;
         const projectId = this.props.route.params.projectId;
         const title = projectId === 'ADD' ? texts.CREATE_LBL : texts.CONFIRM_EDIT_LBL;
+
+        if(loading)
+        {
+            let loadingScreen =
+            (
+                <KeyboardAvoidingView style={styles.screen}>
+                    <ActivityIndicator/>
+                </KeyboardAvoidingView>
+            )
+
+            return loadingScreen;
+        }
 
         const manageProjectScreen: ReactNode =
         (
@@ -93,6 +110,7 @@ class ManageProjectScreen extends Component implements ProjectSubscriber
 
     submit()
     {
+        this.setState({loading: true});
         const projectId = this.props.route.params.projectId;
         const projectName = this.state.projectName;
         const description = this.state.description;
@@ -115,14 +133,13 @@ class ManageProjectScreen extends Component implements ProjectSubscriber
                 description: description,
                 managerId: this.props.user.uuid
             }
-            console.log("Submitting project with EDIT prams");
-            console.log(params);
             this.toolset.projectManager.editProject(params);
         }
     }
 
     delete()
     {
+        this.setState({loading: true});
         const projectId = this.props.route.params.projectId;
         const params: DeleteProjectParameters =
         {
@@ -134,24 +151,29 @@ class ManageProjectScreen extends Component implements ProjectSubscriber
 
     notify(response: ApiResponse)
     {
+        this.setState({loading: false});
         if(response.path.includes(ApiConstants.paths.createProject) 
             || response.path.includes(ApiConstants.paths.editProject))
         {
-            if(response.status === 200)
-            {
-                this.dispatch(toolsetActions.updateProject(response.data.data));
-                this.props.navigation.pop();
-            }
+            if(response.status === 200) this.updateProject(response);
         }
         else if(response.path.includes(ApiConstants.paths.deleteProject))
         {
-            if(response.status === 200)
-            {
-                const projectId = this.props.route.params.projectId;
-                this.dispatch(toolsetActions.removeProject(projectId));
-                this.props.navigation.pop();
-            }
+            if(response.status === 200) this.removeProject();
         }
+    }
+
+    updateProject(response: ApiResponse)
+    {
+        this.dispatch(toolsetActions.updateProject(response.data.data));
+        this.props.navigation.pop();
+    }
+
+    removeProject()
+    {
+        const projectId = this.props.route.params.projectId;
+        this.dispatch(toolsetActions.removeProject(projectId));
+        this.props.navigation.pop();
     }
 
     componentWillUnmount()
@@ -168,7 +190,6 @@ function mapState(state)
         user: state.toolset.user,
         projects: state.toolset.projects
     }
-    console.log("Projects lists props loaded");
     return props;
 }
 
