@@ -208,9 +208,9 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
         {
             const statement = `UPDATE ${DBConstants.tables.user} 
             SET
-            ${DBConstants.userFields.email} = '?',
-            ${DBConstants.userFields.uuid} = '?',
-            ${DBConstants.userFields.webtoken} = '?'
+            ${DBConstants.userFields.email} = ?,
+            ${DBConstants.userFields.uuid} = ?,
+            ${DBConstants.userFields.webtoken} = ?
             WHERE
             ${DBConstants.userFields.id} = 0`;
             const args = [this.userData.email, this.userData.uuid, this.userData.webtoken];

@@ -1,18 +1,17 @@
 import React, {Component, ReactNode} from 'react';
-import { Dispatch } from 'redux';
 import {FlatList} from 'react-native';
 import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 import WorkTaskCell from './components/WorkTaskCell';
 import DefaultButton from '../Reusables/DefaultButton';
 import texts from '../Constants/texts';
 
+import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
+import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
 import WorkTaskSubscriber from '../../1-WorkTaskManager/interfaces/WorkTaskSubscriber'
-import WorkTaskData from '../../2-Database/types/WorkTaskData';
 import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
 import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
-import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
-import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
 
 class WorkTaskListScreen extends Component implements WorkTaskSubscriber
 {
@@ -20,7 +19,7 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
     state;
     toolset: AppToolset;
     dispatch: Dispatch;
-    listener;
+    unsubscribe;
 
     constructor(props)
     {
@@ -79,7 +78,7 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
         this.dispatch = this.props.dispatch;
         this.toolset.workTaskManager.subscribe(this);
         this.toolset.workTaskManager.getWorkTasksOfProject(projectId);
-        this.listener = this.props.navigation.addListener('focus', () => this.forceUpdate());
+        this.unsubscribe = this.props.navigation.addListener('focus', () => this.forceUpdate());
     }
 
     notify(response: ApiResponse)
@@ -97,7 +96,7 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
     componentWillUnmount()
     {
         this.toolset.projectManager.unsubscribe(this);
-        if(this.listener) if(this.listener.remove) this.listener.remove();
+        if(this.unsubscribe) this.unsubscribe();
     }
 }
 
