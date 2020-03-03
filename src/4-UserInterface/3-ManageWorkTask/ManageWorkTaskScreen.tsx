@@ -1,19 +1,23 @@
-import React, {Component, ReactNode} from 'react';
-import { KeyboardAvoidingView, TextInput} from 'react-native';
+import React, { Component, ReactNode } from 'react';
+import { KeyboardAvoidingView, TextInput, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import styles from '../Constants/styles';
+
 import DefaultButton from '../Reusables/DefaultButton';
+
+import styles from '../Constants/styles';
 import texts from '../Constants/texts';
-import WorkTaskSubscriber from '../../1-WorkTaskManager/interfaces/WorkTaskSubscriber';
-import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
-import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
-import WorkTaskData from '../../2-Database/types/WorkTaskData';
+
+import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
+import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
 import CreateWorkTaskParameters from '../../1-WorkTaskManager/types/CreateWorkTaskParameters';
 import UpdateWorkTaskParameters from '../../1-WorkTaskManager/types/UpdateWorkTaskParameters';
 import DeleteTaskParameters from '../../1-WorkTaskManager/types/DeleteTaskParameters';
-import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
-import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
+import WorkTaskSubscriber from '../../1-WorkTaskManager/interfaces/WorkTaskSubscriber';
+import WorkTaskData from '../../2-Database/types/WorkTaskData';
+import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
+import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
+
 
 class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
 {
@@ -35,6 +39,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
             how: '',
             howMuch: '',
             observation: '',
+            loading: false
         }
     }
 
@@ -48,9 +53,22 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
         const how = this.state.how;
         const howMuch = this.state.howMuch;
         const observation = this.state.observation;
+        const loading = this.state.loading;
 
         const workTaskId = this.props.route.params.workTaskId;
         const title = workTaskId === 'ADD' ? texts.CREATE_LBL : texts.CONFIRM_EDIT_LBL;
+
+        if(loading)
+        {
+            let loadingScreen =
+            (
+                <KeyboardAvoidingView style={styles.screen}>
+                    <ActivityIndicator/>
+                </KeyboardAvoidingView>
+            )
+
+            return loadingScreen;
+        }
 
         const manageWorkTaskScreen: ReactNode =
         (
@@ -148,7 +166,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
 
     submit()
     {
-        console.log('Submiting');
+        this.setState({loading: true});
         const projectId = this.props.route.params.projectId;
         const workTaskId = this.props.route.params.workTaskId;
         const workTaskName = this.state.workTaskName;
@@ -197,6 +215,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
 
     delete()
     {
+        this.setState({loading: true})
         const projectId = this.props.route.params.projectId;
         const workTaskId = this.props.route.params.workTaskId;
         const params: DeleteTaskParameters =
@@ -209,25 +228,29 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
 
     notify(response: ApiResponse)
     {
-        console.log(response);
+        this.setState({loading: false})
         if(response.path.includes(ApiConstants.paths.createWorkTask) 
             || response.path.includes(ApiConstants.paths.updateWorkTask))
         {
-            if(response.status === 200)
-            {
-                this.dispatch(toolsetActions.updateWorkTask(response.data.data));
-                this.props.navigation.pop();
-            }
+            if(response.status === 200) this.updateWorkTask(response);
         }
         else if(response.path.includes(ApiConstants.paths.deleteProject))
         {
-            if(response.status === 200)
-            {
-                const projectId = this.props.route.params.projectId;
-                this.dispatch(toolsetActions.removeWorkTask(projectId));
-                this.props.navigation.pop();
-            }
+            if(response.status === 200) this.deleteWorkTask();
         }
+    }
+
+    updateWorkTask(response: ApiResponse)
+    {
+        this.dispatch(toolsetActions.updateWorkTask(response.data.data));
+        this.props.navigation.pop();
+    }
+
+    deleteWorkTask()
+    {
+        const projectId = this.props.route.params.projectId;
+        this.dispatch(toolsetActions.removeWorkTask(projectId));
+        this.props.navigation.pop();
     }
 
     componentWillUnmount()
@@ -243,7 +266,6 @@ function mapState(state)
         toolset: state.toolset.toolset,
         workTasks: state.toolset.workTasks
     }
-    console.log("Projects lists props loaded");
     return props;
 }
 

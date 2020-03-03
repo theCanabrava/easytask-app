@@ -73,33 +73,6 @@ export default class App extends Component
   {
     console.log("SETTING LOADING TO FALSE");
     this.setState({isLoading: false});
-    /*const workTask: WorkTaskData =
-    {
-      id: 'NUUL ID',
-      workTaskName: 'This is a check',
-      projectId: 'NUUL ID',
-      description: 'To see if redux can store a project',
-    }
-    store.dispatch(toolsetActions.updateWorkTask(workTask));
-    const workTask2: WorkTaskData =
-    {
-      id: 'NUUL ID2',
-      projectId: 'Sup, bro',
-      responsibleUserId: 'NUUL ID',
-      description: 'Actualy, a work task',
-      startDate: new Date().toISOString(),
-      finishDate: new Date().toISOString(),
-      expectedConclusionDate: new Date().toISOString(),
-      howMuch: 4,
-      observation: 'Today'
-    }
-    store.dispatch(toolsetActions.updateWorkTask(workTask2));
-    const workTasks: WorkTaskData[] = [];
-    for(let i=0; i<10; i++) workTasks.push({id: `Project ${i}`, projectId: `NUUL ID`})
-    store.dispatch(toolsetActions.reloadWorkTasks(workTasks));
-    console.log(store.getState().toolset.workTasks);
-    store.dispatch(toolsetActions.removeWorkTask('Project 5'));
-    console.log(store.getState().toolset.workTasks);*/
   }
 }
 

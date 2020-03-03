@@ -508,9 +508,9 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
 
     private isAuthResponse(response: ApiResponse): boolean
     {
-        if(response.path.endsWith(ApiConstants.paths.newUser)) return true;
-        else if(response.path.endsWith(ApiConstants.paths.login)) return true;
-        else if(response.path.endsWith(ApiConstants.paths.refreshToken)) return true;
+        if(response.path.includes(ApiConstants.paths.newUser)) return true;
+        else if(response.path.includes(ApiConstants.paths.login)) return true;
+        else if(response.path.includes(ApiConstants.paths.refreshToken)) return true;
         return false;
     }
 
