@@ -257,14 +257,14 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
         {
             const statement = `UPDATE ${DBConstants.tables.project}
             SET 
-                ${DBConstants.projectFields.projectName} = '?',
-                ${DBConstants.projectFields.description} = '?',
-                ${DBConstants.projectFields.startDate} = '?',
+                ${DBConstants.projectFields.projectName} = ?,
+                ${DBConstants.projectFields.description} = ?,
+                ${DBConstants.projectFields.startDate} = ?,
                 ${DBConstants.projectFields.finishDate} = ?,
-                ${DBConstants.projectFields.managerId} = '?',
+                ${DBConstants.projectFields.managerId} = ?,
                 ${DBConstants.projectFields.completed} = ?
             WHERE
-                ${DBConstants.projectFields.id} = '?'`
+                ${DBConstants.projectFields.id} = ?`
 
             const args =
             [
@@ -293,12 +293,12 @@ export default class Database implements UserStorage, ProjectStorage, WorkTaskSt
         {
             const statement = `INSERT INTO ${DBConstants.tables.project} VALUES 
             (
-                '?',
-                '?',
-                '?',
-                '?',
                 ?,
-                '?',
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
                 ?
             )`;
 

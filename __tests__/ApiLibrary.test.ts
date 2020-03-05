@@ -243,6 +243,15 @@ describe('API Library', function()
             expect(req.body.observation).to.equal('obsUpd');
         });
 
+        it('knows finish work task', function()
+        {
+            let req = ApiLibrary.workTaskRequest(finishWorkTaskForm);
+            expect(req.url).to.equal('http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080/api/WorkTask/Finish-WorkTask');
+            expect(req.reqType).to.equal('post');
+            expect(req.body.projectId).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+            expect(req.body.id).to.equal('3fa85f64-5717-4562-b3fc-2c963f66afa6');
+        });
+
         it('knows add responsible', function()
         {
             let req = ApiLibrary.workTaskRequest(addResponsibleForm);
@@ -301,6 +310,16 @@ describe('API Library', function()
                 how: "howUpd",
                 howMuch: 2,
                 observation: "obsUpd"
+            }
+        }
+
+        const finishWorkTaskForm: WorkTaskForm =
+        {
+            id: 'Finish-WorkTask',
+            parameters:
+            {
+                projectId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             }
         }
 

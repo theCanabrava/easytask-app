@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { KeyboardAvoidingView, TextInput, ActivityIndicator } from 'react-native';
+import { KeyboardAvoidingView, TextInput, ActivityIndicator, ScrollView, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -73,68 +73,80 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
         const manageWorkTaskScreen: ReactNode =
         (
             <KeyboardAvoidingView 
-            style={styles.screen}
-            behavior='padding'
+                style={{ flex: 1, flexDirection: 'column',justifyContent: 'center',}} 
+                behavior="padding" 
+                enabled  
+                keyboardVerticalOffset={100}
             >
-                <TextInput
-                    style={styles.input}
-                    value={workTaskName}
-                    onChangeText={(workTaskName) => this.setState({workTaskName})}
-                    placeholder={texts.WORK_TASK_LBL}
-                />
-                <TextInput
-                    multiline
-                    style={styles.input}
-                    value={description}
-                    onChangeText={(description) => this.setState({description})}
-                    placeholder={texts.DESCRIPTION_LBL}
-                />
-                <TextInput
-                    style={styles.input}
-                    value={expectedConclusionDate}
-                    onChangeText={(expectedConclusionDate) => this.setState({expectedConclusionDate})}
-                    placeholder={texts.EXPECTED_CONCLUSION_LBL}
-                />
-                <TextInput
-                    style={styles.input}
-                    value={where}
-                    onChangeText={(where) => this.setState({where})}
-                    placeholder={texts.WHERE_LBL}
-                />
-                <TextInput
-                    style={styles.input}
-                    value={why}
-                    onChangeText={(why) => this.setState({why})}
-                    placeholder={texts.WHY_LBL}
-                />
-                <TextInput
-                    style={styles.input}
-                    value={how}
-                    onChangeText={(how) => this.setState({how})}
-                    placeholder={texts.HOW_LBL}
-                />
-                <TextInput
-                    style={styles.input}
-                    value={howMuch}
-                    onChangeText={(howMuch) => this.setState({howMuch})}
-                    placeholder={texts.HOW_MUCH_LBL}
-                />
-                <TextInput
-                    style={styles.input}
-                    value={observation}
-                    onChangeText={(observation) => this.setState({observation})}
-                    placeholder={texts.OBSERVATION_LBL}
-                />
-                <DefaultButton
-                    title={title}
-                    onPress={this.submit.bind(this)}
-                />
-                {   workTaskId !== 'ADD' && 
-                    <DefaultButton
-                        title={texts.DELETE_LBL}
-                        onPress={this.delete.bind(this)}
-                    />
-                }
+                <ScrollView>
+                    <View style={styles.screen}>
+                        <TextInput
+                            style={styles.input}
+                            value={workTaskName}
+                            onChangeText={(workTaskName) => this.setState({workTaskName})}
+                            placeholder={texts.WORK_TASK_LBL}
+                        />
+                        <TextInput
+                            multiline
+                            style={styles.input}
+                            value={description}
+                            onChangeText={(description) => this.setState({description})}
+                            placeholder={texts.DESCRIPTION_LBL}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={expectedConclusionDate}
+                            onChangeText={(expectedConclusionDate) => this.setState({expectedConclusionDate})}
+                            placeholder={texts.EXPECTED_CONCLUSION_LBL}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={where}
+                            onChangeText={(where) => this.setState({where})}
+                            placeholder={texts.WHERE_LBL}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={why}
+                            onChangeText={(why) => this.setState({why})}
+                            placeholder={texts.WHY_LBL}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={how}
+                            onChangeText={(how) => this.setState({how})}
+                            placeholder={texts.HOW_LBL}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={howMuch}
+                            onChangeText={(howMuch) => this.setState({howMuch})}
+                            placeholder={texts.HOW_MUCH_LBL}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            value={observation}
+                            onChangeText={(observation) => this.setState({observation})}
+                            placeholder={texts.OBSERVATION_LBL}
+                        />
+                        <DefaultButton
+                            title={title}
+                            onPress={this.submit.bind(this)}
+                        />
+                        {   workTaskId !== 'ADD' && 
+                            <>
+                                <DefaultButton
+                                    title={texts.FINISH_TASK_LBL}
+                                    onPress={this.finish.bind(this)}
+                                />
+                                <DefaultButton
+                                    title={texts.DELETE_LBL}
+                                    onPress={this.delete.bind(this)}
+                                />
+                            </>
+                        }
+                    </View>
+                </ScrollView>
             </KeyboardAvoidingView>
         )
         return manageWorkTaskScreen
@@ -213,6 +225,19 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
         }
     }
 
+    finish()
+    {
+        this.setState({loading: true})
+        const projectId = this.props.route.params.projectId;
+        const workTaskId = this.props.route.params.workTaskId;
+        const params: DeleteTaskParameters =
+        {
+            id: workTaskId,
+            projectId: projectId
+        }
+        this.toolset.workTaskManager.finishWorkTask(params);
+    }
+
     delete()
     {
         this.setState({loading: true})
@@ -234,9 +259,13 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
         {
             if(response.status === 200) this.updateWorkTask(response);
         }
-        else if(response.path.includes(ApiConstants.paths.deleteProject))
+        else if(response.path.includes(ApiConstants.paths.deleteWorkTask))
         {
             if(response.status === 200) this.deleteWorkTask();
+        }
+        else if(response.path.includes(ApiConstants.paths.finishWorkTask))
+        {
+            if(response.status === 200) this.props.navigation.pop();
         }
     }
 

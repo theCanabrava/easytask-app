@@ -23,7 +23,7 @@ export default class WorkTaskCell extends Component
                     {texts.DESCRIPTION_LBL}: {workTaskData.description}
                 </DefaultLabel>
                 <DefaultLabel>
-                    {texts.RESPONSIBLE_LBL}: {workTaskData.responsibleUserId}
+                    {texts.RESPONSIBLE_LBL}: {/*workTaskData.responsibleUserId*/}
                 </DefaultLabel>
                 <DefaultLabel>
                     {texts.START_DATE_LBL}: {workTaskData.startDate ? new Date(workTaskData.startDate).toLocaleTimeString() : ''}

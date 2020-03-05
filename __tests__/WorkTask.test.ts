@@ -95,7 +95,7 @@ describe('Project', function()
             description: 'This is an unit test',
         }
         await projectManager.createProject(createParams);
-        await projectManager.addUserToProject({projectId: projectId, userEmail:'testeProjeto@unitario.com'});
+        await projectManager.addUserToProject({projectId: projectId, userEmail:'teste@registro.com'});
     });
 
     let workTaskManager: WorkTaskManager;
@@ -154,7 +154,7 @@ describe('Project', function()
         {
             workTaskId: workTaskId,
             projectId: projectId,
-            userEmail: 'testeProjeto@unitario.com'
+            userEmail: 'teste@registro.com'
         }
         await workTaskManager.addResponsibleToWorkTask(addResponsible);
     });
@@ -162,6 +162,17 @@ describe('Project', function()
     it('Gets work tasks of projects', async function()
     {
         await workTaskManager.getWorkTasksOfProject(projectId);
+    })
+
+    it('Finishes work task', async function()
+    {
+        const finishWorkTask: DeleteTaskParameters =
+        {
+            id: workTaskId,
+            projectId: projectId
+        }
+
+        await workTaskManager.finishWorkTask(finishWorkTask);
     })
 
     it('Deletes work task', async function()

@@ -22,6 +22,7 @@ export default class ApiConstants
     {
         createWorkTask: "Create-WorkTask",
         updateWorkTask: "Update-WorkTask",
+        finishWorkTask: "Finish-WorkTask",
         addResponsible: "Add-Responsible",
         getWorkTasksOfProject: "GetWorkTasksOfProject",
         deleteWorkTask: "Delete-WorkTask"
@@ -52,6 +53,7 @@ export default class ApiConstants
 
         createWorkTask: '/api/WorkTask/Create-WorkTask',
         updateWorkTask: '/api/WorkTask/Update-WorkTask',
+        finishWorkTask: '/api/WorkTask/Finish-WorkTask',
         addResponsible: '/api/WorkTask/Add-Responsible',
         getWorkTasksOfProject: '/api/WorkTask/GetWorkTasksOfProject',
         deleteWorkTask: '/api/WorkTask/Delete-WorkTask',

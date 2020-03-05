@@ -16,7 +16,8 @@ export default class AxiosCommunicator implements AuthCommunicator
     public async send(request: ApiRequest)
     {
         if(request.reqType === 'post') await this.sendPost(request);
-        else await this.sendGetOrDelete(request);
+        else if(request.reqType === 'delete') await this.sendDelete(request);
+        else await this.sendGet(request);
     }
 
     private async sendPost(request: ApiRequest)
@@ -34,9 +35,24 @@ export default class AxiosCommunicator implements AuthCommunicator
             })
     }
 
-    private async sendGetOrDelete(request: ApiRequest)
+    private async sendDelete(request: ApiRequest)
     {
-        await axios[request.reqType](request.url, {headers: request.headers})
+        await axios.delete(request.url, {headers: request.headers, data: request.body})
+            .then((axiosResponse) =>
+            {
+                const apiResponse = this.makeApiResponse(axiosResponse);
+                this.communicatorDelegate.read(apiResponse);
+            })
+            .catch((axiosError) =>
+            {
+                const apiResponse = this.makeApiResponse(axiosError.response)
+                this.communicatorDelegate.read(apiResponse);
+            })
+    }
+
+    private async sendGet(request: ApiRequest)
+    {
+        await axios.get(request.url, {headers: request.headers})
             .then((axiosResponse) =>
             {
                 const apiResponse = this.makeApiResponse(axiosResponse);

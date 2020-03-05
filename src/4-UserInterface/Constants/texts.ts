@@ -34,6 +34,7 @@ export default
     CREATE_LBL: "Criar",
     CONFIRM_EDIT_LBL: "Confirmar edição",
     DELETE_LBL: "Deletar",
+    FINISH_TASK_LBL: "Terminar",
 
     //Work Task List
     RESPONSIBLE_LBL: "Responsável",

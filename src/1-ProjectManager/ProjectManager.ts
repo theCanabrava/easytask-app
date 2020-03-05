@@ -145,7 +145,7 @@ export default class ProjectManager implements CommunicatorDelegate
                 token: this.token
             }
         }
-        console
+
         const request:ApiRequest = ProjectLib.projectRequest(getProjectsListForm);
         await this.communicator.send(request);
     }

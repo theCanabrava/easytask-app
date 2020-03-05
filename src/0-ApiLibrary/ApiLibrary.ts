@@ -229,6 +229,7 @@ export default class ApiLibrary extends Object
     {
         [ApiConstants.workTask.createWorkTask]: ApiLibrary.createWorkTask,
         [ApiConstants.workTask.updateWorkTask]: ApiLibrary.updateWorkTask,
+        [ApiConstants.workTask.finishWorkTask]: ApiLibrary.finishWorkTask,
         [ApiConstants.workTask.addResponsible]: ApiLibrary.addResponsible,
         [ApiConstants.workTask.getWorkTasksOfProject]: ApiLibrary.getWorkTasksOfProject,
         [ApiConstants.workTask.deleteWorkTask]: ApiLibrary.deleteWorkTask
@@ -287,6 +288,26 @@ export default class ApiLibrary extends Object
         }
 
         return updateWorkTaskRequest;
+    }
+
+    private static finishWorkTask(parameters): ApiRequest
+    {
+        const finishWorkTaskRequest: ApiRequest =
+        {
+            url: ApiConstants.paths.prefix + ApiConstants.paths.finishWorkTask,
+            reqType: ApiConstants.reqType.post,
+            body:
+            {
+                projectId: parameters.projectId,
+                id: parameters.id,
+            },
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
+            }
+        }
+
+        return finishWorkTaskRequest;
     }
 
     private static addResponsible(parameters): ApiRequest

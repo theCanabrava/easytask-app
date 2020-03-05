@@ -82,6 +82,23 @@ export default class WorkTaskManager implements CommunicatorDelegate
         await this.communicator.send(request);
     }
 
+    public async finishWorkTask(workTask: DeleteTaskParameters)
+    {
+        this.updateToken();
+        const finishWorkTask: WorkTaskForm =
+        {
+            id: ApiConstants.workTask.finishWorkTask,
+            parameters: 
+            {
+                ...workTask,
+                token: this.token
+            }
+        }
+
+        const request: ApiRequest = WorkTaskLib.workTaskRequest(finishWorkTask);
+        await this.communicator.send(request);
+    }
+
     public async addResponsibleToWorkTask(addResponsible: AddResponsibleParameters)
     {
         this.updateToken();

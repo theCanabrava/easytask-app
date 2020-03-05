@@ -81,8 +81,16 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
         this.unsubscribe = this.props.navigation.addListener('focus', () => this.forceUpdate());
     }
 
+    forceUpdate()
+    {
+        super.forceUpdate();
+        const projectId = this.props.route.params.projectId;
+        this.toolset.workTaskManager.getWorkTasksOfProject(projectId);
+    }
+
     notify(response: ApiResponse)
     {
+        console.log(response);
         if(response.path.includes(ApiConstants.paths.getWorkTasksOfProject))
         {
             if(response.status === 200)
