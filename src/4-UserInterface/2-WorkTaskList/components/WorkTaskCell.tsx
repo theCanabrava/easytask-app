@@ -26,13 +26,13 @@ export default class WorkTaskCell extends Component
                     {texts.RESPONSIBLE_LBL}: {/*workTaskData.responsibleUserId*/}
                 </DefaultLabel>
                 <DefaultLabel>
-                    {texts.START_DATE_LBL}: {workTaskData.startDate ? new Date(workTaskData.startDate).toLocaleTimeString() : ''}
+                    {texts.START_DATE_LBL}: {workTaskData.startDate ? new Date(workTaskData.startDate).toLocaleDateString(undefined, {timeZone: 'UTC'}) : ''}
                 </DefaultLabel>
                 <DefaultLabel>
-                    {texts.EXPECTED_CONCLUSION_LBL}: {workTaskData.expectedConclusionDate ? new Date(workTaskData.expectedConclusionDate).toLocaleTimeString() : ''}
+                    {texts.EXPECTED_CONCLUSION_LBL}: {workTaskData.expectedConclusionDate ? new Date(workTaskData.expectedConclusionDate).toLocaleDateString(undefined, {timeZone: 'UTC'}) : ''}
                 </DefaultLabel>
                 <DefaultLabel>
-                    {texts.FINISH_DATE_LBL}: {workTaskData.finishDate ? new Date(workTaskData.finishDate).toLocaleTimeString() : ''}
+                    {texts.FINISH_DATE_LBL}: {workTaskData.finishDate ? new Date(workTaskData.finishDate).toLocaleDateString(undefined, {timeZone: 'UTC'}) : ''}
                 </DefaultLabel>
                 <DefaultLabel>
                     {texts.WHERE_LBL}: {workTaskData.where}

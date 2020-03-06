@@ -8,6 +8,7 @@ import ManageMembersScreen from '../4-UserInterface/2-ManageMembers/ManageMember
 import ManageProjectScreen from '../4-UserInterface/2-ManageProject/ManageProjectScreen';
 import WorkTaskListScreen from '../4-UserInterface/2-WorkTaskList/WorkTaskList';
 import ManageWorkTaskScreen from '../4-UserInterface/3-ManageWorkTask/ManageWorkTaskScreen';
+import texts from '../4-UserInterface/Constants/texts';
 
 const Stack = createStackNavigator();
 
@@ -20,22 +21,52 @@ class AppNavigation extends Component
             <Stack.Navigator>
                 <Stack.Screen
                     name="ProjectList"
+                    options=
+                    {
+                        {
+                            title:texts.PROJECT_LIST_TTL
+                        }
+                    }
                     component={ProjectListScreen}    
                 />
                 <Stack.Screen
                     name="ManageMembers"
+                    options=
+                    {
+                        {
+                            title:texts.MANAGE_MEMBERS_TTL
+                        }
+                    }
                     component={ManageMembersScreen}    
                 />
                 <Stack.Screen
                     name="ManageProject"
+                    options=
+                    {
+                        {
+                            title:texts.MANAGE_PROJECT_TTL
+                        }
+                    }
                     component={ManageProjectScreen}    
                 />
                 <Stack.Screen
                     name="WorkTaskList"
+                    options=
+                    {
+                        {
+                            title:texts.WORK_TASK_LIST_TTL
+                        }
+                    }
                     component={WorkTaskListScreen}    
                 />
                 <Stack.Screen
                     name="ManageWorkTask"
+                    options=
+                    {
+                        {
+                            title:texts.MANAGE_WORK_TASK_TTL
+                        }
+                    }
                     component={ManageWorkTaskScreen}    
                 />
             </Stack.Navigator>

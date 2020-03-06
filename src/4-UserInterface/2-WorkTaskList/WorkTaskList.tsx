@@ -90,7 +90,6 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
 
     notify(response: ApiResponse)
     {
-        console.log(response);
         if(response.path.includes(ApiConstants.paths.getWorkTasksOfProject))
         {
             if(response.status === 200)

@@ -71,7 +71,6 @@ export default class App extends Component
   
   async loaded()
   {
-    console.log("SETTING LOADING TO FALSE");
     this.setState({isLoading: false});
   }
 }

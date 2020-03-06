@@ -98,6 +98,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
                             value={expectedConclusionDate}
                             onChangeText={(expectedConclusionDate) => this.setState({expectedConclusionDate})}
                             placeholder={texts.EXPECTED_CONCLUSION_LBL}
+                            keyboardType="numbers-and-punctuation"
                         />
                         <TextInput
                             style={styles.input}
@@ -183,8 +184,9 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
         const workTaskId = this.props.route.params.workTaskId;
         const workTaskName = this.state.workTaskName;
         const description = this.state.description;
-        //const expectedConclusionDate = this.state.expectedConclusionDate;
-        const expectedConclusionDate = new Date().toISOString();
+        const date = new Date(this.state.expectedConclusionDate);
+        let expectedConclusionDate = new Date().toISOString();
+        if(!isNaN(date.getTime())) expectedConclusionDate = date.toISOString();
         const where = this.state.where;
         const why = this.state.why;
         const how = this.state.how;

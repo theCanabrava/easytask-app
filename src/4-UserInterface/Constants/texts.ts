@@ -1,5 +1,12 @@
 export default
 {
+    //Navigation
+    PROJECT_LIST_TTL: "Projetos",
+    MANAGE_MEMBERS_TTL: "Membros",
+    MANAGE_PROJECT_TTL: "Gerenciar Projeto",
+    WORK_TASK_LIST_TTL: "Tarefas",
+    MANAGE_WORK_TASK_TTL: "Gerenciar Tarefas",
+    
     //Login
     EMAIL_LBL : 'E-mail',
     PASSWORD_LBL: 'Senha',
