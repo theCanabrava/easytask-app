@@ -185,7 +185,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
         const workTaskName = this.state.workTaskName;
         const description = this.state.description;
         const date = new Date(this.state.expectedConclusionDate);
-        let expectedConclusionDate = new Date().toISOString();
+        let expectedConclusionDate = undefined;
         if(!isNaN(date.getTime())) expectedConclusionDate = date.toISOString();
         const where = this.state.where;
         const why = this.state.why;
