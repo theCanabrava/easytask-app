@@ -1,5 +1,5 @@
 import React, {Component, ReactNode} from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -11,6 +11,7 @@ import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
 import ManageUserParameters from '../../1-ProjectManager/types/ManageUserParameters';
 import ProjectSubscriber from '../../1-ProjectManager/interfaces/ProjectSubscriber';
 import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
+import styles from '../Constants/styles';
 
 class ManageMembersScreen extends Component implements ProjectSubscriber
 {
@@ -24,12 +25,27 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
         super(props);
         this.state =
         {
-            users: []
+            users: [],
+            loading: false
         }
     }
 
     render(): ReactNode
     {
+        const loading = this.state.loading;
+
+        if(loading)
+        {
+            let loadingScreen =
+            (
+                <View style={styles.screen}>
+                    <ActivityIndicator/>
+                </View>
+            )
+
+            return loadingScreen;
+        }
+
         const manageMembersScreen: ReactNode =
         (
             <FlatList
@@ -74,10 +90,12 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
         this.dispatch = this.props.dispatch;
         this.toolset.projectManager.subscribe(this);
         this.toolset.projectManager.getUsersInProject(projectId);
+        this.setState({loading: true});
     }
 
     add(email)
     {
+        this.setState({loading: true});
         const params: ManageUserParameters =
         {
             projectId: this.props.route.params.projectId,
@@ -88,6 +106,7 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
 
     delete(email)
     {
+        this.setState({loading: true});
         const params: ManageUserParameters =
         {
             projectId: this.props.route.params.projectId,
@@ -98,6 +117,7 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
 
     notify(response: ApiResponse)
     {
+        this.setState({loading: false});
         if(response.path.includes(ApiConstants.paths.getUsersInProject) && response.status===200)
         {
             this.getUsers(response);

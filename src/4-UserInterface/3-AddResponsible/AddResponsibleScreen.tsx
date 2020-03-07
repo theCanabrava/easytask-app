@@ -29,7 +29,6 @@ class AddResponsibleScreen extends Component
         {
             email: '',
             isLoading: false
-
         }
     }
 
