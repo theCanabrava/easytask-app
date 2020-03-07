@@ -9,6 +9,7 @@ import ManageProjectScreen from '../4-UserInterface/2-ManageProject/ManageProjec
 import WorkTaskListScreen from '../4-UserInterface/2-WorkTaskList/WorkTaskList';
 import ManageWorkTaskScreen from '../4-UserInterface/3-ManageWorkTask/ManageWorkTaskScreen';
 import texts from '../4-UserInterface/Constants/texts';
+import AddResponsibleScreen from '../4-UserInterface/3-AddResponsible/AddResponsibleScreen';
 
 const Stack = createStackNavigator();
 
@@ -68,6 +69,16 @@ class AppNavigation extends Component
                         }
                     }
                     component={ManageWorkTaskScreen}    
+                />
+                 <Stack.Screen
+                    name="AddResponsible"
+                    options=
+                    {
+                        {
+                            title:texts.ADD_RESPONSIBLE_TTL
+                        }
+                    }
+                    component={AddResponsibleScreen}    
                 />
             </Stack.Navigator>
         )

@@ -64,6 +64,7 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
             (
                 <WorkTaskCell
                     workTaskData = {itemData.item}
+                    onPressAddResponsible = {() => this.props.navigation.navigate('AddResponsible', {workTaskId, projectId})}
                     onPressEdit = {() => this.props.navigation.navigate('ManageWorkTask', {workTaskId, projectId})}
                 />
             )
@@ -95,6 +96,7 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
             if(response.status === 200)
             {
                 const workTasks = response.data.data;
+
                 this.dispatch(toolsetActions.reloadWorkTasks(workTasks));
             }
         }
@@ -102,7 +104,7 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
 
     componentWillUnmount()
     {
-        this.toolset.projectManager.unsubscribe(this);
+        this.toolset.workTaskManager.unsubscribe(this);
         if(this.unsubscribe) this.unsubscribe();
     }
 }

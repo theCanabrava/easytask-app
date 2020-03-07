@@ -29,7 +29,7 @@
     },
     "android": {
       "package": "com.canabrava.easytask",
-      "versionCode": 1
+      "versionCode": 2
     }
   }
 }

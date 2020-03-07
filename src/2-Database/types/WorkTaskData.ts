@@ -5,6 +5,7 @@ export default interface WorkTaskData
     description?: string,
     projectId?: string,
     responsibleUserId?: string,
+    responsibleEmail?: string,
     startDate?: string,
     expectedConclusionDate?: string,
     finishDate?: string,

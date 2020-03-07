@@ -6,6 +6,7 @@ export default
     MANAGE_PROJECT_TTL: "Gerenciar Projeto",
     WORK_TASK_LIST_TTL: "Tarefas",
     MANAGE_WORK_TASK_TTL: "Gerenciar Tarefas",
+    ADD_RESPONSIBLE_TTL: "Novo Responsável",
     
     //Login
     EMAIL_LBL : 'E-mail',
@@ -45,15 +46,21 @@ export default
 
     //Work Task List
     RESPONSIBLE_LBL: "Responsável",
+    NO_RESPONSIBLE_FLD: "Sem responsável",
     EXPECTED_CONCLUSION_LBL: "Previsão de fim",
     WHERE_LBL: "Onde",
     WHY_LBL: "Por que",
     HOW_LBL: "Como",
     HOW_MUCH_LBL: "Quanto",
     OBSERVATION_LBL: "Obs",
+    ADD_RESPONSIBLE_LBL: "Editar Responsável",
     EDIT_WORK_TASK_LBL: "Editar",
     ADD_WORK_TASK: "Adicionar tarefa",
 
     //Manage work tast
-    WORK_TASK_LBL: "Nome da tarefa"
+    WORK_TASK_LBL: "Nome da tarefa",
+
+    //Add Responsible
+    ADD_BTN: "Adicionar",
+    NO_MEMBER_MSG: "Usuário não é integrante do projeto."
 }

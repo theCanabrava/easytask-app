@@ -23,7 +23,7 @@ export default class WorkTaskCell extends Component
                     {texts.DESCRIPTION_LBL}: {workTaskData.description}
                 </DefaultLabel>
                 <DefaultLabel>
-                    {texts.RESPONSIBLE_LBL}: {/*workTaskData.responsibleUserId*/}
+                    {texts.RESPONSIBLE_LBL}: {workTaskData.responsibleEmail ? workTaskData.responsibleEmail : texts.NO_RESPONSIBLE_FLD}
                 </DefaultLabel>
                 <DefaultLabel>
                     {texts.START_DATE_LBL}: {workTaskData.startDate ? new Date(workTaskData.startDate).toLocaleDateString(undefined, {timeZone: 'UTC'}) : ''}
@@ -49,6 +49,10 @@ export default class WorkTaskCell extends Component
                 <DefaultLabel>
                     {texts.OBSERVATION_LBL}: {workTaskData.observation}
                 </DefaultLabel>
+                <DefaultButton
+                    title={texts.ADD_RESPONSIBLE_LBL}
+                    onPress={this.props.onPressAddResponsible}
+                />
                 <DefaultButton
                     title={texts.EDIT_WORK_TASK_LBL}
                     onPress={this.props.onPressEdit}

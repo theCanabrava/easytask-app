@@ -124,6 +124,7 @@ function updateWorkTask(state, action)
         if(workTask.description) workTasks[index].description = workTask.description;
         if(workTask.projectId) workTasks[index].projectId = workTask.projectId;
         if(workTask.responsibleUserId) workTasks[index].responsibleUserId = workTask.responsibleUserId;
+        if(workTask.responsibleEmail) workTasks[index].responsibleEmail = workTask.responsibleEmail;
         if(workTask.startDate) workTasks[index].startDate = workTask.startDate;
         if(workTask.expectedConclusionDate) workTasks[index].expectedConclusionDate = workTask.expectedConclusionDate;
         if(workTask.finishDate) workTasks[index].finishDate = workTask.finishDate;
