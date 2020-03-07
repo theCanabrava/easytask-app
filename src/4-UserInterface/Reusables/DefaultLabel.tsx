@@ -10,15 +10,11 @@ export default class DefaultLabel extends Component
     {
         let defaultLabel: ReactNode =
         (
-            <View
-                style = {styles.label}
+            <Text
+                style = {styles.labelText}
             >
-                <Text
-                    style = {styles.labelText}
-                >
-                    {this.props.children}
-                </Text>
-            </View>
+                {this.props.children}
+            </Text>
         )
 
         return defaultLabel

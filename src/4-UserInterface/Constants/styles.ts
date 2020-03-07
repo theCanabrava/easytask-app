@@ -66,6 +66,7 @@ export default StyleSheet.create(
         projectCell:
         {
             margin: 10,
+            overflow: 'hidden',
             borderColor: 'black',
             padding: 8,
             borderWidth: 1,
@@ -83,7 +84,8 @@ export default StyleSheet.create(
         labelText:
         {
             color: 'black',
-            textAlign: 'left'
+            textAlign: 'left',
+            padding: 8
         },
 
         memberCell:
