@@ -84,8 +84,7 @@ export default StyleSheet.create(
         labelText:
         {
             color: 'black',
-            textAlign: 'left',
-            padding: 8
+            textAlign: 'left'
         },
 
         memberCell:

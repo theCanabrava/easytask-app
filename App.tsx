@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, UIManager, Platform } from 'react-native';
 import { AppLoading } from 'expo';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
@@ -17,8 +17,6 @@ const rootReducer = combineReducers(
 );
 
 const store = createStore(rootReducer);
-
-
 
 export default class App extends Component
 {
@@ -39,6 +37,12 @@ export default class App extends Component
     await this.toolset.authManager.refreshToken(this.toolset.userStorage.getUser().email);
     //await this.toolset.authManager.login({email: '', password: ''});
     store.dispatch(toolsetActions.setToolset(this.toolset));
+
+    if ( Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) 
+    {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+
   }
 
   render()
