@@ -98,6 +98,11 @@ export default StyleSheet.create(
             padding: 8,
             borderWidth: 1,
             borderRadius: 10
+        },
+        
+        datePicker:
+        {
+            width: '100%'
         }
     }
 )

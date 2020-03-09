@@ -3,6 +3,7 @@ import { KeyboardAvoidingView, TextInput, ActivityIndicator, ScrollView, View } 
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
+import DateTimePicker from '@react-native-community/datetimepicker';
 import DefaultButton from '../Reusables/DefaultButton';
 
 import styles from '../Constants/styles';
@@ -17,6 +18,7 @@ import WorkTaskSubscriber from '../../1-WorkTaskManager/interfaces/WorkTaskSubsc
 import WorkTaskData from '../../2-Database/types/WorkTaskData';
 import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
 import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
+import DefaultLabel from '../Reusables/DefaultLabel';
 
 
 class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
@@ -33,7 +35,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
         {
             workTaskName: '',
             description: '',
-            expectedConclusionDate: '',
+            expectedConclusionDate: new Date(),
             where: '',
             why: '',
             how: '',
@@ -93,12 +95,16 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
                             onChangeText={(description) => this.setState({description})}
                             placeholder={texts.DESCRIPTION_LBL}
                         />
-                        <TextInput
-                            style={styles.input}
+                        <DefaultLabel>
+                            {texts.EXPECTED_CONCLUSION_LBL}
+                        </DefaultLabel>
+                        <DateTimePicker
+                            style={styles.datePicker}
+                            timeZoneOffsetInMinutes={0}
                             value={expectedConclusionDate}
-                            onChangeText={(expectedConclusionDate) => this.setState({expectedConclusionDate})}
-                            placeholder={texts.EXPECTED_CONCLUSION_LBL}
-                            keyboardType="numbers-and-punctuation"
+                            mode="date"
+                            display="default"
+                            onChange={(_, selectedDate) => {this.setState({expectedConclusionDate: selectedDate})}}
                         />
                         <TextInput
                             style={styles.input}
@@ -166,7 +172,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
             {
                 workTaskName: workTask.workTaskName,
                 description: workTask.description,
-                expectedConclusionDate: workTask.expectedConclusionDate,
+                expectedConclusionDate: new Date(workTask.expectedConclusionDate),
                 where: workTask.where,
                 why: workTask.why,
                 how: workTask.how,
@@ -184,9 +190,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
         const workTaskId = this.props.route.params.workTaskId;
         const workTaskName = this.state.workTaskName;
         const description = this.state.description;
-        const date = new Date(this.state.expectedConclusionDate);
-        let expectedConclusionDate = undefined;
-        if(!isNaN(date.getTime())) expectedConclusionDate = date.toISOString();
+        const expectedConclusionDate = this.state.expectedConclusionDate.toISOString();
         const where = this.state.where;
         const why = this.state.why;
         const how = this.state.how;
