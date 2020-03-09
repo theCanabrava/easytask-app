@@ -21,6 +21,8 @@ export default class WorkTaskCell extends Component
     {
         const expanded = this.state.expanded;
         const workTaskData: WorkTaskData = this.props.workTaskData;
+        const enableEdit = this.props.enableEdit;
+
         const projectCell: ReactNode =
         (
             <View style={styles.projectCell}>
@@ -63,14 +65,18 @@ export default class WorkTaskCell extends Component
                             <DefaultLabel>
                                 {texts.OBSERVATION_LBL}: {workTaskData.observation}
                             </DefaultLabel>
-                            <DefaultButton
-                                title={texts.ADD_RESPONSIBLE_LBL}
-                                onPress={this.props.onPressAddResponsible}
-                            />
-                            <DefaultButton
-                                title={texts.EDIT_WORK_TASK_LBL}
-                                onPress={this.props.onPressEdit}
-                            />
+                            {   enableEdit &&
+                                <>
+                                    <DefaultButton
+                                        title={texts.ADD_RESPONSIBLE_LBL}
+                                        onPress={this.props.onPressAddResponsible}
+                                    />
+                                    <DefaultButton
+                                        title={texts.EDIT_WORK_TASK_LBL}
+                                        onPress={this.props.onPressEdit}
+                                    />
+                                </>
+                            }
                         </>
                     }  
                 </TouchableOpacity>

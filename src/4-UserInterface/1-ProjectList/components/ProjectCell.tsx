@@ -21,6 +21,9 @@ export default class ProjectCell extends Component
     {
         const expanded = this.state.expanded
         const projectData: ProjectData = this.props.projectData;
+        const uuid = this.props.uuid;
+        const enableEdit = projectData.managerId === uuid;
+
         const projectCell: ReactNode =
         (
             <View style={styles.projectCell}>
@@ -53,10 +56,12 @@ export default class ProjectCell extends Component
                                 title={texts.MANAGE_USERS_LBL}
                                 onPress={this.props.onPressManageMembers}
                             />
-                            <DefaultButton
-                                title={texts.MANAGE_PROJECT_LBL}
-                                onPress={this.props.onPressManageProject}
-                            />
+                            {   enableEdit &&
+                                <DefaultButton
+                                    title={texts.MANAGE_PROJECT_LBL}
+                                    onPress={this.props.onPressManageProject}
+                                />
+                            }   
                         </>
                     }
                 </TouchableOpacity>

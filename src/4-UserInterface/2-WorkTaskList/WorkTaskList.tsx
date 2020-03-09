@@ -46,9 +46,14 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
     {
         const workTaskId = itemData.item.id;
         const projectId = this.props.route.params.projectId;
+        const managerId = this.props.route.params.managerId;
+        const uuid = this.props.user.uuid;
+        const enableEdit = managerId === uuid;
 
         if(workTaskId === "ADD")
         {
+            if(!enableEdit) return null;
+
             const addCell =
             (
                 <DefaultButton
@@ -66,6 +71,7 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
                     workTaskData = {itemData.item}
                     onPressAddResponsible = {() => this.props.navigation.navigate('AddResponsible', {workTaskId, projectId})}
                     onPressEdit = {() => this.props.navigation.navigate('ManageWorkTask', {workTaskId, projectId})}
+                    enableEdit = {enableEdit}
                 />
             )
             return projectCell;

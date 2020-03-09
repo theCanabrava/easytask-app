@@ -12,18 +12,22 @@ export default class MemberCell extends Component
 
     render(): ReactNode
     {
-        const email: ProjectData = this.props.email;
+        const email: string = this.props.email;
+        const enableEdit = this.props.enableEdit;
+        
         const memberCell: ReactNode =
         (
             <View style={styles.memberCell}>
                 <DefaultLabel>
                     {email}
                 </DefaultLabel>
-                <DefaultButton
-                    style={styles.shortButton}
-                    title={texts.REMOVE_LBL}
-                    onPress={this.props.onPressRemove.bind(this, email)}
-                />
+                {   enableEdit &&
+                    <DefaultButton
+                        style={styles.shortButton}
+                        title={texts.REMOVE_LBL}
+                        onPress={this.props.onPressRemove.bind(this, email)}
+                    />
+                }
             </View>
         );
 

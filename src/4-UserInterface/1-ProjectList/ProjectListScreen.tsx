@@ -73,8 +73,9 @@ class ProjectListScreen extends Component implements ProjectSubscriber
             (
                 <ProjectCell
                     projectData = {itemData.item}
-                    onPressWorkTasks = {() => this.props.navigation.navigate('WorkTaskList', {projectId: itemData.item.id})}
-                    onPressManageMembers = {() => {this.props.navigation.navigate('ManageMembers', {projectId: itemData.item.id})}}
+                    uuid = {this.props.user.uuid}
+                    onPressWorkTasks = {() => this.props.navigation.navigate('WorkTaskList', {projectId: itemData.item.id, managerId: itemData.item.managerId})}
+                    onPressManageMembers = {() => {this.props.navigation.navigate('ManageMembers', {projectId: itemData.item.id, managerId: itemData.item.managerId})}}
                     onPressManageProject = {() => this.props.navigation.navigate('ManageProject', {projectId: itemData.item.id})}
                 />
             )

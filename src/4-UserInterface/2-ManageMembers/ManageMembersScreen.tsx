@@ -58,8 +58,15 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
 
     renderItem(itemData)
     {
+        const managerId = this.props.route.params.managerId;
+        const uuid = this.props.user.uuid;
+
+        const enableEdit = (managerId === uuid);
+
         if(itemData.item.id === "ADD")
         {
+            if(!enableEdit) return null;
+            
             const addMember =
             (
                 <AddMemberForm
@@ -76,6 +83,7 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
                 <MemberCell
                     email = {itemData.item.id}
                     onPressRemove = {this.delete.bind(this)}
+                    enableEdit = {enableEdit}
                 />
             )
 
