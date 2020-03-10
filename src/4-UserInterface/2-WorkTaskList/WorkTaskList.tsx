@@ -12,6 +12,7 @@ import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
 import WorkTaskSubscriber from '../../1-WorkTaskManager/interfaces/WorkTaskSubscriber'
 import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
 import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
+import WorkTaskData from '../../2-Database/types/WorkTaskData';
 
 class WorkTaskListScreen extends Component implements WorkTaskSubscriber
 {
@@ -44,7 +45,9 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
 
     renderItem(itemData): ReactNode
     {
-        const workTaskId = itemData.item.id;
+        const item: WorkTaskData = itemData.item;
+        const workTaskId = item.id;
+        const responsible = item.responsibleEmail;
         const projectId = this.props.route.params.projectId;
         const managerId = this.props.route.params.managerId;
         const uuid = this.props.user.uuid;
@@ -69,7 +72,7 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
             (
                 <WorkTaskCell
                     workTaskData = {itemData.item}
-                    onPressAddResponsible = {() => this.props.navigation.navigate('AddResponsible', {workTaskId, projectId})}
+                    onPressAddResponsible = {() => this.props.navigation.navigate('AddResponsible', {workTaskId, projectId, responsible})}
                     onPressEdit = {() => this.props.navigation.navigate('ManageWorkTask', {workTaskId, projectId})}
                     enableEdit = {enableEdit}
                 />

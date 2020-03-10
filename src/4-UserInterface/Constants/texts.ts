@@ -61,6 +61,6 @@ export default
     WORK_TASK_LBL: "Nome da tarefa",
 
     //Add Responsible
-    ADD_BTN: "Adicionar",
+    ADD_BTN: "Adicionar Responsável",
     NO_MEMBER_MSG: "Usuário não é integrante do projeto."
 }

@@ -1,82 +1,91 @@
 import React, { Component, ReactNode } from 'react';
 import { Dispatch } from 'redux';
 
-import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { FlatList, View, Alert, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
-import DefaultButton from '../Reusables/DefaultButton';
 
 import styles from '../Constants/styles';
 import texts from '../Constants/texts';
 
 import ApiConstants from '../../0-ApiLibrary/constants/ApiConstants';
 import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
-import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
-import LoginParameters from '../../1-AuthManager/types/LoginParameters';
-import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
 import AddResponsibleParameters from '../../1-WorkTaskManager/types/AddResponsibleParameters';
+import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
+import MemberCell from '../3-AddResponsible/components/MemberCell';
 
 class AddResponsibleScreen extends Component
 {
     props;
     state;
     toolset: AppToolset;
-    dispatch: Dispatch
+    dispatch: Dispatch;
 
     constructor(props)
     {
         super(props)
         this.state =
         {
-            email: '',
-            isLoading: false
+            users: [],
+            isLoading: true,
         }
     }
 
     render(): ReactNode
     {
-        const email = this.state.email;
-        const isLoading = this.state.isLoading
+        const isLoading = this.state.isLoading;
 
-        let commandPannel = 
+        if(isLoading)
+        {
+            let loadingScreen =
+            (
+                <View style={styles.screen}>
+                    <ActivityIndicator/>
+                </View>
+            )
+
+            return loadingScreen;
+        }
+
+        const manageMembersScreen: ReactNode =
         (
-            <DefaultButton
-            title={texts.LOGIN_LBL}
-            onPress={this.login.bind(this)}
+            <FlatList
+                data = {this.state.users}
+                renderItem = {this.renderItem.bind(this)}
             />
         )
-        if (isLoading) commandPannel = <ActivityIndicator style={{marginVertical:10}}/>
-
-        const addResponsibleScreen: ReactNode =
-        (
-            <KeyboardAvoidingView 
-                style={styles.screen}
-                behavior='padding'
-            >
-                <TextInput
-                    style={styles.input}
-                    value={email}
-                    onChangeText={(email) => this.setState({email})}
-                    placeholder={texts.EMAIL_LBL}
-                    keyboardType='email-address'
-                    autoCapitalize='none'
-                />
-                {commandPannel}
-            </KeyboardAvoidingView>
-        )
-        return addResponsibleScreen
+        return manageMembersScreen
     }
 
     componentDidMount()
     {
+        const projectId = this.props.route.params.projectId;
         this.toolset = this.props.toolset;
         this.toolset.workTaskManager.subscribe(this);
-        this.dispatch = this.props.dispatch;
+        this.toolset.projectManager.subscribe(this);
+        this.toolset.projectManager.getUsersInProject(projectId);
+        this.setState({loading: true});
     }
 
-    async login()
+    renderItem(itemData)
+    {
+        const responsible = this.props.route.params.responsible;
+        const enableEdit = (responsible !== itemData.item.id);
+
+        const memberCell =
+        (
+            <MemberCell
+                email = {itemData.item.id}
+                onPressAdd = {this.addResponsible.bind(this)}
+                enableEdit = {enableEdit}
+            />
+        )
+
+        return memberCell;
+    }
+
+    async addResponsible(email)
     {
         this.setState({isLoading: true});
-        const email:string = this.state.email;
         const projectId: string = this.props.route.params.projectId;
         const workTaskId: string = this.props.route.params.workTaskId;
 
@@ -91,10 +100,15 @@ class AddResponsibleScreen extends Component
 
     notify(response: ApiResponse)
     {
+        this.setState({isLoading: false});
         if(response.path.includes(ApiConstants.paths.addResponsible))
         {
             if(response.status === 200) this.handleSuccess();
             else this.handleFaillure();
+        }
+        else if(response.path.includes(ApiConstants.paths.getUsersInProject))
+        {
+            this.getUsers(response);
         }
     }
 
@@ -105,13 +119,23 @@ class AddResponsibleScreen extends Component
 
     handleFaillure()
     {
-        this.setState({isLoading: false});
         Alert.alert(texts.FAIL, texts.NO_MEMBER_MSG);
+    }
+
+    getUsers(response: ApiResponse)
+    {
+        const users = [];
+        for(const i in response.data.data)
+        {
+            users.push({id: response.data.data[i].email});
+        }
+        this.setState({users});
     }
 
     componentWillUnmount()
     {
         this.toolset.workTaskManager.unsubscribe(this);
+        this.toolset.projectManager.unsubscribe(this);
     }
 }
 
