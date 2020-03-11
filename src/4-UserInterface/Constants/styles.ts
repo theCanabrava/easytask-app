@@ -99,6 +99,17 @@ export default StyleSheet.create(
             borderWidth: 1,
             borderRadius: 10
         },
+
+        datePickerCell:
+        {
+            margin: 10,
+            width: '80%',
+            overflow: 'hidden',
+            borderColor: 'black',
+            padding: 8,
+            borderWidth: 1,
+            borderRadius: 10
+        },
         
         datePicker:
         {

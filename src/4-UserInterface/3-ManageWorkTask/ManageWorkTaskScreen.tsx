@@ -3,7 +3,6 @@ import { KeyboardAvoidingView, TextInput, ActivityIndicator, ScrollView, View } 
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
-import DateTimePicker from '@react-native-community/datetimepicker';
 import DefaultButton from '../Reusables/DefaultButton';
 
 import styles from '../Constants/styles';
@@ -19,6 +18,7 @@ import WorkTaskData from '../../2-Database/types/WorkTaskData';
 import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
 import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
 import DefaultLabel from '../Reusables/DefaultLabel';
+import DatePicker from './components/DatePicker';
 
 
 class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
@@ -95,16 +95,9 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
                             onChangeText={(description) => this.setState({description})}
                             placeholder={texts.DESCRIPTION_LBL}
                         />
-                        <DefaultLabel>
-                            {texts.EXPECTED_CONCLUSION_LBL}
-                        </DefaultLabel>
-                        <DateTimePicker
-                            style={styles.datePicker}
-                            timeZoneOffsetInMinutes={0}
-                            value={expectedConclusionDate}
-                            mode="date"
-                            display="default"
-                            onChange={(_, selectedDate) => {this.setState({expectedConclusionDate: selectedDate})}}
+                        <DatePicker
+                            value = {expectedConclusionDate}
+                            pickedDate = {(expectedConclusionDate) => this.setState({expectedConclusionDate})}
                         />
                         <TextInput
                             style={styles.input}
