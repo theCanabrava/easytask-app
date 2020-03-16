@@ -14,8 +14,10 @@ export default class ApiConstants
         deleteProject: "Delete-Project",
         addUserToProject: "Add-User-To-Project",
         removeUserFromProject: "Remove-User-From-Project",
+        addManagerToProject: "Add-Manager-To-Project",
         getProjectsList: "Get-Projects-List",
-        getUsersInProject: "Get-Users-In-Project"
+        getUsersInProject: "Get-Users-In-Project",
+        getUserManagedProjects: "Get-User-Managed-Projects"
     }
 
     public static readonly workTask =
@@ -48,8 +50,10 @@ export default class ApiConstants
         deleteProject: '/api/Project/Delete-Project',
         addUserToProject: '/api/Project/Add-User-To-Project',
         removeUserFromProject: '/api/Project/Remove-User-From-Project',
+        addManagerToProject: '/api/Project/Add-Manager-To-Project',
         getProjectsList:  '/api/Project/Get-Projects-List',
         getUsersInProject: '/api/Project/Get-Users-In-Project',
+        getUserManagedProjects: '/api/Project/Get-User-Managed-Projects',
 
         createWorkTask: '/api/WorkTask/Create-WorkTask',
         updateWorkTask: '/api/WorkTask/Update-WorkTask',

@@ -82,7 +82,9 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
             (
                 <MemberCell
                     email = {itemData.item.id}
+                    isManager = {itemData.item.isManager}
                     onPressRemove = {this.delete.bind(this)}
+                    onPressAddManager = {this.addManager.bind(this)}
                     enableEdit = {enableEdit}
                 />
             )
@@ -123,6 +125,17 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
         this.toolset.projectManager.removeUserFromProject(params);
     }
 
+    addManager(email)
+    {
+        this.setState({loading: true});
+        const params: ManageUserParameters =
+        {
+            projectId: this.props.route.params.projectId,
+            userEmail: email
+        }
+        this.toolset.projectManager.addManagerToProject(params);
+    }
+
     notify(response: ApiResponse)
     {
         this.setState({loading: false});
@@ -138,6 +151,9 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
         {
             this.removeUser(response);
         }
+        else if(response.path.includes(ApiConstants.paths.addManagerToProject) && response.status===200){
+            this.addManagerToProject(response)
+        }
     }
 
     getUsers(response: ApiResponse)
@@ -145,7 +161,7 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
         const users = [];
         for(const i in response.data.data)
         {
-            users.push({id: response.data.data[i].email});
+            users.push({id: response.data.data[i].email, isManager: response.data.data[i].isManager});
         }
         users.push({id: 'ADD'});
         this.setState({users});
@@ -166,6 +182,15 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
         const users = this.state.users;
         const index = users.findIndex(user => user.id === email)
         users.splice(index, 1);
+        this.setState({users});
+    }
+
+    addManagerToProject(response: ApiResponse)
+    {
+        const email = response.data.data.userEmail;
+        const users = this.state.users;
+        const index = users.findIndex(user => user.id === email)
+        users[index].isManager = true
         this.setState({users});
     }
 

@@ -122,10 +122,22 @@ class ProjectListScreen extends Component implements ProjectSubscriber
         {
             if(response.status === 200)
             {
-                const projects = response.data.data;
-                this.dispatch(toolsetActions.reloadProjects(projects));
+               this.displayProjects(response)
             }
         }
+        if(response.path.includes(ApiConstants.paths.getUserManagedProjects))
+        {
+            if(response.status === 200)
+            {
+                this.dispatch(toolsetActions.setProjectManager(response.data.data))   
+            }
+        }
+    }
+
+    displayProjects(response: ApiResponse){
+        const projects = response.data.data;
+        this.dispatch(toolsetActions.reloadProjects(projects));
+        this.toolset.projectManager.getUserManagedProjects(this.props.user.uuid)
     }
 
     componentWillUnmount()

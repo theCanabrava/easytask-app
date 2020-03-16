@@ -43,8 +43,8 @@ class LoginScreen extends Component
         (
             <>
             <DefaultButton
-            title={texts.LOGIN_LBL}
-            onPress={this.login.bind(this)}
+                title={texts.LOGIN_LBL}
+                onPress={this.login.bind(this)}
             />
             <DefaultButton
                 title={texts.SIGNUP_LBL}

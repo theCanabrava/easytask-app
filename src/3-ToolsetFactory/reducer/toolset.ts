@@ -10,6 +10,7 @@ import
     UPDATE_PROJECT,
     RELOAD_PROJECTS,
     DELETE_PROJECT,
+    SET_PROJECT_MANAGER,
     UPDATE_WORKTASK,
     RELOAD_WORKTASK,
     DELETE_WORKTASK
@@ -49,6 +50,7 @@ const reducerFunctions =
     [UPDATE_PROJECT]: updateProject,
     [RELOAD_PROJECTS]: reloadProjects,
     [DELETE_PROJECT]: deleteProjects,
+    [SET_PROJECT_MANAGER]: setProjectManager,
     [UPDATE_WORKTASK]: updateWorkTask,
     [RELOAD_WORKTASK]: reloadWorkTask,
     [DELETE_WORKTASK]: deleteWorkTask
@@ -111,6 +113,22 @@ function deleteProjects(state, action)
     const index = projects.findIndex(proj => proj.id === action.projectId);
     delete projects[index];
     return {...state, projects: projects};
+}
+
+function setProjectManager(state, action)
+{
+    const projects: ProjectData[] = state.projects;
+    const uuid: string = state.user.uuid;
+    const projectsIds: string[] = action.projectsIds;
+    const toolset: AppToolset = action.toolset;
+
+    projects.forEach(function(project, index){
+        if(projectsIds.includes(project.id)){
+            projects[index].managerId = uuid
+        }
+    })
+
+    return {...state, projects: projects}
 }
 
 function updateWorkTask(state, action)

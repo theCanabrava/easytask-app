@@ -9,6 +9,7 @@ export const REMOVE_USER = "REMOVE_USER"
 export const UPDATE_PROJECT = "UPDATE_PROJECT"
 export const RELOAD_PROJECTS = "RELOAD_PROJECTS"
 export const DELETE_PROJECT = "DELETE_PROJECT"
+export const SET_PROJECT_MANAGER = "SET_PROJECT_MANAGER"
 export const UPDATE_WORKTASK = "UPDATE_WORKTASK"
 export const RELOAD_WORKTASK = "RELOAD_WORKTASK"
 export const DELETE_WORKTASK = "DELETE_WORKTASK"
@@ -73,6 +74,18 @@ export function removeProject(projectId: string)
     {
         type: DELETE_PROJECT,
         projectId: projectId
+    }
+
+    return action;
+}
+
+export function setProjectManager(projectsIds: string[]){
+
+
+    const action =
+    {
+        type: SET_PROJECT_MANAGER,
+        projectsIds: projectsIds
     }
 
     return action;

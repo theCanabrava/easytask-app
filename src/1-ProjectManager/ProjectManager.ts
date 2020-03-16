@@ -133,6 +133,23 @@ export default class ProjectManager implements CommunicatorDelegate
         await this.communicator.send(request);
     }
 
+    public async addManagerToProject(addManager: ManageUserParameters)
+    {
+        this.updateToken();
+        const addManagerToProjectForm: ProjectForm =
+        {
+            id: ApiConstants.project.addManagerToProject,
+            parameters: 
+            {
+                ...addManager,
+                token: this.token
+            }
+        }
+
+        const request:ApiRequest = ProjectLib.projectRequest(addManagerToProjectForm);
+        await this.communicator.send(request);
+    }
+
     public async getProjectsList(userId: string)
     {
         this.updateToken();
@@ -164,6 +181,23 @@ export default class ProjectManager implements CommunicatorDelegate
         }
 
         const request:ApiRequest = ProjectLib.projectRequest(getUsersInProjectFrom);
+        await this.communicator.send(request);
+    }
+
+    public async getUserManagedProjects(userId: string)
+    {
+        this.updateToken();
+        const getUserManagedProjectsFrom: ProjectForm =
+        {
+            id: ApiConstants.project.getUserManagedProjects,
+            parameters: 
+            {
+                userId: userId,
+                token: this.token
+            }
+        }
+
+        const request:ApiRequest = ProjectLib.projectRequest(getUserManagedProjectsFrom);
         await this.communicator.send(request);
     }
 

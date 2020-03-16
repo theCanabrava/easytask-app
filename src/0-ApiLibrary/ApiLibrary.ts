@@ -87,8 +87,10 @@ export default class ApiLibrary extends Object
         [ApiConstants.project.deleteProject]: ApiLibrary.deleteProject,
         [ApiConstants.project.addUserToProject]: ApiLibrary.addUserToProject,
         [ApiConstants.project.removeUserFromProject]: ApiLibrary.removeUserFromProject,
+        [ApiConstants.project.addManagerToProject]: ApiLibrary.addManagerToProject,
         [ApiConstants.project.getProjectsList]: ApiLibrary.getProjectsList,
-        [ApiConstants.project.getUsersInProject]: ApiLibrary.getUsersInProject
+        [ApiConstants.project.getUsersInProject]: ApiLibrary.getUsersInProject,
+        [ApiConstants.project.getUserManagedProjects]: ApiLibrary.getUserManagedProjects
     }
 
     private static createProject(parameters): ApiRequest
@@ -194,6 +196,26 @@ export default class ApiLibrary extends Object
         return removeUserFromProjectRequest;
     }
 
+    private static addManagerToProject(parameters): ApiRequest
+    {
+        const addManagerToProjectRequest: ApiRequest =
+        {
+            url: ApiConstants.paths.prefix + ApiConstants.paths.addManagerToProject,
+            reqType: ApiConstants.reqType.post,
+            body:
+            {
+                projectId: parameters.projectId,
+                userEmail: parameters.userEmail
+            },
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
+            }
+        }
+
+        return addManagerToProjectRequest;
+    }
+
     private static getProjectsList(parameters): ApiRequest
     {
         const getProjectsListRequest: ApiRequest =
@@ -223,6 +245,22 @@ export default class ApiLibrary extends Object
         }
 
         return getUsersInProjectRequest;
+    }
+
+    private static getUserManagedProjects(parameters): ApiRequest
+    {
+        const getUserManagedProjectsRequest: ApiRequest =
+        {
+            url: ApiConstants.paths.prefix + ApiConstants.paths.getUserManagedProjects + `?UserId=${encodeURI(parameters.userId)}`,
+            reqType: ApiConstants.reqType.get,
+            body:{},
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
+            }
+        }
+
+        return getUserManagedProjectsRequest;
     }
 
     private static workTaskLibrary =

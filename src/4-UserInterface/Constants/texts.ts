@@ -35,6 +35,8 @@ export default
 
     //Manage Members
     ADD_MEMBER_LBL: "Adicionar membro",
+    ADD_MANAGER_LBL: "Adicionar Gerente",
+    MANAGER_LBL: "Gerente",
     REMOVE_LBL: "Remover",
 
     //Manage Project
