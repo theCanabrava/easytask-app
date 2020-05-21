@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { KeyboardAvoidingView, TextInput, ActivityIndicator, ScrollView, View } from 'react-native';
+import { KeyboardAvoidingView, TextInput, ActivityIndicator, ScrollView, View, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -76,7 +76,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
         (
             <KeyboardAvoidingView 
                 style={{ flex: 1, flexDirection: 'column',justifyContent: 'center',}} 
-                behavior="padding" 
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
                 enabled  
                 keyboardVerticalOffset={100}
             >
@@ -183,7 +183,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
         const workTaskId = this.props.route.params.workTaskId;
         const workTaskName = this.state.workTaskName;
         const description = this.state.description;
-        const expectedConclusionDate = this.state.expectedConclusionDate.toISOString();
+        const expectedConclusionDate = this.state.expectedConclusionDate;
         const where = this.state.where;
         const why = this.state.why;
         const how = this.state.how;

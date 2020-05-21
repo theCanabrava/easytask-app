@@ -270,7 +270,8 @@ export default class ApiLibrary extends Object
         [ApiConstants.workTask.finishWorkTask]: ApiLibrary.finishWorkTask,
         [ApiConstants.workTask.addResponsible]: ApiLibrary.addResponsible,
         [ApiConstants.workTask.getWorkTasksOfProject]: ApiLibrary.getWorkTasksOfProject,
-        [ApiConstants.workTask.deleteWorkTask]: ApiLibrary.deleteWorkTask
+        [ApiConstants.workTask.deleteWorkTask]: ApiLibrary.deleteWorkTask,
+        [ApiConstants.workTask.filterWorkTask]: ApiLibrary.filterWorkTask
     }
 
     private static createWorkTask(parameters): ApiRequest
@@ -403,5 +404,21 @@ export default class ApiLibrary extends Object
         }
 
         return deleteWorkTaskRequest;
+    }
+
+    private static filterWorkTask(parameters)
+    {
+        const filterWorkTask: ApiRequest =
+        {
+            url: ApiConstants.paths.prefix + ApiConstants.paths.filterWorkTask +  `?projectId=${parameters.projectId}&status=${parameters.status}`,
+            reqType: ApiConstants.reqType.get,
+            body: {},
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
+            }
+        }
+
+        return filterWorkTask;
     }
 }

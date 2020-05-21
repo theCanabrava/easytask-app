@@ -12,6 +12,7 @@ export const DELETE_PROJECT = "DELETE_PROJECT"
 export const SET_PROJECT_MANAGER = "SET_PROJECT_MANAGER"
 export const UPDATE_WORKTASK = "UPDATE_WORKTASK"
 export const RELOAD_WORKTASK = "RELOAD_WORKTASK"
+export const FILTER_WORKTASK = "FILTER_WORKTASK"
 export const DELETE_WORKTASK = "DELETE_WORKTASK"
 
 export function setToolset(toolset: AppToolset)
@@ -112,6 +113,20 @@ export function reloadWorkTasks(workTasks: WorkTaskData[])
 
     return action;
 }
+
+export function filterWorkTask(workTasks: WorkTaskData[])
+{
+    const action =
+    {
+        type: FILTER_WORKTASK,
+        workTasks: workTasks
+    }
+
+    return action;
+}
+
+
+
 
 export function removeWorkTask(workTaskId: string)
 {

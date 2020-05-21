@@ -6,7 +6,14 @@ export default StyleSheet.create(
         {
             flex: 1,
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
+        },
+
+        sworkTaskScreen:
+        {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'stretch',
         },
 
         button:

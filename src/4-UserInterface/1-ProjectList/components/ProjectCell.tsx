@@ -39,15 +39,6 @@ export default class ProjectCell extends Component
                             <DefaultLabel>
                                 {texts.DESCRIPTION_LBL}: {projectData.description}
                             </DefaultLabel>
-                            <DefaultLabel>
-                                {texts.START_DATE_LBL}: {projectData.startDate ? new Date(projectData.startDate).toLocaleDateString(undefined, {timeZone: 'UTC'}) : ''}
-                            </DefaultLabel>
-                            <DefaultLabel>
-                                {texts.FINISH_DATE_LBL}: {projectData.finishDate ? new Date(projectData.finishDate).toLocaleDateString(undefined, {timeZone: 'UTC'}) : ''}
-                            </DefaultLabel>
-                            <DefaultLabel>
-                                {texts.COMPLETE_LBL}: {projectData.completed ? texts.YES_LBL : texts.NO_LBL}
-                            </DefaultLabel>
                             <DefaultButton
                                 title={texts.WORK_TASKS_LBL}
                                 onPress={this.props.onPressWorkTasks}

@@ -12,6 +12,7 @@ import UpdateWorkTaskParameters from "./types/UpdateWorkTaskParameters";
 import AddResponsibleParameters from "./types/AddResponsibleParameters";
 import DeleteTaskParameters from "./types/DeleteTaskParameters";
 import CreateWorkTaskParameters from "./types/CreateWorkTaskParameters";
+import FilterWorkTaskParameters from "./types/FilterWorkTaskParameters";
 
 export default class WorkTaskManager implements CommunicatorDelegate
 {
@@ -147,6 +148,24 @@ export default class WorkTaskManager implements CommunicatorDelegate
         }
 
         const request: ApiRequest = WorkTaskLib.workTaskRequest(deleteWorkTaskForm);
+        await this.communicator.send(request);
+    }
+
+    public async filterWorkTask(filtertasks: FilterWorkTaskParameters)
+    {
+        this.updateToken();
+        const filterWorkTaskForm: WorkTaskForm = 
+        {
+            id: ApiConstants.workTask.filterWorkTask,
+            parameters: 
+            {
+                ...filtertasks,
+                token: this.token
+            }
+        }
+
+        const request: ApiRequest = WorkTaskLib.workTaskRequest(filterWorkTaskForm);
+        console.log(request);
         await this.communicator.send(request);
     }
 

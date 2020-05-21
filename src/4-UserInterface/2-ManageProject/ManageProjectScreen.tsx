@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { KeyboardAvoidingView, TextInput, ActivityIndicator } from 'react-native';
+import { KeyboardAvoidingView, TextInput, ActivityIndicator, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -60,7 +60,7 @@ class ManageProjectScreen extends Component implements ProjectSubscriber
         (
             <KeyboardAvoidingView 
                 style={styles.screen}
-                behavior='padding'
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
                 <TextInput
                     style={styles.input}

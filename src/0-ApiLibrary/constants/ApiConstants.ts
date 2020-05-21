@@ -27,7 +27,8 @@ export default class ApiConstants
         finishWorkTask: "Finish-WorkTask",
         addResponsible: "Add-Responsible",
         getWorkTasksOfProject: "GetWorkTasksOfProject",
-        deleteWorkTask: "Delete-WorkTask"
+        deleteWorkTask: "Delete-WorkTask",
+        filterWorkTask: "Filter-Task"
     }
 
     public static readonly reqType =
@@ -39,7 +40,7 @@ export default class ApiConstants
 
     public static readonly paths =
     {
-        prefix: 'http://ec2-18-229-140-144.sa-east-1.compute.amazonaws.com:8080',
+        prefix: 'http://ec2-54-207-71-204.sa-east-1.compute.amazonaws.com:8080',
 
         newUser: '/api/New-User',
         login: '/api/Login',
@@ -61,5 +62,6 @@ export default class ApiConstants
         addResponsible: '/api/WorkTask/Add-Responsible',
         getWorkTasksOfProject: '/api/WorkTask/GetWorkTasksOfProject',
         deleteWorkTask: '/api/WorkTask/Delete-WorkTask',
+        filterWorkTask: '/api/WorkTask/Filter-Task'
     }
 }

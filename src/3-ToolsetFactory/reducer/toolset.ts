@@ -13,6 +13,7 @@ import
     SET_PROJECT_MANAGER,
     UPDATE_WORKTASK,
     RELOAD_WORKTASK,
+    FILTER_WORKTASK,
     DELETE_WORKTASK
 } 
 from "../actions/toolset";
@@ -53,6 +54,7 @@ const reducerFunctions =
     [SET_PROJECT_MANAGER]: setProjectManager,
     [UPDATE_WORKTASK]: updateWorkTask,
     [RELOAD_WORKTASK]: reloadWorkTask,
+    [FILTER_WORKTASK]: filterWorkTask,
     [DELETE_WORKTASK]: deleteWorkTask
 }
 
@@ -163,6 +165,12 @@ function reloadWorkTask(state, action)
     const newWorkTasks: WorkTaskData[] = oldWorkTasks.filter(work => work.projectId !== addedWorkTasks[0].projectId);
     for(const i in addedWorkTasks)newWorkTasks.push(addedWorkTasks[i]);
     return { ...state, workTasks: newWorkTasks };
+}
+
+function filterWorkTask(state, action)
+{
+    const filteredTasks: WorkTaskData[] = action.workTasks;
+    return { ...state, workTasks: filteredTasks };
 }
 
 function deleteWorkTask(state, action)

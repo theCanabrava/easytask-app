@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Dispatch } from 'redux';
 
-import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import DefaultButton from '../Reusables/DefaultButton';
 
@@ -58,7 +58,7 @@ class LoginScreen extends Component
         (
             <KeyboardAvoidingView 
                 style={styles.screen}
-                behavior='padding'
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
                 <TextInput
                     style={styles.input}

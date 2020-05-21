@@ -22,6 +22,7 @@ export default class AxiosCommunicator implements AuthCommunicator
 
     private async sendPost(request: ApiRequest)
     {
+
         await axios[request.reqType](request.url, request.body, {headers: request.headers})
             .then((axiosResponse) =>
             {

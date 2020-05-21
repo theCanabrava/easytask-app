@@ -1,7 +1,7 @@
 import React, {Component, ReactNode} from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, Platform } from 'react-native';
 
 import DefaultButton from '../Reusables/DefaultButton';
 import styles from '../Constants/styles';
@@ -53,7 +53,7 @@ class RegisterScreen extends Component implements AuthSubscriber
         (
             <KeyboardAvoidingView 
                 style={styles.screen}
-                behavior='padding'
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
                 <TextInput
                     style={styles.input}

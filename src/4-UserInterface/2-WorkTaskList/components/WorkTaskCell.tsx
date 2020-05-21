@@ -1,15 +1,23 @@
 import React, { Component, ReactNode } from 'react';
+import { Icon } from 'react-native-elements';
 import { View, TouchableOpacity, LayoutAnimation } from 'react-native';
 import WorkTaskData from '../../../2-Database/types/WorkTaskData';
 import styles from '../../Constants/styles';
 import DefaultLabel from '../../Reusables/DefaultLabel';
 import texts from '../../Constants/texts';
 import DefaultButton from '../../Reusables/DefaultButton';
+import { StackNavigationOptions } from '@react-navigation/stack';
+import icons from '../../Constants/icons';
 
 export default class WorkTaskCell extends Component
 {
     props;
     state;
+    navOptions: StackNavigationOptions =
+    {
+        headerRight: this.renderHeaderRight.bind(this),
+        headerRightContainerStyle:{paddingRight: 20}
+    };
 
     constructor(props)
     {
@@ -17,11 +25,26 @@ export default class WorkTaskCell extends Component
         this.state = {expanded: false};
     }
 
+    renderHeaderRight()
+    {
+        const header =
+        (
+            <TouchableOpacity>
+                <Icon
+                    name={icons.ICON_LOGOUT}
+                    type={icons.ICON_TYPE}
+                />
+            </TouchableOpacity>
+        )
+        return header;
+    }
+
     render(): ReactNode
     {
         const expanded = this.state.expanded;
         const workTaskData: WorkTaskData = this.props.workTaskData;
         const enableEdit = this.props.enableEdit;
+        const expectedConclusionDate = new Date(workTaskData.expectedConclusionDate).toISOString().replace(/T/, ' ').replace(/\..+/, '').substring(0,10).split('-')
 
         const projectCell: ReactNode =
         (
@@ -36,16 +59,16 @@ export default class WorkTaskCell extends Component
                         {texts.RESPONSIBLE_LBL}: {workTaskData.responsibleEmail ? workTaskData.responsibleEmail : texts.NO_RESPONSIBLE_FLD}
                     </DefaultLabel>
                     <DefaultLabel>
-                        {expanded ? `${texts.EXPECTED_CONCLUSION_LBL}: ` : ''}{workTaskData.expectedConclusionDate ? new Date(workTaskData.expectedConclusionDate).toLocaleDateString(undefined, {timeZone: 'UTC'}) : ''}
+                        {expanded ? `${texts.EXPECTED_CONCLUSION_LBL}: ` : ''}{this.formatDateString(workTaskData.expectedConclusionDate)}
                     </DefaultLabel>
                     { 
                         expanded &&
                         <>
                             <DefaultLabel>
-                                {texts.START_DATE_LBL}: {workTaskData.startDate ? new Date(workTaskData.startDate).toLocaleDateString(undefined, {timeZone: 'UTC'}) : ''}
+                                {texts.START_DATE_LBL}: {this.formatDateString(workTaskData.startDate)}
                             </DefaultLabel>
                             <DefaultLabel>
-                                {texts.FINISH_DATE_LBL}: {workTaskData.finishDate ? new Date(workTaskData.finishDate).toLocaleDateString(undefined, {timeZone: 'UTC'}) : ''}
+                                {texts.FINISH_DATE_LBL}: {this.formatDateString(workTaskData.finishDate)}
                             </DefaultLabel>
                             <DefaultLabel>
                                 {texts.DESCRIPTION_LBL}: {workTaskData.description}
@@ -90,5 +113,13 @@ export default class WorkTaskCell extends Component
     {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         this.setState({expanded: !this.state.expanded})
+    }
+
+    formatDateString(dateString:string){
+        if(dateString === null || dateString === undefined) return ''
+
+        const date = new Date(dateString).toISOString().replace(/T/, ' ').replace(/\..+/, '').substring(0,10).split('-')
+
+        return date[2] + '/' + date[1] + '/' + date[0]
     }
 }
