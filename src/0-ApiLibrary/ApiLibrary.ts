@@ -3,6 +3,7 @@ import ApiRequest from "./types/ApiRequest";
 import ProjectForm from "./types/ProjectForm";
 import WorkTaskForm from "./types/WorkTaskForm";
 import ApiConstants from "./constants/ApiConstants";
+import PushNotificationForm from "./types/PushNotificationForm";
 
 export default class ApiLibrary extends Object
 {
@@ -19,6 +20,11 @@ export default class ApiLibrary extends Object
     public static workTaskRequest(form: WorkTaskForm): ApiRequest
     {
         return ApiLibrary.workTaskLibrary[form.id](form.parameters);
+    }
+
+    public static pushNotificationRequest(form: PushNotificationForm) : ApiRequest
+    {
+        return ApiLibrary.pushNotificationLibrary[form.id](form.parameters);
     }
 
     private static authLibrary =
@@ -406,7 +412,7 @@ export default class ApiLibrary extends Object
         return deleteWorkTaskRequest;
     }
 
-    private static filterWorkTask(parameters)
+    private static filterWorkTask(parameters): ApiRequest
     {
         const filterWorkTask: ApiRequest =
         {
@@ -420,5 +426,31 @@ export default class ApiLibrary extends Object
         }
 
         return filterWorkTask;
+    }
+
+    private static pushNotificationLibrary =
+    {
+        [ApiConstants.pushNotification.sendPushNotificationToken]: ApiLibrary.sendPushNotificationToken
+    }
+
+    private static sendPushNotificationToken(parameters) : ApiRequest
+    {
+        const sendPushNotificationToken: ApiRequest =
+        {
+            url: ApiConstants.paths.prefix + ApiConstants.paths.sendPushNotificationToken,
+            reqType: ApiConstants.reqType.post,
+            body: 
+            {
+                userEmail: parameters.userEmail,
+                pushNotificationToken : parameters.pushNotificationToken
+
+            },
+            headers: 
+            {
+                Authorization: `Bearer ${parameters.token}`
+            }
+        }
+
+        return sendPushNotificationToken;
     }
 }

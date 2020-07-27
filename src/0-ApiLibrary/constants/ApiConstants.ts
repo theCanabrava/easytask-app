@@ -31,6 +31,10 @@ export default class ApiConstants
         filterWorkTask: "Filter-Task"
     }
 
+    public static readonly pushNotification = {
+        sendPushNotificationToken: "Send-Push-Notification-Token"
+    }
+
     public static readonly reqType =
     {
         get: 'get',
@@ -62,6 +66,8 @@ export default class ApiConstants
         addResponsible: '/api/WorkTask/Add-Responsible',
         getWorkTasksOfProject: '/api/WorkTask/GetWorkTasksOfProject',
         deleteWorkTask: '/api/WorkTask/Delete-WorkTask',
-        filterWorkTask: '/api/WorkTask/Filter-Task'
+        filterWorkTask: '/api/WorkTask/Filter-Task',
+
+        sendPushNotificationToken: '/api/Send-Push-Notification-Token'
     }
 }

@@ -53,7 +53,7 @@ export default StyleSheet.create(
             height: 32,
             width: '80%',
             marginVertical: 8,
-
+            marginLeft: 45,
             borderColor: 'black',
             padding: 8,
             borderWidth: 1

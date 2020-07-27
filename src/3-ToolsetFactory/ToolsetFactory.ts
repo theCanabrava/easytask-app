@@ -4,9 +4,11 @@ import AuthManager from "../1-AuthManager/AuthManager";
 import AuthManagerComponents from "../1-AuthManager/types/AuthManagerComponents";
 import ProjectManagerComponents from "../1-ProjectManager/types/ProjectManagerComponents";
 import WorkTaskManagerComponents from "../1-WorkTaskManager/types/WorkTaskManagerComponents";
+import PushNotificationComponents from "../1-PushNotificationManager/types/PushNotificationComponents"
 import AxiosCommunicator from "../2-AxiosCommunicator/AxiosCommunicator";
 import ProjectManager from "../1-ProjectManager/ProjectManager";
 import WorkTaskManager from "../1-WorkTaskManager/WorkTaskManager";
+import PushNotificationManager from "../1-PushNotificationManager/PushNotificationManager";
 
 export default class ToolsetFactory
 {
@@ -17,6 +19,8 @@ export default class ToolsetFactory
         const authManager = this.makeAuthManager(database);
         const projectManager = this.makeProjectManager(database);
         const workTaskManager = this.makeWorkTaskManager(database);
+        const pushNotificationManager = this.pushNotificationManager(database);
+
         const toolset: AppToolset =
         {
             userStorage: database,
@@ -25,11 +29,11 @@ export default class ToolsetFactory
 
             authManager: authManager,
             projectManager: projectManager,
-            workTaskManager: workTaskManager
+            workTaskManager: workTaskManager,
+            pushNotificationManager: pushNotificationManager
         }
         return toolset;
     }
-
     private static makeAuthManager(database: Database): AuthManager
     {
         const communicator =  new AxiosCommunicator();
@@ -64,6 +68,17 @@ export default class ToolsetFactory
             subscribers: [database]
         }
         return new WorkTaskManager(components)
+    }
+
+    static pushNotificationManager(database: Database) : PushNotificationManager
+    {
+        const communicator =  new AxiosCommunicator();
+        const components: PushNotificationComponents =
+        {
+            communicator: communicator,
+            dataSource: database
+        }
+        return new PushNotificationManager(components);
     }
 
     private static makeDatabase(): Database

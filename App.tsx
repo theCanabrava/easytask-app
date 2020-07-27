@@ -10,6 +10,7 @@ import * as toolsetActions from './src/3-ToolsetFactory/actions/toolset';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigation from './src/5-Navigation/AppNavigation';
 
+
 const rootReducer = combineReducers(
   {
     toolset: toolsetReducer

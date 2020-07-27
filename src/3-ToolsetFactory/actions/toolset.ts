@@ -125,9 +125,6 @@ export function filterWorkTask(workTasks: WorkTaskData[])
     return action;
 }
 
-
-
-
 export function removeWorkTask(workTaskId: string)
 {
     const action =

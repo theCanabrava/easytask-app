@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Dispatch } from 'redux';
 
-import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, Platform } from 'react-native';
+import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, Platform, ImageBackground, View , Image} from 'react-native';
 import { connect } from 'react-redux';
 import DefaultButton from '../Reusables/DefaultButton';
 
@@ -38,6 +38,8 @@ class LoginScreen extends Component
         const email = this.state.email;
         const password = this.state.password;
         const isLoading = this.state.isLoading
+        const backgroundimage = require("../Assets/bg.png");
+        const logo = require("../Assets/logo.png")
 
         let commandPannel = 
         (
@@ -56,12 +58,27 @@ class LoginScreen extends Component
 
         const loginScreen: ReactNode =
         (
-            <KeyboardAvoidingView 
-                style={styles.screen}
-                behavior={Platform.OS == "ios" ? "padding" : "height"}
-            >
+                <ImageBackground source={backgroundimage} resizeMode={'stretch'}  style={{flex: 1,
+                height: "50%",
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "black"}}>
+                <Image source={logo} resizeMode={'center'} style = {
+                    {
+                    alignSelf: "center",
+                    bottom: "15%",
+                    height: 100,
+                    width: 200}
+                } />
+                <KeyboardAvoidingView style={{
+                    backgroundColor: "black",
+                    width: "100%",
+                    borderRadius: 30
+                    }}
+                    behavior={Platform.OS == "ios" ? "height" : null}>  
                 <TextInput
-                    style={styles.input}
+                    style={{...styles.input}}
                     value={email}
                     onChangeText={(email) => this.setState({email})}
                     placeholder={texts.EMAIL_LBL}
@@ -78,7 +95,9 @@ class LoginScreen extends Component
                     secureTextEntry
                 />
                 {commandPannel}
-            </KeyboardAvoidingView>
+                </KeyboardAvoidingView>
+                </ImageBackground>
+            
         )
         return loginScreen
     }

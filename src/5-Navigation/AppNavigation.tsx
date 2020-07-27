@@ -10,6 +10,7 @@ import WorkTaskListScreen from '../4-UserInterface/2-WorkTaskList/WorkTaskList';
 import ManageWorkTaskScreen from '../4-UserInterface/3-ManageWorkTask/ManageWorkTaskScreen';
 import texts from '../4-UserInterface/Constants/texts';
 import AddResponsibleScreen from '../4-UserInterface/3-AddResponsible/AddResponsibleScreen';
+import AppToolset from '../3-ToolsetFactory/types/AppToolset';
 
 const Stack = createStackNavigator();
 
@@ -119,11 +120,18 @@ class LoginNavigation extends Component
 class MainNavigator extends Component
 {
     props;
+    toolset: AppToolset;
 
     render()
     {
         const loggedIn = this.props.user.uuid !== '';
-        if(loggedIn) return (<AppNavigation/>)
+        if(loggedIn) {
+            this.toolset = this.props.toolset
+
+            this.toolset.pushNotificationManager.sendPushNotificatioNToken(this.props.user.email)
+
+            return (<AppNavigation/>)
+        }
         else return (<LoginNavigation/>)
     }
 }
@@ -132,6 +140,7 @@ function mapState(state)
 {
     const props =
     {
+        toolset: state.toolset.toolset,
         user: state.toolset.user
     }
     return props;
