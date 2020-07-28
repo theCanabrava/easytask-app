@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Dispatch } from 'redux';
 
-import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, Platform, ImageBackground, View , Image} from 'react-native';
+import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, Platform, View, ImageBackground, Image } from 'react-native';
 import { connect } from 'react-redux';
 import DefaultButton from '../Reusables/DefaultButton';
 
@@ -13,6 +13,9 @@ import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
 import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
 import LoginParameters from '../../1-AuthManager/types/LoginParameters';
 import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
+
+const logoBackground = require('../Assets/bg.png');
+const logo = require('../Assets/logo.png');
 
 class LoginScreen extends Component
 {
@@ -38,8 +41,6 @@ class LoginScreen extends Component
         const email = this.state.email;
         const password = this.state.password;
         const isLoading = this.state.isLoading
-        const backgroundimage = require("../Assets/bg.png");
-        const logo = require("../Assets/logo.png")
 
         let commandPannel = 
         (
@@ -58,46 +59,34 @@ class LoginScreen extends Component
 
         const loginScreen: ReactNode =
         (
-                <ImageBackground source={backgroundimage} resizeMode={'stretch'}  style={{flex: 1,
-                height: "50%",
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "black"}}>
-                <Image source={logo} resizeMode={'center'} style = {
-                    {
-                    alignSelf: "center",
-                    bottom: "15%",
-                    height: 100,
-                    width: 200}
-                } />
-                <KeyboardAvoidingView style={{
-                    backgroundColor: "black",
-                    width: "100%",
-                    borderRadius: 30
-                    }}
-                    behavior={Platform.OS == "ios" ? "height" : null}>  
-                <TextInput
-                    style={{...styles.input}}
-                    value={email}
-                    onChangeText={(email) => this.setState({email})}
-                    placeholder={texts.EMAIL_LBL}
-                    keyboardType='email-address'
-                    autoCapitalize='none'
-                />
-                <TextInput
-                    style={styles.input}
-                    value={password}
-                    onChangeText={(password) => this.setState({password})}
-                    placeholder={texts.PASSWORD_LBL}
-                    keyboardType='default'
-                    autoCapitalize='none'
-                    secureTextEntry
-                />
-                {commandPannel}
-                </KeyboardAvoidingView>
+            <KeyboardAvoidingView 
+                style={styles.loginScreen}
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
+            >
+                <ImageBackground source={logoBackground} style={styles.loginLogoContainer}>
+                    <Image source={logo} style={styles.loginLogo}/>
                 </ImageBackground>
-            
+                <View style={styles.loginContainer}>
+                    <TextInput
+                        style={styles.input}
+                        value={email}
+                        onChangeText={(email) => this.setState({email})}
+                        placeholder={texts.EMAIL_LBL}
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                    />
+                    <TextInput
+                        style={styles.input}
+                        value={password}
+                        onChangeText={(password) => this.setState({password})}
+                        placeholder={texts.PASSWORD_LBL}
+                        keyboardType='default'
+                        autoCapitalize='none'
+                        secureTextEntry
+                    />
+                    {commandPannel}
+                </View>
+            </KeyboardAvoidingView>
         )
         return loginScreen
     }

@@ -9,6 +9,39 @@ export default StyleSheet.create(
             alignItems: 'center',
         },
 
+        loginScreen:
+        {
+            flex: 1,
+            backgroundColor: 'midnightblue',
+            justifyContent: 'center',
+            alignItems: 'stretch',
+        },
+
+        loginLogoContainer:
+        {
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: 1,
+        },
+
+        loginLogo:
+        {
+            height: 85,
+            width: 250,
+            resizeMode: 'contain'
+        },
+
+        loginContainer:
+        {
+            backgroundColor: 'midnightblue',
+            alignItems: 'center',
+            paddingTop: 40,
+            borderTopLeftRadius: 15,
+            borderTopRightRadius: 15,
+            top: -15,
+            flex: 1.61803398875
+        },
+
         sworkTaskScreen:
         {
             flex: 1,
@@ -53,7 +86,6 @@ export default StyleSheet.create(
             height: 32,
             width: '80%',
             marginVertical: 8,
-            marginLeft: 45,
             borderColor: 'black',
             padding: 8,
             borderWidth: 1
