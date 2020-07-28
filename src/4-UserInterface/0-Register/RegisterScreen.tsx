@@ -1,7 +1,7 @@
 import React, {Component, ReactNode} from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, Platform } from 'react-native';
+import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, Platform, View, ImageBackground, Image } from 'react-native';
 
 import DefaultButton from '../Reusables/DefaultButton';
 import styles from '../Constants/styles';
@@ -13,6 +13,9 @@ import AuthSubscriber from '../../1-AuthManager/interfaces/AuthSubscriber';
 import NewUserParameters from '../../1-AuthManager/types/NewUserParameters';
 import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
 import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
+
+const logoBackground = require('../Assets/bg.png');
+const logo = require('../Assets/logo.png');
 
 class RegisterScreen extends Component implements AuthSubscriber
 {
@@ -52,34 +55,39 @@ class RegisterScreen extends Component implements AuthSubscriber
         const registerScreen: ReactNode =
         (
             <KeyboardAvoidingView 
-                style={styles.screen}
+                style={styles.loginScreen}
                 behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
-                <TextInput
-                    style={styles.input}
-                    value={email}
-                    onChangeText={(email) => this.setState({email})}
-                    placeholder={texts.EMAIL_LBL}
-                    keyboardType='email-address'
-                    autoCapitalize='none'
-                />
-                <TextInput
-                    style={styles.input}
-                    value={password}
-                    onChangeText={(password) => this.setState({password})}
-                    placeholder={texts.PASSWORD_LBL}
-                    autoCapitalize='none'
-                    secureTextEntry
-                />
-                <TextInput
-                    style={styles.input}
-                    value={confirmPassword}
-                    onChangeText={(confirmPassword) => this.setState({confirmPassword})}
-                    placeholder={texts.CONFIRM_PASSWORD_LBL}
-                    autoCapitalize='none'
-                    secureTextEntry
-                />
-                {commandPannel}
+                <ImageBackground source={logoBackground} style={styles.loginLogoContainer}>
+                    <Image source={logo} style={styles.loginLogo}/>
+                </ImageBackground>
+                <View style={styles.loginContainer}>
+                    <TextInput
+                        style={styles.input}
+                        value={email}
+                        onChangeText={(email) => this.setState({email})}
+                        placeholder={texts.EMAIL_LBL}
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                    />
+                    <TextInput
+                        style={styles.input}
+                        value={password}
+                        onChangeText={(password) => this.setState({password})}
+                        placeholder={texts.PASSWORD_LBL}
+                        autoCapitalize='none'
+                        secureTextEntry
+                    />
+                    <TextInput
+                        style={styles.input}
+                        value={confirmPassword}
+                        onChangeText={(confirmPassword) => this.setState({confirmPassword})}
+                        placeholder={texts.CONFIRM_PASSWORD_LBL}
+                        autoCapitalize='none'
+                        secureTextEntry
+                    />
+                    {commandPannel}
+                </View>
             </KeyboardAvoidingView>
         )
         return registerScreen
