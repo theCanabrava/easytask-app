@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Dispatch } from 'redux';
 
-import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, Platform, View, ImageBackground, Image } from 'react-native';
+import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, Platform, View, ImageBackground, Image, Text } from 'react-native';
 import { connect } from 'react-redux';
 import DefaultButton from '../Reusables/DefaultButton';
 
@@ -46,13 +46,20 @@ class LoginScreen extends Component
         (
             <>
             <DefaultButton
+                style={{marginTop: 25}}
                 title={texts.LOGIN_LBL}
                 onPress={this.login.bind(this)}
             />
-            <DefaultButton
-                title={texts.SIGNUP_LBL}
-                onPress={() => this.props.navigation.navigate('Register')}
-            />
+            <Text style={{...styles.clickableText, margin: 25}}>
+                {texts.FORGOT_PASSWORD}
+            </Text>
+            <Text style={styles.whiteText}>
+                {texts.DONT_HAVE_ACCOUNT} 
+                <Text style={styles.clickableText}
+                      onPress={() => this.props.navigation.navigate('Register')}
+                > {texts.SIGNUP}      
+                </Text>
+            </Text>
             </>
         )
         if (isLoading) commandPannel = <ActivityIndicator style={{marginVertical:10}}/>
@@ -67,6 +74,7 @@ class LoginScreen extends Component
                     <Image source={logo} style={styles.loginLogo}/>
                 </ImageBackground>
                 <View style={styles.loginContainer}>
+                    <Text style={styles.loginText}>Email</Text>
                     <TextInput
                         style={styles.input}
                         value={email}
@@ -75,6 +83,7 @@ class LoginScreen extends Component
                         keyboardType='email-address'
                         autoCapitalize='none'
                     />
+                    <Text style={styles.loginText}>Senha</Text>
                     <TextInput
                         style={styles.input}
                         value={password}

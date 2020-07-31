@@ -20,7 +20,10 @@ class AppNavigation extends Component
     {
         let appNavigation: ReactNode =
         (
-            <Stack.Navigator>
+            <Stack.Navigator
+            screenOptions = {{
+                headerShown: false
+            }}>
                 <Stack.Screen
                     name="ProjectList"
                     options=

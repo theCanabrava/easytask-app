@@ -1,7 +1,7 @@
 import React, {Component, ReactNode} from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { FlatList, TouchableOpacity } from 'react-native';
+import { View, FlatList, TouchableOpacity, ImageBackground, Image, Text} from 'react-native';
 import { StackNavigationOptions } from '@react-navigation/stack';
 import { Icon } from 'react-native-elements';
 
@@ -17,6 +17,11 @@ import ProjectSubscriber from '../../1-ProjectManager/interfaces/ProjectSubscrib
 import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
 import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
 import cellIds from '../Constants/cellIds';
+import styles from '../Constants/styles';
+
+const logoBackground = require('../Assets/bg.png');
+const projects = require('../Assets/add_task.png');
+const back = require('../Assets/back.png');
 
 class ProjectListScreen extends Component implements ProjectSubscriber
 {
@@ -39,48 +44,47 @@ class ProjectListScreen extends Component implements ProjectSubscriber
     {
         const projectList = 
         [
-            ...this.props.projects,
-            {
-                id: cellIds.ADD
-            }
+            ...this.props.projects
         ]
         const projectListScreen: ReactNode =
         (
-            <FlatList
-                data = {projectList}
-                renderItem = {this.renderItem.bind(this)}
-            />
+            <View style={styles.defaultScreen}>
+                <ImageBackground source={logoBackground} style={styles.backgroundContainer}>
+                    <View style={styles.backImageContainer}>
+                        <Image source={back} style={styles.backImage}/>
+                    </View>
+                    <Image source={projects} style={styles.defaultImage}/>
+                    <Text style={styles.screenTitle}>{texts.PROJECT_LIST_TTL}</Text>
+                </ImageBackground>
+                <View style={styles.defaultContainer}>
+                    <FlatList
+                        style = {styles.flatList}
+                        data = {projectList}
+                        renderItem = {this.renderItem.bind(this)}
+                    />
+                    <DefaultButton
+                    title = {texts.ADD_PROJECT_LBL}
+                    onPress = {() => this.props.navigation.navigate('ManageProject', {projectId: cellIds.ADD})}
+                />
+                </View>
+            </View>
         )
         return projectListScreen
     }
 
     renderItem(itemData): ReactNode
     {
-        if(itemData.item.id === cellIds.ADD)
-        {
-            const addCell =
-            (
-                <DefaultButton
-                    title = {texts.ADD_PROJECT_LBL}
-                    onPress = {() => this.props.navigation.navigate('ManageProject', {projectId: itemData.item.id})}
-                />
-            )
-            return addCell
-        } 
-        else
-        {
-            const projectCell =
-            (
-                <ProjectCell
-                    projectData = {itemData.item}
-                    uuid = {this.props.user.uuid}
-                    onPressWorkTasks = {() => this.props.navigation.navigate('WorkTaskList', {projectId: itemData.item.id, managerId: itemData.item.managerId})}
-                    onPressManageMembers = {() => {this.props.navigation.navigate('ManageMembers', {projectId: itemData.item.id, managerId: itemData.item.managerId})}}
-                    onPressManageProject = {() => this.props.navigation.navigate('ManageProject', {projectId: itemData.item.id})}
-                />
-            )
-            return projectCell;
-        }
+        const projectCell =
+        (
+            <ProjectCell
+                projectData = {itemData.item}
+                uuid = {this.props.user.uuid}
+                onPressWorkTasks = {() => this.props.navigation.navigate('WorkTaskList', {projectId: itemData.item.id, managerId: itemData.item.managerId})}
+                onPressManageMembers = {() => {this.props.navigation.navigate('ManageMembers', {projectId: itemData.item.id, managerId: itemData.item.managerId})}}
+                onPressManageProject = {() => this.props.navigation.navigate('ManageProject', {projectId: itemData.item.id})}
+            />
+        )
+        return projectCell;
     }
 
     componentDidMount()

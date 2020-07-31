@@ -11,10 +11,10 @@ export default class DefaultButton extends Component
         let defaultButton: ReactNode =
         (
             <View
-                style = {this.props.style ? this.props.style : styles.button}
+                style = {{...styles.button, ...this.props.style}}
             >
                 <TouchableOpacity
-                    style = {styles.buttonContent}
+                    style = {{...styles.buttonContent}}
                     onPress = {this.props.onPress}
                 >
                     <Text

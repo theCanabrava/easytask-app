@@ -30,14 +30,14 @@ export default class ProjectCell extends Component
                 <TouchableOpacity
                     onPress = {this.handleToggle.bind(this)}
                 >
-                    <DefaultLabel>
-                        {texts.NAME_LBL}: {projectData.projectName}
+                    <DefaultLabel style = {{color: '#385398', fontWeight: 'bold'}}>
+                        {projectData.projectName}
                     </DefaultLabel>
                     {
                         expanded &&
-                        <>
-                            <DefaultLabel>
-                                {texts.DESCRIPTION_LBL}: {projectData.description}
+                        <View style = {{alignItems: 'center'}}>
+                            <DefaultLabel style = {{color: '#616161'}}>
+                                {projectData.description}
                             </DefaultLabel>
                             <DefaultButton
                                 title={texts.WORK_TASKS_LBL}
@@ -53,7 +53,7 @@ export default class ProjectCell extends Component
                                     onPress={this.props.onPressManageProject}
                                 />
                             }   
-                        </>
+                        </View>
                     }
                 </TouchableOpacity>
             </View>

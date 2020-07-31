@@ -15,6 +15,9 @@ export default
     SIGNUP_LBL: 'Registrar',
     FAIL: 'Falha',
     LOGIN_MSG: 'Conta ou senha erradas',
+    FORGOT_PASSWORD: 'Esqueceu sua senha?',
+    DONT_HAVE_ACCOUNT: 'Não possui conta?',
+    SIGNUP: 'Registre-se',
     
     //Register
     CONFIRM_PASSWORD_LBL: 'Confirmar Senha',

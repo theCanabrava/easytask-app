@@ -1,7 +1,7 @@
 import React, {Component, ReactNode} from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, Platform, View, ImageBackground, Image } from 'react-native';
+import { Text, KeyboardAvoidingView, TextInput, Alert, ActivityIndicator, Platform, View, ImageBackground, Image } from 'react-native';
 
 import DefaultButton from '../Reusables/DefaultButton';
 import styles from '../Constants/styles';
@@ -46,6 +46,7 @@ class RegisterScreen extends Component implements AuthSubscriber
         let commandPannel = 
         (
             <DefaultButton
+                style={{marginTop: 25}}
                 title={texts.SIGNUP_LBL}
                 onPress={this.signUp.bind(this)}
             />
@@ -62,6 +63,7 @@ class RegisterScreen extends Component implements AuthSubscriber
                     <Image source={logo} style={styles.loginLogo}/>
                 </ImageBackground>
                 <View style={styles.loginContainer}>
+                    <Text style={styles.loginText}>{texts.EMAIL_LBL}</Text>
                     <TextInput
                         style={styles.input}
                         value={email}
@@ -70,6 +72,7 @@ class RegisterScreen extends Component implements AuthSubscriber
                         keyboardType='email-address'
                         autoCapitalize='none'
                     />
+                    <Text style={styles.loginText}>{texts.PASSWORD_LBL}</Text>
                     <TextInput
                         style={styles.input}
                         value={password}
@@ -78,6 +81,7 @@ class RegisterScreen extends Component implements AuthSubscriber
                         autoCapitalize='none'
                         secureTextEntry
                     />
+                    <Text style={{...styles.loginText, left: '-24%'}}>{texts.CONFIRM_PASSWORD_LBL}</Text>
                     <TextInput
                         style={styles.input}
                         value={confirmPassword}

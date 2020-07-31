@@ -14,7 +14,7 @@ export default class DefaultLabel extends Component
                 style = {styles.label}
             >
                 <Text
-                    style = {styles.labelText}
+                    style = {{...styles.labelText, ...this.props.style}}
                 >
                     {this.props.children}
                 </Text>
