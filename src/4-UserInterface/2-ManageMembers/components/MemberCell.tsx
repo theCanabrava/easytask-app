@@ -1,10 +1,13 @@
 import React, { Component, ReactNode } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import ProjectData from '../../../2-Database/types/ProjectData';
 import styles from '../../Constants/styles';
 import DefaultLabel from '../../Reusables/DefaultLabel';
 import texts from '../../Constants/texts';
 import DefaultButton from '../../Reusables/DefaultButton';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
+const trash = require('../../Assets/Trash.png');
 
 export default class MemberCell extends Component
 {
@@ -18,32 +21,37 @@ export default class MemberCell extends Component
         
         const memberCell: ReactNode =
         (
-            <View style={styles.memberCell}>
-                <DefaultLabel>
-                    {email}
-                </DefaultLabel>
+            <View style={styles.addMemberMemberCell}>
+                <View style={styles.memberInfo}>
+                    <DefaultLabel>
+                        {email}
+                    </DefaultLabel>
+                    {
+                        enableEdit &&
+                        <>
+                        {
+                            !isManager &&
+                            <DefaultButton
+                            style={styles.addManagerButton}
+                            title={texts.ADD_MANAGER_LBL}
+                            onPress={this.props.onPressAddManager.bind(this, email)}
+                            />
+                        }
+                        {
+                            isManager &&
+                            <DefaultLabel
+                            style={styles.managerLabel}>
+                            {texts.MANAGER_LBL}
+                            </DefaultLabel>
+                        }
+                        </>
+                    }
+                </View>
                 {   enableEdit &&
-                    <>
-                    {
-                        !isManager &&
-                        <DefaultButton
-                        style={styles.shortButton}
-                        title={texts.ADD_MANAGER_LBL}
-                        onPress={this.props.onPressAddManager.bind(this, email)}
-                    />
-                    }
-                    {
-                        isManager &&
-                        <DefaultLabel>
-                        {texts.MANAGER_LBL}
-                        </DefaultLabel>
-                    }
-                    <DefaultButton
-                        style={styles.shortButton}
-                        title={texts.REMOVE_LBL}
-                        onPress={this.props.onPressRemove.bind(this, email)}
-                    />
-                    </>
+                    <TouchableOpacity
+                    onPress={this.props.onPressRemove.bind(this, email)}>
+                        <Image source={trash} style={styles.backImage}/>
+                    </TouchableOpacity>
                 }
             </View>
         );

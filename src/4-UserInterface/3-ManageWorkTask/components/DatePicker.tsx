@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import { View, LayoutAnimation, Platform } from 'react-native';
+import { View, LayoutAnimation, Platform, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DefaultButton from '../../Reusables/DefaultButton';
 import styles from '../../Constants/styles';
@@ -30,14 +30,13 @@ export default class DatePicker extends Component
         const datePicker =
         (
             <View style={styles.datePickerCell}>
-                <DefaultButton
-                    title={texts.EXPECTED_CONCLUSION_LBL}
-                    onPress={this.onPress.bind(this)}
-                />
-
-                <DefaultLabel>
-                    {this.formatDateString(value.toISOString())}
-                </DefaultLabel>
+                
+                <TouchableOpacity  onPress={this.onPress.bind(this)}>
+                    <DefaultLabel>
+                        {this.formatDateString(value.toISOString())}
+                    </DefaultLabel>
+                </TouchableOpacity>
+                
 
                 {
                     

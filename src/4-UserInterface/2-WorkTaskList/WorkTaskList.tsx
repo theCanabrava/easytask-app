@@ -1,5 +1,5 @@
 import React, {Component, ReactNode} from 'react';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, TouchableOpacity, View, ImageBackground, Image, Text } from 'react-native';
 import { StackNavigationOptions } from '@react-navigation/stack';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -19,6 +19,10 @@ import icons from '../Constants/icons';
 import FilterWorkTaskParameters from '../../1-WorkTaskManager/types/FilterWorkTaskParameters';
 import StatusPickerFilter from './components/StatusFilterPicker'
 import styles from '../Constants/styles';
+
+const logoBackground = require('../Assets/bg.png');
+const filter = require('../Assets/filter.png');
+const back = require('../Assets/back.png');
 
 
 class WorkTaskListScreen extends Component implements WorkTaskSubscriber
@@ -52,7 +56,19 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
 
         const workTaskListScreen: ReactNode =
         (
-            <View style={styles.sworkTaskScreen}>
+            <View style={styles.defaultScreen}>
+                <ImageBackground source={logoBackground} style={styles.backgroundContainer}>
+                    <View style={styles.backImageContainer}>
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                            <Image source={back} style={styles.backImage}/>
+                        </TouchableOpacity>
+                        <Text style={styles.screenTitle}>{texts.WORK_TASKS_LBL}</Text>
+                        <TouchableOpacity onPress={() => this.setState({showPicker: true})}>
+                            <Image source={filter} style={styles.backImage}/>
+                        </TouchableOpacity>
+                    </View>
+                </ImageBackground>
+                <View style={styles.workTaskContainer}>
             {
                 showPicker && <>
                 <StatusPickerFilter 
@@ -67,10 +83,12 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
             {
                 !showPicker && 
                 <FlatList
+                style = {styles.flatList}
                 data = {workTasks}
                 renderItem = {this.renderItem.bind(this)}
                 />
              }
+             </View>
             </View>
         )
         return workTaskListScreen
@@ -93,6 +111,7 @@ class WorkTaskListScreen extends Component implements WorkTaskSubscriber
             const addCell =
             (
                 <DefaultButton
+                    style={styles.workTaskButton}
                     title = {texts.ADD_WORK_TASK}
                     onPress = {() => this.props.navigation.navigate('ManageWorkTask', {workTaskId, projectId})}
                 />

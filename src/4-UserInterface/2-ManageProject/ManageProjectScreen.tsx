@@ -81,6 +81,8 @@ class ManageProjectScreen extends Component implements ProjectSubscriber
                 />
                 {   projectId !== 'ADD' && 
                     <DefaultButton
+                        style={styles.redButton}
+                        textStyle={styles.redButtonText}
                         title={texts.DELETE_LBL}
                         onPress={this.delete.bind(this)}
                     />

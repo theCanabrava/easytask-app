@@ -1,5 +1,6 @@
 import React, { Component, ReactNode } from 'react';
-import { KeyboardAvoidingView, TextInput, ActivityIndicator, ScrollView, View, Platform } from 'react-native';
+import { KeyboardAvoidingView, TextInput, ActivityIndicator, ScrollView, View, Platform, 
+    ImageBackground, Image, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -19,6 +20,10 @@ import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
 import * as toolsetActions from '../../3-ToolsetFactory/actions/toolset';
 import DefaultLabel from '../Reusables/DefaultLabel';
 import DatePicker from './components/DatePicker';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+const logoBackground = require('../Assets/bg.png');
+const back = require('../Assets/back.png');
 
 
 class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
@@ -75,13 +80,22 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
         const manageWorkTaskScreen: ReactNode =
         (
             <KeyboardAvoidingView 
-                style={{ flex: 1, flexDirection: 'column',justifyContent: 'center',}} 
+                style={{ flex: 1, flexDirection: 'column',justifyContent: 'center'}} 
                 behavior={Platform.OS == "ios" ? "padding" : "height"}
                 enabled  
                 keyboardVerticalOffset={100}
             >
-                <ScrollView>
-                    <View style={styles.screen}>
+                <ImageBackground source={logoBackground} style={styles.backgroundContainer}>
+                    <View style={styles.backImageContainer}>
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                            <Image source={back} style={styles.backImage}/>
+                        </TouchableOpacity>
+                        <Text style={styles.screenTitle}>{texts.MEMBER_LBL}</Text>
+                    </View>
+                    </ImageBackground>
+                <SafeAreaView style={{height: '85%', backgroundColor: '#1b54d0'}}>
+                <ScrollView style={{height: '100%', backgroundColor: '#f0f0f0', borderTopLeftRadius: 10, borderTopRightRadius: 10}}>
+                    <View style={{overflow: 'scroll', alignItems: 'center'}}>
                         <TextInput
                             style={styles.input}
                             value={workTaskName}
@@ -136,10 +150,14 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
                         {   workTaskId !== 'ADD' && 
                             <>
                                 <DefaultButton
+                                    style={styles.whiteButton}
+                                    textStyle={styles.whiteButtonText}
                                     title={texts.FINISH_TASK_LBL}
                                     onPress={this.finish.bind(this)}
                                 />
                                 <DefaultButton
+                                    style={styles.redButton}
+                                    textStyle={styles.redButtonText}
                                     title={texts.DELETE_LBL}
                                     onPress={this.delete.bind(this)}
                                 />
@@ -147,6 +165,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
                         }
                     </View>
                 </ScrollView>
+                </SafeAreaView>
             </KeyboardAvoidingView>
         )
         return manageWorkTaskScreen

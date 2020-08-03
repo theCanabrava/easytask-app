@@ -1,5 +1,5 @@
 import React, {Component, ReactNode} from 'react';
-import { FlatList, View, ActivityIndicator } from 'react-native';
+import { FlatList, View, ActivityIndicator, ImageBackground, Image, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -12,6 +12,11 @@ import ManageUserParameters from '../../1-ProjectManager/types/ManageUserParamet
 import ProjectSubscriber from '../../1-ProjectManager/interfaces/ProjectSubscriber';
 import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
 import styles from '../Constants/styles';
+import texts from '../Constants/texts';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
+const logoBackground = require('../Assets/bg.png');
+const back = require('../Assets/back.png');
 
 class ManageMembersScreen extends Component implements ProjectSubscriber
 {
@@ -48,10 +53,23 @@ class ManageMembersScreen extends Component implements ProjectSubscriber
 
         const manageMembersScreen: ReactNode =
         (
-            <FlatList
-                data = {this.state.users}
-                renderItem = {this.renderItem.bind(this)}
-            />
+            <View style={styles.defaultScreen}>
+                <ImageBackground source={logoBackground} style={styles.backgroundContainer}>
+                    <View style={styles.backImageContainer}>
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                            <Image source={back} style={styles.backImage}/>
+                        </TouchableOpacity>
+                        <Text style={styles.screenTitle}>{texts.MEMBERS_LBL}</Text>
+                    </View>
+                </ImageBackground>
+                <View style={styles.memberCellContainer}>
+                    <FlatList
+                        style = {styles.flatList}
+                        data = {this.state.users}
+                        renderItem = {this.renderItem.bind(this)}
+                    />
+                </View>
+            </View>
         )
         return manageMembersScreen
     }

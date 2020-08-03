@@ -1,7 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { Dispatch } from 'redux';
 
-import { FlatList, View, Alert, ActivityIndicator } from 'react-native';
+import { FlatList, View, Alert, ActivityIndicator, ImageBackground, TouchableOpacity, Image, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 import styles from '../Constants/styles';
@@ -12,6 +12,9 @@ import ApiResponse from '../../0-ApiLibrary/types/ApiResponse';
 import AddResponsibleParameters from '../../1-WorkTaskManager/types/AddResponsibleParameters';
 import AppToolset from '../../3-ToolsetFactory/types/AppToolset';
 import MemberCell from '../3-AddResponsible/components/MemberCell';
+
+const logoBackground = require('../Assets/bg.png');
+const back = require('../Assets/back.png');
 
 class AddResponsibleScreen extends Component
 {
@@ -48,10 +51,23 @@ class AddResponsibleScreen extends Component
 
         const manageMembersScreen: ReactNode =
         (
-            <FlatList
-                data = {this.state.users}
-                renderItem = {this.renderItem.bind(this)}
-            />
+            <View style={styles.defaultScreen}>
+                <ImageBackground source={logoBackground} style={styles.backgroundContainer}>
+                    <View style={styles.backImageContainer}>
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                            <Image source={back} style={styles.backImage}/>
+                        </TouchableOpacity>
+                        <Text style={styles.screenTitle}>{texts.MEMBER_LBL}</Text>
+                    </View>
+                </ImageBackground>
+                <View style={styles.workTaskContainer}>
+                    <FlatList
+                        style={styles.flatList}
+                        data = {this.state.users}
+                        renderItem = {this.renderItem.bind(this)}
+                    />
+                </View>
+             </View>
         )
         return manageMembersScreen
     }

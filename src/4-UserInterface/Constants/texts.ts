@@ -37,6 +37,8 @@ export default
     MANAGE_PROJECT_LBL: "Gerenciar projeto",
 
     //Manage Members
+    MEMBERS_LBL: "Membros",
+    EMAIL_MEMBER_LBL: "Email",
     ADD_MEMBER_LBL: "Adicionar membro",
     ADD_MANAGER_LBL: "Adicionar Gerente",
     MANAGER_LBL: "Gerente",
@@ -66,6 +68,7 @@ export default
     WORK_TASK_LBL: "Nome da tarefa",
 
     //Add Responsible
+    MEMBER_LBL: "Membros",
     ADD_BTN: "Adicionar Responsável",
     NO_MEMBER_MSG: "Usuário não é integrante do projeto."
 }

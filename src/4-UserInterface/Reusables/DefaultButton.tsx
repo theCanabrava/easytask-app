@@ -18,7 +18,7 @@ export default class DefaultButton extends Component
                     onPress = {this.props.onPress}
                 >
                     <Text
-                        style = {styles.buttonText}
+                        style = {{...styles.buttonText, ...this.props.textStyle}}
                     >
                         {this.props.title}
                     </Text>

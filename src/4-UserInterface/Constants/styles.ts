@@ -69,7 +69,8 @@ export default StyleSheet.create(
         backImageContainer: {
             width: '90%',
             justifyContent: 'flex-start',
-            flexDirection: 'row'  
+            flexDirection: 'row',
+            alignItems: 'center'
         },
 
         defaultContainer:
@@ -80,6 +81,30 @@ export default StyleSheet.create(
             borderTopRightRadius: 15,
             top: -15,
             flex: 1.61803398875,
+            alignItems: 'center',
+            width: '100%',
+        },
+
+        workTaskContainer:
+        {
+            backgroundColor: 'white',
+            paddingTop: 40,
+            borderTopLeftRadius: 15,
+            borderTopRightRadius: 15,
+            top: -15,
+            flex: 5,
+            alignItems: 'center',
+            width: '100%',
+        },
+
+        memberCellContainer:
+        {
+            backgroundColor: 'white',
+            paddingTop: 40,
+            borderTopLeftRadius: 15,
+            borderTopRightRadius: 15,
+            top: -15,
+            flex: 5,
             alignItems: 'center',
             width: '100%',
         },
@@ -105,9 +130,11 @@ export default StyleSheet.create(
 
         screenTitle:
         {
+            flex: 1,
+            textAlign: 'center',
             color: 'white',
             marginTop: 5,
-            fontSize: 18
+            fontSize: 20
         },
 
         clickableText:
@@ -140,6 +167,40 @@ export default StyleSheet.create(
             borderRadius: 15
         },
 
+        whiteButton:
+        {
+            height: 50,
+            width: '80%',
+            marginVertical: 8,
+            borderColor: '#2EBDD8',
+            backgroundColor: 'white',
+            padding: 8,
+            borderWidth: 1,
+            borderRadius: 15
+        },
+
+        whiteButtonText: 
+        {
+            color: '#2EBDD8'
+        },
+
+        redButton:
+        {
+            height: 50,
+            width: '80%',
+            marginVertical: 8,
+            borderColor: 'red',
+            backgroundColor: 'white',
+            padding: 8,
+            borderWidth: 1,
+            borderRadius: 15
+        },
+
+        redButtonText: 
+        {
+            color: 'red'
+        },
+
         buttonContent:
         {
             flex: 1,
@@ -157,8 +218,23 @@ export default StyleSheet.create(
             height: 30,
             justifyContent: 'center',
             
-            backgroundColor: 'black',
+            backgroundColor: '#2EBDD8',
             padding: 8
+        },
+
+        addManagerButton:
+        {
+            height: 35,
+            justifyContent: 'center',
+            borderColor: '#2EBDD8',
+            backgroundColor: '#2EBDD8',
+            padding: 8
+        },
+
+        workTaskButton:
+        {
+            alignSelf: 'center',
+            width: '100%'
         },
 
         input:
@@ -174,17 +250,16 @@ export default StyleSheet.create(
             borderRadius: 15
         },
 
-
-
         addUserInput:
         {
-            height: 32,
+            height: 48,
             width: '100%',
             marginVertical: 8,
-
-            borderColor: 'black',
+            backgroundColor: '#f5f9fc',
+            borderColor: '#f5f9fc',
             padding: 8,
-            borderWidth: 1
+            borderWidth: 1,
+            borderRadius: 10
         },
 
         projectCell:
@@ -196,6 +271,34 @@ export default StyleSheet.create(
             padding: 8,
             borderWidth: 1,
             borderRadius: 10
+        },
+
+        delayedCell:
+        {
+            backgroundColor: '#ff6b6b'
+        },
+
+        defaultCellTitle:
+        {
+            fontSize: 17,
+            color: "#a6a9ab"
+        },
+
+        delayedCellTitle:
+        {
+            fontSize: 17,
+            color: "#a33229"
+        },
+
+        completedCellTitle:
+        {
+            fontSize: 17,
+            color: "#0a7d4f"
+        },
+
+        completedCell:
+        {
+            backgroundColor: '#a1ffdb'
         },
 
         label:
@@ -212,17 +315,56 @@ export default StyleSheet.create(
             textAlign: 'left'
         },
 
-        memberCell:
+        labelAddMember:
         {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            color: '#5374a3'
+        },
 
+        addMemberCell:
+        {
             margin: 10,
-            borderColor: 'black',
+            overflow: 'hidden',
+            borderColor: 'white',
             padding: 8,
             borderWidth: 1,
             borderRadius: 10
+        },
+
+        addMemberMemberCell:
+        {
+            overflow: 'hidden',
+            borderColor: '#f5f9fc',
+            backgroundColor: '#f5f9fc',
+            flexDirection: 'row',
+            alignItems: 'center',
+            margin: 10,
+            padding: 10,
+            borderWidth: 1,
+            borderRadius: 10
+        },
+
+        memberCell:
+        {
+            overflow: 'hidden',
+            borderColor: '#f5f9fc',
+            backgroundColor: '#f5f9fc',
+            flexDirection: 'column',
+            alignItems: 'center',
+            margin: 10,
+            padding: 10,
+            borderWidth: 1,
+            borderRadius: 10
+        },
+
+        memberInfo:
+        {
+            flex: 1, 
+            flexDirection: 'column'
+        },
+
+        managerLabel:
+        {
+            color: '#bebebe'
         },
 
         datePickerCell:
@@ -230,7 +372,8 @@ export default StyleSheet.create(
             margin: 10,
             width: '80%',
             overflow: 'hidden',
-            borderColor: 'black',
+            borderColor: '#f0f0f0',
+            backgroundColor: 'white',
             padding: 8,
             borderWidth: 1,
             borderRadius: 10

@@ -41,20 +41,50 @@ export default class WorkTaskCell extends Component
 
     render(): ReactNode
     {
+        const today = new Date(new Date().toLocaleDateString());
+        const todayArray  = new Date(today).toISOString().replace(/T/, ' ').replace(/\..+/, '').substring(0,10).split('-')
         const expanded = this.state.expanded;
         const workTaskData: WorkTaskData = this.props.workTaskData;
+        const conclusionDate = new Date(workTaskData.expectedConclusionDate);
+        
         const enableEdit = this.props.enableEdit;
         const expectedConclusionDate = new Date(workTaskData.expectedConclusionDate).toISOString().replace(/T/, ' ').replace(/\..+/, '').substring(0,10).split('-')
 
+        const isDelayed = todayArray[0] > expectedConclusionDate[0] ? true : 
+                            expectedConclusionDate[0] > todayArray[0] ? false :
+                               todayArray[1] > expectedConclusionDate[1] ? true :
+                               expectedConclusionDate[1] > todayArray[1] ? false :
+                               todayArray[2] <= expectedConclusionDate[2] ? true : false;
+
+        const isCompleted = (workTaskData.finishDate != null || workTaskData.finishDate != undefined);
+
         const projectCell: ReactNode =
         (
-            <View style={styles.projectCell}>
+            <View style={[styles.projectCell, 
+                          isDelayed ? styles.delayedCell : {}, 
+                          isCompleted ? styles.completedCell : {}]}>
                 <TouchableOpacity
                     onPress = {this.handleToggle.bind(this)}
                 >
-                    <DefaultLabel>
-                        {texts.NAME_LBL}: {workTaskData.workTaskName}
-                    </DefaultLabel>
+                    {
+                        (!isCompleted && isDelayed) && 
+                        <DefaultLabel style={styles.delayedCellTitle}>
+                            {workTaskData.workTaskName}
+                        </DefaultLabel>
+                    }
+                    {
+                        isCompleted && 
+                        <DefaultLabel style={styles.completedCellTitle}>
+                            {workTaskData.workTaskName}
+                        </DefaultLabel>
+                    }
+                    {
+                        (!isDelayed && !isCompleted) &&
+                        <DefaultLabel style={styles.defaultCellTitle}>
+                            {workTaskData.workTaskName}
+                        </DefaultLabel>
+                    }
+                    
                     <DefaultLabel>
                         {texts.RESPONSIBLE_LBL}: {workTaskData.responsibleEmail ? workTaskData.responsibleEmail : texts.NO_RESPONSIBLE_FLD}
                     </DefaultLabel>
@@ -91,10 +121,12 @@ export default class WorkTaskCell extends Component
                             {   enableEdit &&
                                 <>
                                     <DefaultButton
+                                        style={styles.workTaskButton}
                                         title={texts.ADD_RESPONSIBLE_LBL}
                                         onPress={this.props.onPressAddResponsible}
                                     />
                                     <DefaultButton
+                                        style={styles.workTaskButton}
                                         title={texts.EDIT_WORK_TASK_LBL}
                                         onPress={this.props.onPressEdit}
                                     />

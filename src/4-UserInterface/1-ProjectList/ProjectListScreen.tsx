@@ -50,9 +50,10 @@ class ProjectListScreen extends Component implements ProjectSubscriber
         (
             <View style={styles.defaultScreen}>
                 <ImageBackground source={logoBackground} style={styles.backgroundContainer}>
-                    <View style={styles.backImageContainer}>
+                    <TouchableOpacity style={styles.backImageContainer} 
+                        onPress = {this.logout.bind(this)}>
                         <Image source={back} style={styles.backImage}/>
-                    </View>
+                    </TouchableOpacity>
                     <Image source={projects} style={styles.defaultImage}/>
                     <Text style={styles.screenTitle}>{texts.PROJECT_LIST_TTL}</Text>
                 </ImageBackground>
