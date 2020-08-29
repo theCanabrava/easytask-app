@@ -51,10 +51,8 @@ export default class WorkTaskCell extends Component
         const expectedConclusionDate = new Date(workTaskData.expectedConclusionDate).toISOString().replace(/T/, ' ').replace(/\..+/, '').substring(0,10).split('-')
 
         const isDelayed = todayArray[0] > expectedConclusionDate[0] ? true : 
-                            expectedConclusionDate[0] > todayArray[0] ? false :
                                todayArray[1] > expectedConclusionDate[1] ? true :
-                               expectedConclusionDate[1] > todayArray[1] ? false :
-                               todayArray[2] <= expectedConclusionDate[2] ? true : false;
+                               todayArray[2] >= expectedConclusionDate[2] ? true : false; 
 
         const isCompleted = (workTaskData.finishDate != null || workTaskData.finishDate != undefined);
 

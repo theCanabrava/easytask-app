@@ -36,8 +36,7 @@ export default class PushNotificationManager implements CommunicatorDelegate
     }
 
     private async getPushNotificationToken(){
-        console.log("vai chamar");
-        
+
         const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
         let finalStatus = existingStatus;
         if (existingStatus !== 'granted') {
@@ -56,7 +55,7 @@ export default class PushNotificationManager implements CommunicatorDelegate
         return token;
     }
 
-    public async sendPushNotificatioNToken(userEmail: string,)
+    public async sendPushNotificatioNToken(userEmail: string)
     {
         var pushNotificationToken =  await this.getPushNotificationToken()
 
@@ -65,8 +64,8 @@ export default class PushNotificationManager implements CommunicatorDelegate
             id: ApiConstants.pushNotification.sendPushNotificationToken,
             parameters:
             {
-                PushNotificationToken: pushNotificationToken,
-                UserEmail: userEmail,
+                pushNotificationToken: pushNotificationToken,
+                userEmail: userEmail,
                 token: this.token
             }
         }
