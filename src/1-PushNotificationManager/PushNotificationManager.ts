@@ -50,8 +50,6 @@ export default class PushNotificationManager implements CommunicatorDelegate
         
         const token = await Notifications.getExpoPushTokenAsync();
 
-        console.log(token);
-
         return token;
     }
 

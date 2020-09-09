@@ -109,6 +109,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
                             onChangeText={(description) => this.setState({description})}
                             placeholder={texts.DESCRIPTION_LBL}
                         />
+                        <Text>Previsão de fim:</Text>
                         <DatePicker
                             value = {expectedConclusionDate}
                             pickedDate = {(expectedConclusionDate) => this.setState({expectedConclusionDate})}

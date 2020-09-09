@@ -128,6 +128,7 @@ class MainNavigator extends Component
     render()
     {
         const loggedIn = this.props.user.uuid !== '';
+        
         if(loggedIn) {
             this.toolset = this.props.toolset
 

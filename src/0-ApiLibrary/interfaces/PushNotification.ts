@@ -7,7 +7,6 @@ export default class PushNotificationLib
     public static pushNotificationRequest(form: PushNotificationForm): ApiRequest
     {
         const req = ApiLibrary.pushNotificationRequest(form);
-        console.log(req);
         return req;
     }
 }
