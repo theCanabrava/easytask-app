@@ -1,6 +1,7 @@
 import React, { Component, ReactNode } from 'react';
 import { KeyboardAvoidingView, TextInput, ActivityIndicator, ScrollView, View, Platform, 
     ImageBackground, Image, Text, TouchableOpacity } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 
@@ -49,6 +50,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
             loading: false
         }
     }
+    
 
     render(): ReactNode
     {
@@ -69,9 +71,9 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
         {
             let loadingScreen =
             (
-                <KeyboardAvoidingView style={styles.screen}>
+                <KeyboardAwareScrollView style={styles.screen}>
                     <ActivityIndicator/>
-                </KeyboardAvoidingView>
+                </KeyboardAwareScrollView>
             )
 
             return loadingScreen;
@@ -79,18 +81,14 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
 
         const manageWorkTaskScreen: ReactNode =
         (
-            <KeyboardAvoidingView 
-                style={{ flex: 1, flexDirection: 'column',justifyContent: 'center'}} 
-                behavior={Platform.OS == "ios" ? "padding" : "height"}
-                enabled  
-                keyboardVerticalOffset={100}
+            <KeyboardAwareScrollView 
             >
                 <ImageBackground source={logoBackground} style={styles.backgroundContainer}>
                     <View style={styles.backImageContainer}>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                             <Image source={back} style={styles.backImage}/>
                         </TouchableOpacity>
-                        <Text style={styles.screenTitle}>{texts.MEMBER_LBL}</Text>
+                        <Text style={styles.screenTitle}>{texts.WORK_TASK_TITLE_LBL}</Text>
                     </View>
                     </ImageBackground>
                 <SafeAreaView style={{height: '85%', backgroundColor: '#1b54d0'}}>
@@ -167,7 +165,7 @@ class ManageWorkTaskScreen extends Component implements WorkTaskSubscriber
                     </View>
                 </ScrollView>
                 </SafeAreaView>
-            </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
         )
         return manageWorkTaskScreen
     }

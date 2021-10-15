@@ -65,6 +65,7 @@ export default
     ADD_WORK_TASK: "Adicionar tarefa",
 
     //Manage work tast
+    WORK_TASK_TITLE_LBL: "Tarefa",
     WORK_TASK_LBL: "Nome da tarefa",
 
     //Add Responsible
